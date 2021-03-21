@@ -1,6 +1,9 @@
-﻿<img src="https://heavenmssurveyhome.files.wordpress.com/2018/12/heavenmslogo.png"  width="370" height="auto">
+﻿<img src="https://heavenmssurveyhome.files.wordpress.com/2018/12/heavenmslogo.png"  width="370" height="auto" alt="HeavenMS logo">
 
-## Head developer: Ronan C. P. Lana
+# HeavenMS 2
+The continuation of HeavenMS, HeavenMS 2 (*name not finalized*) lead by `Ponk`, launched on March 21st 2021.
+
+## Words from previous head developer, Ronan C. P. Lana
 
 Besides myself for maintaining this repository, credits are to be given to Wizet/Nexon (owners of MapleStory & it's IP contents), the original MapleSolaxia staff and other colaborators, as just some changes/patches on the game were applied by myself, in which some of them diverged from the original v83 patch contents (alright, not just "some patches" by now since a whole lot of major server core changes have been applied on this development).
 
@@ -19,15 +22,17 @@ The main objective of this effort is to try as best as possible to recreate what
 ---
 ### Download items 
 
-Server files: https://github.com/ronancpl/HeavenMS
+Server files: https://github.com/P0nk/HeavenMS-2
 
-Client files & general tools: https://drive.google.com/drive/folders/0BzDsHSr-0V4MYVJ0TWIxd05hYUk
+Client files & general tools: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
+
+Note: the actual client .exe that you use to launch the game is not included on Google Drive. See link below to localhost client.
 
 Java 8 SDK & NetBeans bundle: https://www.oracle.com/technetwork/pt/java/javase/downloads/jdk-netbeans-jsp-3413153-ptb.html
 
-**Important note about localhosts**: these executables are red-flagged by antivirus tools as __potentially malicious softwares__, this happens due to the reverse engineering methods that were applied onto these software artifacts. Those depicted here have been put to use for years already and posed no harm so far, so they are soundly assumed to be safe.
+**Important note about localhost clients**: these executables are red-flagged by antivirus tools as __potentially malicious softwares__, this happens due to the reverse engineering methods that were applied onto these software artifacts. Those depicted here have been put to use for years already and posed no harm so far, so they are soundly assumed to be safe.
 
-  Latest localhost: https://hostr.co/amuX5SLeeVZx
+  Latest localhost client: https://hostr.co/amuX5SLeeVZx
 
   The following list, in bottom-up chronological order, holds information regarding all changes that were applied from the starting localhost used in this development. Some lines have a link attached, that will lead you to a snapshot of the localhost at that version of the artifact. Naturally, later versions holds all previous changes along with the proposed changes.
 
@@ -77,7 +82,7 @@ HeavenClient Github: https://github.com/ryantpayton/HeavenClient
 ---
 ### Development information
 
-Status: <span style="color:SkyBlue">__Released (4 rounds)__</span>.
+Status: <span style="color:SkyBlue">__in development__</span>.
 
 #### Mission
 
@@ -153,9 +158,9 @@ Hamachi is optional, though. You don't have to install Hamachi if you want to ma
 ---
 ### Installing the SERVER 
 
-By downloading through the Github download button, you may have obtained a ZIP file with a single "HeavenMS-master" folder on it. EXTRACT that folder.
+By downloading through the Github download button, you may have obtained a ZIP file with a single "HeavenMS-2-master" folder on it. EXTRACT that folder.
 
-For expediency, "HeavenMS-master" folder on this guide will be referred just as "HeavenMS". Rename it for convenience. Then, set "HeavenMS" the folder on a place of your preference. It is recommended to use "C:\Nexon\HeavenMS".
+For expediency, "HeavenMS-2-master" folder on this guide will be referred just as "HeavenMS". Rename it for convenience. Then, set "HeavenMS" the folder on a place of your preference. It is recommended to use "C:\Nexon\HeavenMS".
 
 Setting up the SQL: open MySQL Query Browser, then create a new session with the parameters below, then click OK.
 
@@ -204,7 +209,7 @@ Once done, make sure both WampServer and Hamachi are on and functional, then exe
 
 The client's set-up is quite straightforward:
 
-1. From "ManagerMsv83.exe", install MapleStory on your folder of preference (e.g. "C:\Nexon\MapleStory") and follow their instructions.
+1. From "MapleGlobal-v83-setup.exe", install MapleStory on your folder of preference (e.g. "C:\Nexon\MapleStory") and follow their instructions.
 2. Once done, erase these files: "HShield" (folder), "ASPLnchr.exe", "MapleStory.exe" and "Patcher.exe".
 3. Extract into the client folder the "localhost.exe" from the provided link.
 4. Overwrite the original WZ files with the ones provided from either one of those folders on the Google Drive:
@@ -222,6 +227,8 @@ To hex-edit, install the Neo Hex Editor from "free-hex-editor-neo.exe" and follo
 Open the "localhost.exe" client. If by any means the program did not open, and checking the server log your ping has been listened by the server and you are using Windows 8 or 10, it probably might be some compatibility issue.
 
 In that case, extract "lolwut.exe" from "lolwut-v0.01.rar" and place it on the MapleStory client folder ("C:\Nexon\MapleStory"). Your "localhost.exe" property settings must follow these:
+
+Note: "lolwut.exe" is currently not available in the Google Drive.
 
 * Run in compatibility mode: Windows 7;
 * Unchecked reduced color mode;
@@ -296,7 +303,7 @@ The default login/password also varies, so use the link http://www.routerpasswor
 
 Now you have logged in the router system, search for anything related to portforwarding. Should the system prompt you between portforwarding and portriggering, pick the first, it is what we will be using.
 
-Now, it is needed to enable the right ports for the Internet. For MapleSolaxia, it is basically needed to open ports 7575 to 7575 + (number of channels) and port 8484. Create a new custom service which enables that range of ports for the server's channel and opt to use TCP/UDP protocols. Finally, create a custom service now for using port 8484.
+Now, it is needed to enable the right ports for the Internet. For HeavenMS, it is basically needed to open ports 7575 to 7575 + (number of channels) and port 8484. Create a new custom service which enables that range of ports for the server's channel and opt to use TCP/UDP protocols. Finally, create a custom service now for using port 8484.
 
 Optionally, if you want to host a webpage, portforward the port 80 (the HTTP port) as well.
 

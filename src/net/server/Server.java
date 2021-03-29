@@ -864,7 +864,7 @@ public class Server {
     }
     
     public void init() {
-        System.out.println("HeavenMS v" + ServerConstants.VERSION + " starting up.\r\n");
+        System.out.println("Cosmic v" + ServerConstants.VERSION + " starting up.\r\n");
         
         if(YamlConfig.config.server.SHUTDOWNHOOK)
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
@@ -954,7 +954,7 @@ public class Server {
         
         System.out.println("Listening on port 8484\r\n\r\n");
         
-        System.out.println("HeavenMS is now online.\r\n");
+        System.out.println("Cosmic is now online.\r\n");
         online = true;
         
         MapleSkillbookInformationProvider.getInstance();

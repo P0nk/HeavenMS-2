@@ -1,4 +1,4 @@
----- HeavenMS MySQL Database ----
+---- Cosmic MySQL Database ----
 
 These SQL files must be executed IN ORDER to set up the database:
 	- db_database.sql

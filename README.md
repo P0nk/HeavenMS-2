@@ -1,7 +1,5 @@
-﻿<img src="https://heavenmssurveyhome.files.wordpress.com/2018/12/heavenmslogo.png"  width="370" height="auto" alt="HeavenMS logo">
-
-# HeavenMS 2
-The continuation of HeavenMS, HeavenMS 2 (*name not finalized*) lead by `Ponk`, launched on March 21st 2021.
+﻿# Cosmic - MapleStory v83
+Cosmic launched as a continuation of HeavenMS on March 21st 2021.
 
 ## Words from previous head developer, Ronan C. P. Lana
 
@@ -22,7 +20,7 @@ The main objective of this effort is to try as best as possible to recreate what
 ---
 ### Download items 
 
-Server files: https://github.com/P0nk/HeavenMS-2
+Server files: https://github.com/P0nk/Cosmic
 
 Client files & general tools: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
 
@@ -158,9 +156,9 @@ Hamachi is optional, though. You don't have to install Hamachi if you want to ma
 ---
 ### Installing the SERVER 
 
-By downloading through the Github download button, you may have obtained a ZIP file with a single "HeavenMS-2-master" folder on it. EXTRACT that folder.
+By downloading through the Github download button, you may have obtained a ZIP file with a single "Cosmic-master" folder on it. EXTRACT that folder.
 
-For expediency, "HeavenMS-2-master" folder on this guide will be referred just as "HeavenMS". Rename it for convenience. Then, set "HeavenMS" the folder on a place of your preference. It is recommended to use "C:\Nexon\HeavenMS".
+For expediency, "Cosmic-master" folder on this guide will be referred just as "Cosmic". Rename it for convenience. Then, set "Cosmic" the folder on a place of your preference. It is recommended to use "C:\Nexon\Cosmic".
 
 Setting up the SQL: open MySQL Query Browser, then create a new session with the parameters below, then click OK.
 
@@ -170,15 +168,15 @@ Setting up the SQL: open MySQL Query Browser, then create a new session with the
 
 Now it must be done CAREFULLY:
 
-1. File -> Open Script... -> Browse for "C:\Nexon\HeavenMS\sql" -> db_database.sql, and execute it.
+1. File -> Open Script... -> Browse for "C:\Nexon\Cosmic\sql" -> db_database.sql, and execute it.
 
-2. File -> Open Script... -> Browse for "C:\Nexon\HeavenMS\sql" -> db_drops.sql, and execute it.
+2. File -> Open Script... -> Browse for "C:\Nexon\Cosmic\sql" -> db_drops.sql, and execute it.
 
 Now it is OPTIONAL, you don't need to run it if you don't want, as it will simply change some NPC shops to set some new goods, not present in the original MapleStory, to sell:
 
-3. File -> Open Script... -> Browse for "C:\Nexon\HeavenMS\sql" -> db_shopupdate.sql, and execute it.
+3. File -> Open Script... -> Browse for "C:\Nexon\Cosmic\sql" -> db_shopupdate.sql, and execute it.
 
-At the end of the execution of these SQLs, you should have installed a database schema named "heavenms". REGISTER YOUR FIRST ACCOUNT to be used in-game by **creating manually** an entry on the table "accounts" at that database with a login and a password.
+At the end of the execution of these SQLs, you should have installed a database schema named "cosmic". REGISTER YOUR FIRST ACCOUNT to be used in-game by **creating manually** an entry on the table "accounts" at that database with a login and a password.
 
 Configure the IP you want to use for your MapleStory server in "configuration.ini" file, or set it as "localhost" if you want to run it only on your machine. Alternatively, you can use the IP given by Hamachi to use on a Hamachi network, or you can use a non-Hamachi method of port-forwarding. Neither will be approached here.
 
@@ -249,7 +247,7 @@ After creating a character, experiment typing in all-chat "@commands". This will
 To change a character's GM level, make sure that character is not logged in, then:
 
 * Open MySQL Query Browser;
-* Double-click "heavenms" schema;
+* Double-click "cosmic" schema;
 * Double click "characters" table;
 * Execute the selected query;
 * Mark "Edit" flag on the MySQL Query Browser UI screen;
@@ -282,7 +280,7 @@ To make it happen:
 * Paste it on the "dist" subfolder.
 * Inside "dist", open the command prompt by alt+right clicking there.
 * Execute "java -jar MobBookUpdate.jar". It will generate a "MonsterBook_updated.img.xml" file.
-* At last, overwrite the "MonsterBook.img.xml" on "C:\Nexon\HeavenMS\wz\String.wz" with this file, renaming it back to "MonsterBook.img.xml".
+* At last, overwrite the "MonsterBook.img.xml" on "C:\Nexon\Cosmic\wz\String.wz" with this file, renaming it back to "MonsterBook.img.xml".
 
 At this point, **just the server-side** Monster Book has been updated with the current state of the database's drop data.
 
@@ -303,7 +301,7 @@ The default login/password also varies, so use the link http://www.routerpasswor
 
 Now you have logged in the router system, search for anything related to portforwarding. Should the system prompt you between portforwarding and portriggering, pick the first, it is what we will be using.
 
-Now, it is needed to enable the right ports for the Internet. For HeavenMS, it is basically needed to open ports 7575 to 7575 + (number of channels) and port 8484. Create a new custom service which enables that range of ports for the server's channel and opt to use TCP/UDP protocols. Finally, create a custom service now for using port 8484.
+Now, it is needed to enable the right ports for the Internet. For Cosmic, it is basically needed to open ports 7575 to 7575 + (number of channels) and port 8484. Create a new custom service which enables that range of ports for the server's channel and opt to use TCP/UDP protocols. Finally, create a custom service now for using port 8484.
 
 Optionally, if you want to host a webpage, portforward the port 80 (the HTTP port) as well.
 

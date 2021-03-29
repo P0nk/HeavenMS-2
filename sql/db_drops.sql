@@ -1,7 +1,7 @@
 #THIS SQL MUST BE USED AFTER 'db_database.sql'
 #NEXT SQL 'db_shopupdate.sql' IS OPTIONAL
 
-USE `heavenms`;
+USE `cosmic`;
 
   INSERT IGNORE INTO temp_data (`dropperid`, `itemid`, `minimum_quantity`, `maximum_quantity`, `questid`, `chance`) VALUES
   #-- copy+paste inside here as many drop data as possible from the spider (drop generator) files --

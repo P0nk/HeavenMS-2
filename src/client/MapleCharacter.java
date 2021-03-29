@@ -6710,11 +6710,11 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         } else if (level == 80) {
             yellowMessage("You think you are powerful enough? Try facing horntail!");
         } else if (level == 85) {
-            yellowMessage("Did you know? The majority of people who hit level 85 in HeavenMS don't live to be 85 years old?");
+            yellowMessage("Did you know? The majority of people who hit level 85 in Cosmic don't live to be 85 years old?");
         } else if (level == 90) {
             yellowMessage("Hey do you like the amusement park? I heard Spooky World is the best theme park around. I heard they sell cute teddy-bears.");
         } else if (level == 95) {
-            yellowMessage("100% of people who hit level 95 in HeavenMS don't live to be 95 years old.");
+            yellowMessage("100% of people who hit level 95 in Cosmic don't live to be 95 years old.");
         } else if (level == 100) {
             yellowMessage("Mid-journey so far... You just reached level 100! Now THAT's such a feat, however to manage the 200 you will need even more passion and determination than ever! Good hunting!");
         } else if (level == 105) {
@@ -8853,7 +8853,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
 
     public void sendPolice(int greason, String reason, int duration) {
-        announce(MaplePacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for %s.#k", "HeavenMS", reason)));
+        announce(MaplePacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for %s.#k", "Cosmic", reason)));
         this.isbanned = true;
         TimerManager.getInstance().schedule(new Runnable() {
             @Override
@@ -10323,7 +10323,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
         
         this.ban(reason);
-        announce(MaplePacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for HACK reason.#k", "HeavenMS")));
+        announce(MaplePacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for HACK reason.#k", "Cosmic")));
         TimerManager.getInstance().schedule(new Runnable() {
             @Override
             public void run() {

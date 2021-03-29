@@ -40,7 +40,7 @@ import java.util.List;
  * 
  */
 public class MapleSkillMakerReagentIndexer {
-    static String host = "jdbc:mysql://localhost:3306/heavenms";
+    static String host = "jdbc:mysql://localhost:3306/cosmic";
     static String driver = "com.mysql.jdbc.Driver";
     static String username = "root";
     static String password = "";

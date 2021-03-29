@@ -163,8 +163,8 @@ server:
 
     #Database Configuration
     DB_URL: "jdbc:mysql://localhost:3306/cosmic"
-    DB_USER: "root"
-    DB_PASS: ""
+    DB_USER: "snail"
+    DB_PASS: "shell"
     DB_CONNECTION_POOL: true        #Installs a connection pool to hub DB connections. Set false to default.
 
     #Login Configuration

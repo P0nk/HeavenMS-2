@@ -67,8 +67,8 @@ public class MapleQuestItemFetcher {
     
     static String host = "jdbc:mysql://localhost:3306/cosmic";
     static String driver = "com.mysql.jdbc.Driver";
-    static String username = "root";
-    static String password = "";
+    static String username = "snail";
+    static String password = "shell";
 
     static String wzPath = "../../wz";
     static String directoryName = "../..";

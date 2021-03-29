@@ -38,8 +38,8 @@ import java.io.*;
 public class MapleSkillMakerFetcher {
     static String host = "jdbc:mysql://localhost:3306/cosmic";
     static String driver = "com.mysql.jdbc.Driver";
-    static String username = "root";
-    static String password = "";
+    static String username = "snail";
+    static String password = "shell";
 
     static String fileName = "../../wz/Etc.wz/ItemMake.img.xml";
     static String newFile = "lib/MakerData.sql";

@@ -946,7 +946,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        This text should cause the Actions PR pipeline to fail
         System.setProperty("wzpath", "wz");
         Security.setProperty("crypto.policy", "unlimited");
         AutoJCE.removeCryptographyRestrictions();

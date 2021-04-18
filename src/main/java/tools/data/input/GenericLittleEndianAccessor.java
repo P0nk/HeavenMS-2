@@ -21,6 +21,7 @@
 */
 package tools.data.input;
 
+import constants.string.CharsetConstants;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 
@@ -129,11 +130,17 @@ public class GenericLittleEndianAccessor implements LittleEndianAccessor {
      * @return The string read.
      */
     public final String readAsciiString(int n) {
-        char[] ret = new char[n];
+        byte ret[] = new byte[n];
         for (int x = 0; x < n; x++) {
-            ret[x] = (char) readByte();
+            ret[x] = (byte) readByte();
         }
-        return String.valueOf(ret);
+        try {
+            String str= new String(ret,CharsetConstants.MapleEncoding); // Multi-Language Support by MiLin
+            return str;
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return null;
     }
 
     /**

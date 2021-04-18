@@ -21,6 +21,7 @@
 */
 package tools.data.output;
 
+import constants.string.CharsetConstants;
 import constants.string.CharsetConstants.MapleLanguageType;
 
 import java.awt.*;
@@ -34,7 +35,6 @@ import java.nio.charset.Charset;
  * @since Revision 323
  */
 public class GenericLittleEndianWriter implements LittleEndianWriter {
-    private static Charset ASCII = Charset.forName(MapleLanguageType.LANGUAGE_US.getAscii());
     private ByteOutputStream bos;
 
     /**
@@ -121,7 +121,7 @@ public class GenericLittleEndianWriter implements LittleEndianWriter {
      */
     @Override
     public void writeAsciiString(String s) {
-        write(s.getBytes(ASCII));
+        write(s.getBytes(CharsetConstants.MapleEncoding)); // Multi-Language Support by MiLin
     }
 
     /**
@@ -131,7 +131,7 @@ public class GenericLittleEndianWriter implements LittleEndianWriter {
      */
     @Override
     public void writeMapleAsciiString(String s) {
-        writeShort((short) s.length());
+        writeShort((short) s.getBytes().length);
         writeAsciiString(s);
     }
 

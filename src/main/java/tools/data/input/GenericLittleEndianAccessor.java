@@ -130,13 +130,12 @@ public class GenericLittleEndianAccessor implements LittleEndianAccessor {
      * @return The string read.
      */
     public final String readAsciiString(int n) {
-        byte ret[] = new byte[n];
+        byte[] ret = new byte[n];
         for (int x = 0; x < n; x++) {
-            ret[x] = (byte) readByte();
+            ret[x] = readByte();
         }
         try {
-            String str= new String(ret,CharsetConstants.MapleEncoding); // Multi-Language Support by MiLin
-            return str;
+            return new String(ret,CharsetConstants.MapleEncoding); // Multi-Language Support by MiLin
         } catch (Exception e) {
             System.err.println(e);
         }

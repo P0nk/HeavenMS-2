@@ -33,7 +33,7 @@ public class StringUtil {
 	 */
 	public static String getLeftPaddedStr(String in, char padchar, int length) {
 		StringBuilder builder = new StringBuilder(length);
-		for (int x = in.getBytes().length; x < length; x++) { // Multi-Language Support by MiLin
+		for (int x = in.length(); x < length; x++) { // Multi-Language Support by MiLin
 			builder.append(padchar);
 		}
 		builder.append(in);
@@ -51,7 +51,7 @@ public class StringUtil {
 	 */
 	public static String getRightPaddedStr(String in, char padchar, int length) {
 		StringBuilder builder = new StringBuilder(in);
-		for (int x = in.getBytes().length; x < length; x++) { // Multi-Language Support by MiLin
+		for (int x = in.length(); x < length; x++) { // Multi-Language Support by MiLin
 			builder.append(padchar);
 		}
 		return builder.toString();

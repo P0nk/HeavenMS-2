@@ -6,6 +6,7 @@
  
 package constants.string;
  
+import config.YamlConfig;
 import java.nio.charset.Charset;
 
 /*
@@ -19,12 +20,11 @@ public class CharsetConstants {
    
     public static MapleLanguageType MAPLE_TYPE = MapleLanguageType.LANGUAGE_US;
     
-    public static Charset MapleEncoding = Charset.forName(MapleLanguageType.LANGUAGE_TH.getAscii()); // Multi-Language Support by MiLin (E.g. TH)
+    public static final Charset MapleEncoding = Charset.forName(YamlConfig.config.server.MAPLE_ENCODING); // Multi-Language Support by MiLin
    
     public enum MapleLanguageType {
         LANGUAGE_PT_BR(1, "ISO-8859-1"),
-        LANGUAGE_US(2, "US-ASCII"),
-        LANGUAGE_TH(3, "TIS-620"); // Multi-Language Support by MiLin
+        LANGUAGE_US(2, "US-ASCII");
         final byte type;
         final String ascii;
  

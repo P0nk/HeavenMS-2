@@ -167,6 +167,9 @@ server:
     DB_USER: "cosmic_server"
     DB_PASS: "snailshell"
     INIT_CONNECTION_POOL_TIMEOUT: 60    # Seconds
+    
+    #Encoding Configuration E.g. MS949 for Korean, TIS620 for Thai
+    MAPLE_ENCODING: "TIS620"
 
     #Login Configuration
     WORLDS: 1                           #Initial number of worlds on the server.

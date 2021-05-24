@@ -6,6 +6,9 @@
  
 package constants.string;
  
+import config.YamlConfig;
+import java.nio.charset.Charset;
+
 /*
  * Thanks to GabrielSin (EllinMS) - gabrielsin@playellin.net
  * Ellin
@@ -16,6 +19,8 @@ package constants.string;
 public class CharsetConstants {
    
     public static MapleLanguageType MAPLE_TYPE = MapleLanguageType.LANGUAGE_US;
+    
+    public static final Charset MapleEncoding = Charset.forName(YamlConfig.config.server.MAPLE_ENCODING); // Multi-Language Support by MiLin
    
     public enum MapleLanguageType {
         LANGUAGE_PT_BR(1, "ISO-8859-1"),

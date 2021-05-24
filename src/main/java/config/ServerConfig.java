@@ -303,5 +303,7 @@ public class ServerConfig {
 
     //Event End Timestamp
     public long EVENT_END_TIMESTAMP;
-
+    
+    //MapleEncoding by MiLin
+    public String MAPLE_ENCODING;
 }

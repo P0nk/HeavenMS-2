@@ -45,13 +45,13 @@ function action(mode, type, selection) {
                         status--;
     
                 if(status == 0) {
-                        if (cm.isQuestCompleted(100007)) {
+                        if (cm.isQuestCompleted(32007)) {
                             cm.sendOk("You're truly a hero!");
                             cm.dispose();
-                        } else if(cm.isQuestCompleted(100006)) {
+                        } else if(cm.isQuestCompleted(32006)) {
                             cm.sendNext("Alright I'll let you in! Defeat the monsters inside, collect 30 Dark Marbles, then strike up a conversation with a colleague of mine inside. He'll give you #bThe Proof of a Hero#k, the proof that you've passed the test. Best of luck to you.");
                             status = 4;
-                        } else if (cm.isQuestStarted(100006)) {
+                        } else if (cm.isQuestStarted(32006)) {
                             cm.sendNext("Hmmm...it is definitely the letter from #bGrendell the Really Old#k...so you came all the way here to take the test and make the 2nd job advancement as a magician. Alright, I'll explain the test to you. Don't sweat it too much, it's not that complicated.");
                         } else {
                             cm.sendOk("I can show you the way once your ready for it.");
@@ -66,8 +66,8 @@ function action(mode, type, selection) {
                         cm.sendYesNo("Once you go inside, you can't leave until you take care of your mission. If you die, your experience level will decrease.. So you better really buckle up and get ready...well, do you want to go for it now?");
                 else if (status == 4) {
                         cm.sendNext("Alright I'll let you in! Defeat the monsters inside, collect 30 Dark Marbles, then strike up a conversation with a colleague of mine inside. He'll give you #bThe Proof of a Hero#k, the proof that you've passed the test. Best of luck to you.");
-                        cm.completeQuest(100006);            
-                        cm.startQuest(100007);
+                        cm.completeQuest(32006);
+                        cm.startQuest(32007);
                         cm.gainItem(4031009, -1);
                 }
                 else if (status == 5) {

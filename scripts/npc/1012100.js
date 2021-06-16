@@ -1,8 +1,8 @@
 /*
-	This file is part of the OdinMS Maple Story Server
+    This file is part of the OdinMS Maple Story Server
     Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+               Matthias Butz <matze@odinms.de>
+               Jan Christian Meyer <vimes@odinms.de>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -21,8 +21,8 @@
 */
 
 /*      Athena Pierce
-	Bowman Job Advancement
-	Victoria Road : Bowman Instructional School (100000201)
+    Bowman Job Advancement
+    Victoria Road : Bowman Instructional School (100000201)
 */
 
 status = -1;
@@ -52,7 +52,7 @@ function start() {
             actionx["2ndJob"] = true;
             if (cm.haveItem(4031012))
                 cm.sendNext("Haha...I knew you'd breeze through that test. I'll admit, you are a great bowman. I'll make you much stronger than you're right now. before that, however... you;ll need to choose one of two paths given to you. It'll be a difficult decision for you to make, but... if there's any question to ask, please do so.");
-            else if (cm.haveItem(4031011)){
+            else if (cm.haveItem(4031011)) {
                 cm.sendOk("Go and see the #b#p1072002##k.");
                 cm.dispose();
             } else
@@ -110,7 +110,7 @@ function action(mode, type, selection) {
             if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008) && status == 2) || (actionx["3thJobI"] && status == 1)){
                 if (mode == 0 && status == 2 && type == 1)
                     cm.sendOk("You know there is no other choice...");
-                if (!(mode == 0 && type != 1)){
+                if (!(mode == 0 && type != 1)) {
                     cm.dispose();
                     return;
                 }
@@ -118,7 +118,7 @@ function action(mode, type, selection) {
         }
     }
     
-    if (actionx["1stJob"]){
+    if (actionx["1stJob"]) {
         if (status == 0) {
             if (cm.getLevel() >= 10 && cm.canGetFirstJob(jobType)) {
                 cm.sendNextPrev("It is an important and final choice. You will not be able to turn back.");
@@ -141,7 +141,7 @@ function action(mode, type, selection) {
             }
         } else if (status == 2) 
             cm.sendNextPrev("You've gotten much stronger now. Plus every single one of your inventories have added slots. A whole row, to be exact. Go see for it yourself. I just gave you a little bit of #bSP#k. When you open up the #bSkill#k menu on the lower left corner of the screen, there are skills you can learn by using SP's. One warning, though: You can't raise it all together all at once. There are also skills you can acquire only after having learned a couple of skills first.");
-	else if (status == 3)
+    else if (status == 3)
             cm.sendNextPrev("Now a reminder. Once you have chosen, you cannot change up your mind and try to pick another path. Go now, and live as a proud Bowman.");
         else
             cm.dispose();    
@@ -151,16 +151,16 @@ function action(mode, type, selection) {
                 cm.sendSimple("Alright, when you have made your decision, click on [I'll choose my occupation] at the bottom.#b\r\n#L0#Please explain to me what being the Hunter is all about.\r\n#L1#Please explain to me what being the Crossbowman is all about.\r\n#L3#I'll choose my occupation!");
             else {
                 cm.sendNext("Good decision. You look strong, but I need to see if you really are strong enough to pass the test, it's not a difficult test, so you'll do just fine. Here, take my letter first... make sure you don't lose it!");
-		if(!cm.isQuestStarted(100000)) cm.startQuest(100000);
-	   }
+        if(!cm.isQuestStarted(32000)) cm.startQuest(32000);
+       }
         } else if (status == 1){
             if (!cm.haveItem(4031012)){
                 if (cm.canHold(4031010)){
                     if (!cm.haveItem(4031010))
                         cm.gainItem(4031010, 1);
                     cm.sendNextPrev("Please get this letter to #b#p1072002##k who's around #b#m106010000##k near Henesys. She is taking care of the job of an instructor in place of me. Give her the letter and she'll test you in place of me. Best of luck to you.");
-		    cm.dispose();
-		} else {
+                    cm.dispose();
+                } else {
                     cm.sendNext("Please, make some space in your inventory.");
                     cm.dispose();
                 }
@@ -182,6 +182,7 @@ function action(mode, type, selection) {
         } else if (status == 3){
             if (cm.haveItem(4031012))
                 cm.gainItem(4031012, -1);
+            cm.completeQuest(32002);
             
             cm.sendNext("Alright, you're the " + (job == 310 ? "#bHunter#k" : "#bCrossbowman#k") + " from here on out. " + (job == 310 ? "#bHunter#k" : "#bCrossbowman#k") + "s are the intelligent bunch with incredible vision, able to pierce the arrow through the heart of the monsters with ease... please train yourself each and everyday. I'll help you become even stronger than you already are.");
             if (cm.getJobId() != job)

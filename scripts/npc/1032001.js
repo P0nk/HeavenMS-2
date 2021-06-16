@@ -155,7 +155,7 @@ function action(mode, type, selection) {
                 cm.sendSimple("Alright, when you have made your decision, click on [I'll choose my occupation] at the bottom.#b\r\n#L0#Please explain to me what being the Wizard (Fire / Poison) is all about.\r\n#L1#Please explain to me what being the Wizard (Ice / Lighting) is all about.\r\n#L2#Please explain to me what being the Cleric is all about.\r\n#L3#I'll choose my occupation!");
             else {
                 cm.sendNext("Good decision. You look strong, but I need to see if you really are strong enough to pass the test, it's not a difficult test, so you'll do just fine. Here, take my letter first... make sure you don't lose it!");
-		if(!cm.isQuestStarted(100006)) cm.startQuest(100006);
+		if(!cm.isQuestStarted(32006)) cm.startQuest(32006);
 	    }
         } else if (status == 1){
             if (!cm.haveItem(4031012)){
@@ -191,7 +191,7 @@ function action(mode, type, selection) {
         } else if (status == 3){
             if (cm.haveItem(4031012))
                 cm.gainItem(4031012, -1);
-            cm.completeQuest(100008);
+            cm.completeQuest(32008);
             cm.sendNext("Alright, you're the " + (job == 210 ? "#bWizard (Fire / Poison)#k" : job == 220 ? "#bWizard (Ice / Lighting)#k" : "#bCleric#k") + " from here on out. Mages and wizards are the intelligent bunch with incredible magical prowess, able to pierce the mind and the psychological structure of the monsters with ease... please train yourself each and everyday. I'll help you become even stronger than you already are.");
             if (cm.getJobId() != job)
                 cm.changeJobById(job);

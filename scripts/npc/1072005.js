@@ -51,8 +51,8 @@ function action(mode, type, selection) {
                 } else if(status == 1) {
                     if(completed) {
                         cm.removeAll(4031013);
-                        cm.completeQuest(100007);
-                        cm.startQuest(100008);
+                        cm.completeQuest(32007);
+                        cm.startQuest(32008);
                         cm.gainItem(4031012);
                     }
                     

@@ -9811,7 +9811,14 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
         }
     }
-    
+
+    /**
+     * Updates the progress for a quest. For example, eating rogers apple would apply the infoNumber for rogers apple to 1.
+     *
+     * @param id Quest id to apply the update to.
+     * @param infoNumber ID of the thing that the quest is tracking.
+     * @param progress New progress value that the player has achieved.
+     */
     public void setQuestProgress(int id, int infoNumber, String progress) {
         MapleQuest q = MapleQuest.getInstance(id);
         MapleQuestStatus qs = getQuest(q);
@@ -9927,6 +9934,19 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
             // reminder: do not reset quest progress of infoNumbers, some quests cannot backtrack
         }
+    }
+
+    /**
+     * Adds a quest to be forfeited to the delayed quest update list, for processing when ready.
+     * This method can also be used to reset completed quests, but each quest in a series must be forfeit individually.
+     *
+     * @param id ID of the quest that should be forfeit.
+     */
+    public void forfeitQuest(int id) {
+        MapleQuest q = MapleQuest.getInstance(id);
+        MapleQuestStatus qs = getQuest(q);
+
+        announceUpdateQuest(DelayedQuestUpdate.FORFEIT, qs.getQuestID());
     }
     
     private void expireQuest(MapleQuest quest) {
@@ -11141,6 +11161,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         if (getLevel() != 200) {
             return;
         }
+
+        // Reset all the quest ids so the player can do job advancements again.
+        for (int id : GameConstants.JOB_ADV_QUEST_IDS) {
+            forfeitQuest(id);
+        }
+
         addReborns();
         changeJob(MapleJob.BEGINNER);
         setLevel(0);

@@ -151,7 +151,7 @@ function action(mode, type, selection) {
                 cm.sendSimple("Alright, when you have made your decision, click on [I'll choose my occupation] at the bottom.#b\r\n#L0#Please explain to me what being the Fighter is all about.\r\n#L1#Please explain to me what being the Page is all about.\r\n#L2#Please explain to me what being the Spearman is all about.\r\n#L3#I'll choose my occupation!");
             else {
                 cm.sendNext("Good decision. You look strong, but I need to see if you really are strong enough to pass the test, it's not a difficult test, so you'll do just fine. Here, take my letter first... make sure you don't lose it!");
-		if(!cm.isQuestStarted(100003)) cm.startQuest(100003);
+		if(!cm.isQuestStarted(32003)) cm.startQuest(32003);
 	    }
         } else if (status == 1){
             if (!cm.haveItem(4031012)){
@@ -187,7 +187,7 @@ function action(mode, type, selection) {
         } else if (status == 3){
             if (cm.haveItem(4031012))
                 cm.gainItem(4031012, -1);
-	    cm.completeQuest(100005);
+	    cm.completeQuest(32005);
             
             if(job == 110) cm.sendNext("Alright, you have now become the #bFighter#k. A fighter strives to become the strongest of the strong, and never stops fighting. Don't ever lose that will to fight, and push forward 24/7. I'll help you become even stronger than you already are.");
             else if(job == 120) cm.sendNext("Alright, you have now become a #bPage#k! Pages have high intelligence and bravery, which I hope you'll employ throughout your journey to the right path. I'll help you become much stronger than you already are.");

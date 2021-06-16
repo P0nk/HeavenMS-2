@@ -45,13 +45,13 @@ function action(mode, type, selection) {
                         status--;
     
                 if (status == 0) {
-                        if (cm.isQuestCompleted(100001)) {
+                        if (cm.isQuestCompleted(32001)) {
                             cm.sendOk("You're truly a hero!");
                             cm.dispose();
-                        } else if(cm.isQuestCompleted(100000)) {
+                        } else if(cm.isQuestCompleted(32000)) {
                             cm.sendNext("Alright I'll let you in! Defeat the monsters inside, collect 30 Dark Marbles, then strike up a conversation with a colleague of mine inside. He'll give you #bThe Proof of a Hero#k, the proof that you've passed the test. Best of luck to you.");
                             status = 3;
-                        } else if (cm.isQuestStarted(100000)) {
+                        } else if (cm.isQuestStarted(32000)) {
                             cm.sendNext("Oh, isn't this a letter from #bAthena#k?");
                         } else {
                             cm.sendOk("I can show you the way once your ready for it.");
@@ -64,8 +64,8 @@ function action(mode, type, selection) {
                 else if (status == 2)
                     cm.sendAcceptDecline("I will give you a chance if you're ready.");
                 else if (status == 3) {
-                    cm.completeQuest(100000);
-                    cm.startQuest(100001);
+                    cm.completeQuest(32000);
+                    cm.startQuest(32001);
                     cm.gainItem(4031010, -1);
                     cm.sendOk("You will have to collect me #b30 #t4031013##k. Good luck.")
                 } else if (status == 4) {

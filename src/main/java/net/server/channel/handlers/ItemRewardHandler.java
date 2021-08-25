@@ -27,13 +27,13 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import server.MapleItemInformationProvider;
 import server.MapleItemInformationProvider.RewardItem;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.List;
 
@@ -43,9 +43,9 @@ import java.util.List;
  */
 public final class ItemRewardHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        byte slot = (byte) slea.readShort();
-        int itemId = slea.readInt(); // will load from xml I don't care.
+    public final void handlePacket(InPacket p, MapleClient c) {
+        byte slot = (byte) p.readShort();
+        int itemId = p.readInt(); // will load from xml I don't care.
         
         Item it = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);   // null check here thanks to Thora
         if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(MapleInventoryType.USE).countById(itemId) < 1) return;

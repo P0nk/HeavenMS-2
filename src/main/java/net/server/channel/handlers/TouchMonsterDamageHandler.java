@@ -24,14 +24,14 @@ package net.server.channel.handlers;
 import client.MapleBuffStat;
 import client.MapleClient;
 import client.MapleCharacter;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public final class TouchMonsterDamageHandler extends AbstractDealDamageHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         if (chr.getEnergyBar() == 15000 || chr.getBuffedValue(MapleBuffStat.BODY_PRESSURE) != null) {
-            applyAttack(parseDamage(slea, chr, false, false), c.getPlayer(), 1);
+            applyAttack(parseDamage(p, chr, false, false), c.getPlayer(), 1);
         }
     }
 }

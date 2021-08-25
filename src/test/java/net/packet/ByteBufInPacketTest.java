@@ -2,6 +2,7 @@ package net.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.opcodes.SendOpcode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +73,7 @@ class ByteBufInPacketTest {
         byteBuf.writeShortLE((short) writtenPoint.getX());
         byteBuf.writeShortLE((short) writtenPoint.getY());
 
-        Point readPoint = inPacket.readPoint();
+        Point readPoint = inPacket.readPos();
 
         assertEquals(writtenPoint, readPoint);
     }
@@ -188,5 +189,19 @@ class ByteBufInPacketTest {
         assertEquals(5, sameBytes.length);
 
         assertArrayEquals(bytes, sameBytes);
+    }
+
+    @Test
+    void toString_shouldIncludeEntirePacket() {
+        OutPacket outPacket = OutPacket.create(SendOpcode.COCONUT_HIT);
+        outPacket.writeByte(111);
+        ByteBuf byteBuf = Unpooled.wrappedBuffer(outPacket.getBytes());
+        ByteBufInPacket inPacket = new ByteBufInPacket(byteBuf);
+
+        String initial = inPacket.toString();
+        inPacket.readShort();
+        String afterReadingOpcode = inPacket.toString();
+
+        assertEquals(initial.length(), afterReadingOpcode.length());
     }
 }

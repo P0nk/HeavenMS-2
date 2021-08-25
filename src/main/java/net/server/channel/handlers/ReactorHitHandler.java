@@ -23,23 +23,23 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleReactor;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  * @author Lerk
  */
 public final class ReactorHitHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
     	//System.out.println(slea); //To see if there are any differences with packets
         //CD 00 6B 00 00 00 01 00 00 00 03 00 00 00 20 03 F7 03 00 00
     	//[CD 00] [66 00 00 00] [00 00 00 00] [02 00] [00 00 19 01] [00 00 00 00]
-        int oid = slea.readInt();
-        int charPos = slea.readInt();
-        short stance = slea.readShort();
-        slea.skip(4);
-        int skillid = slea.readInt();
+        int oid = p.readInt();
+        int charPos = p.readInt();
+        short stance = p.readShort();
+        p.skip(4);
+        int skillid = p.readInt();
         MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
         if (reactor != null) {
             reactor.hitReactor(true, charPos, stance, skillid, c);

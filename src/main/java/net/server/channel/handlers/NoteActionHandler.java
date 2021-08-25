@@ -23,9 +23,9 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,11 +34,11 @@ import java.sql.SQLException;
 
 public final class NoteActionHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int action = slea.readByte();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int action = p.readByte();
         if (action == 0 && c.getPlayer().getCashShop().getAvailableNotes() > 0) {
-            String charname = slea.readMapleAsciiString();
-            String message = slea.readMapleAsciiString();
+            String charname = p.readString();
+            String message = p.readString();
             try {
                 if (c.getPlayer().getCashShop().isOpened()) {
                     c.sendPacket(PacketCreator.showCashInventory(c));
@@ -50,13 +50,13 @@ public final class NoteActionHandler extends AbstractMaplePacketHandler {
                 e.printStackTrace();
             }
         } else if (action == 1) {
-            int num = slea.readByte();
-            slea.readByte();
-            slea.readByte();
+            int num = p.readByte();
+            p.readByte();
+            p.readByte();
             int fame = 0;
             for (int i = 0; i < num; i++) {
-                int id = slea.readInt();
-                slea.readByte(); //Fame, but we read it from the database :)
+                int id = p.readInt();
+                p.readByte(); //Fame, but we read it from the database :)
 
                 try (Connection con = DatabaseConnection.getConnection()) {
                     try (PreparedStatement ps = con.prepareStatement("SELECT `fame` FROM notes WHERE id=? AND deleted=0")) {

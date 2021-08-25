@@ -23,19 +23,19 @@ import client.MapleCharacter;
 import client.MapleClient;
 import constants.game.GameConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.maps.MapleMap;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public class FieldDamageMobHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int mobOid = slea.readInt();    // packet structure found thanks to Darter (Rajan)
-        int dmg = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int mobOid = p.readInt();    // packet structure found thanks to Darter (Rajan)
+        int dmg = p.readInt();
         
         MapleCharacter chr = c.getPlayer();
         MapleMap map = chr.getMap();

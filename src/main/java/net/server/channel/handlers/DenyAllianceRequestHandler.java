@@ -22,8 +22,8 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.MapleCharacter;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.guild.MapleAlliance;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  * @author Ronan
@@ -31,10 +31,10 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class DenyAllianceRequestHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readByte();
-        String inviterName = slea.readMapleAsciiString();
-        String guildName = slea.readMapleAsciiString();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readByte();
+        String inviterName = p.readString();
+        String guildName = p.readString();
         
         MapleCharacter chr = c.getWorldServer().getPlayerStorage().getCharacterByName(inviterName);
         if (chr != null) {

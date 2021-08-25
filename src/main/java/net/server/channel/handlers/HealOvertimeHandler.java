@@ -26,22 +26,22 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.autoban.AutobanManager;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import server.maps.MapleMap;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class HealOvertimeHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         if(!chr.isLoggedinWorld()) return;
         
         AutobanManager abm = chr.getAutobanManager();
         int timestamp = Server.getInstance().getCurrentTimestamp();
-        slea.skip(8);
+        p.skip(8);
         
-        short healHP = slea.readShort();
+        short healHP = p.readShort();
         if (healHP != 0) {
             abm.setTimestamp(8, timestamp, 28);  // thanks Vcoc & Thora for pointing out d/c happening here
             if ((abm.getLastSpam(0) + 1500) > timestamp) AutobanFactory.FAST_HP_HEALING.addPoint(abm, "Fast hp healing");
@@ -57,7 +57,7 @@ public final class HealOvertimeHandler extends AbstractMaplePacketHandler {
             chr.getMap().broadcastMessage(chr, PacketCreator.showHpHealed(chr.getId(), healHP), false);
             abm.spam(0, timestamp);
         }
-        short healMP = slea.readShort();
+        short healMP = p.readShort();
         if (healMP != 0 && healMP < 1000) {
             abm.setTimestamp(9, timestamp, 28);
             if ((abm.getLastSpam(1) + 1500) > timestamp) {

@@ -29,6 +29,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.skills.*;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.PlayerBuffValueHolder;
 import scripting.AbstractPlayerInteraction;
 import server.MapleStatEffect;
@@ -41,7 +42,6 @@ import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
-import tools.data.input.LittleEndianAccessor;
 
 import java.awt.*;
 import java.util.List;
@@ -524,15 +524,15 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
         }
     }
     
-    protected AttackInfo parseDamage(LittleEndianAccessor lea, MapleCharacter chr, boolean ranged, boolean magic) {    
+    protected AttackInfo parseDamage(InPacket p, MapleCharacter chr, boolean ranged, boolean magic) {
     	//2C 00 00 01 91 A1 12 00 A5 57 62 FC E2 75 99 10 00 47 80 01 04 01 C6 CC 02 DD FF 5F 00
         AttackInfo ret = new AttackInfo();
-        lea.readByte();
-        ret.numAttackedAndDamage = lea.readByte();
+        p.readByte();
+        ret.numAttackedAndDamage = p.readByte();
         ret.numAttacked = (ret.numAttackedAndDamage >>> 4) & 0xF;
         ret.numDamage = ret.numAttackedAndDamage & 0xF;
         ret.allDamage = new HashMap<>();
-        ret.skill = lea.readInt();
+        ret.skill = p.readInt();
         ret.ranged = ranged;
         ret.magic = magic;
         
@@ -542,45 +542,45 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
         }
         
         if (ret.skill == Evan.ICE_BREATH || ret.skill == Evan.FIRE_BREATH || ret.skill == FPArchMage.BIG_BANG || ret.skill == ILArchMage.BIG_BANG || ret.skill == Bishop.BIG_BANG || ret.skill == Gunslinger.GRENADE || ret.skill == Brawler.CORKSCREW_BLOW || ret.skill == ThunderBreaker.CORKSCREW_BLOW || ret.skill == NightWalker.POISON_BOMB) {
-            ret.charge = lea.readInt();
+            ret.charge = p.readInt();
         } else {
             ret.charge = 0;
         }
         
-        lea.skip(8);
-        ret.display = lea.readByte();
-        ret.direction = lea.readByte();
-        ret.stance = lea.readByte();
+        p.skip(8);
+        ret.display = p.readByte();
+        ret.direction = p.readByte();
+        ret.stance = p.readByte();
         if (ret.skill == ChiefBandit.MESO_EXPLOSION) {
             if (ret.numAttackedAndDamage == 0) {
-                lea.skip(10);
-                int bullets = lea.readByte();
+                p.skip(10);
+                int bullets = p.readByte();
                 for (int j = 0; j < bullets; j++) {
-                    int mesoid = lea.readInt();
-                    lea.skip(1);
+                    int mesoid = p.readInt();
+                    p.skip(1);
                     ret.allDamage.put(mesoid, null);
                 }
                 return ret;
             } else {
-                lea.skip(6);
+                p.skip(6);
             }
             for (int i = 0; i < ret.numAttacked + 1; i++) {
-                int oid = lea.readInt();
+                int oid = p.readInt();
                 if (i < ret.numAttacked) {
-                    lea.skip(12);
-                    int bullets = lea.readByte();
+                    p.skip(12);
+                    int bullets = p.readByte();
                     List<Integer> allDamageNumbers = new ArrayList<>();
                     for (int j = 0; j < bullets; j++) {
-                        int damage = lea.readInt();
+                        int damage = p.readInt();
                         allDamageNumbers.add(damage);
                     }
                     ret.allDamage.put(oid, allDamageNumbers);
-                    lea.skip(4);
+                    p.skip(4);
                 } else {
-                    int bullets = lea.readByte();
+                    int bullets = p.readByte();
                     for (int j = 0; j < bullets; j++) {
-                        int mesoid = lea.readInt();
-                        lea.skip(1);
+                        int mesoid = p.readInt();
+                        p.skip(1);
                         ret.allDamage.put(mesoid, null);
                     }
                 }
@@ -588,18 +588,18 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
             return ret;
         }
         if (ranged) {
-            lea.readByte();
-            ret.speed = lea.readByte();
-            lea.readByte();
-            ret.rangedirection = lea.readByte();
-            lea.skip(7);
+            p.readByte();
+            ret.speed = p.readByte();
+            p.readByte();
+            ret.rangedirection = p.readByte();
+            p.skip(7);
             if (ret.skill == Bowmaster.HURRICANE || ret.skill == Marksman.PIERCING_ARROW || ret.skill == Corsair.RAPID_FIRE || ret.skill == WindArcher.HURRICANE) {
-                lea.skip(4);
+                p.skip(4);
             }
         } else {
-            lea.readByte();
-            ret.speed = lea.readByte();
-            lea.skip(4);
+            p.readByte();
+            ret.speed = p.readByte();
+            p.skip(4);
         }
         
         // Find the base damage to base futher calculations on.
@@ -739,8 +739,8 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                 calcDmgMax = fixed;
         }
         for (int i = 0; i < ret.numAttacked; i++) {
-            int oid = lea.readInt();
-            lea.skip(14);
+            int oid = p.readInt();
+            p.skip(14);
             List<Integer> allDamageNumbers = new ArrayList<>();
             MapleMonster monster = chr.getMap().getMonsterByOid(oid);
             
@@ -814,7 +814,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
             }
             
             for (int j = 0; j < ret.numDamage; j++) {
-                    int damage = lea.readInt();
+                    int damage = p.readInt();
                     long hitDmgMax = calcDmgMax;
                     if(ret.skill == Buccaneer.BARRAGE || ret.skill == ThunderBreaker.BARRAGE) {
                         if(j > 3)
@@ -857,13 +857,13 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                     allDamageNumbers.add(damage);
             }
             if (ret.skill != Corsair.RAPID_FIRE || ret.skill != Aran.HIDDEN_FULL_DOUBLE || ret.skill != Aran.HIDDEN_FULL_TRIPLE || ret.skill != Aran.HIDDEN_OVER_DOUBLE || ret.skill != Aran.HIDDEN_OVER_TRIPLE) {
-            	lea.skip(4);
+            	p.skip(4);
             }
             ret.allDamage.put(oid, allDamageNumbers);
         }
         if (ret.skill == NightWalker.POISON_BOMB) { // Poison Bomb
-            lea.skip(4);
-            ret.position.setLocation(lea.readShort(), lea.readShort());
+            p.skip(4);
+            ret.position.setLocation(p.readShort(), p.readShort());
         }
         return ret;
     }

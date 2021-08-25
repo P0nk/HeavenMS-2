@@ -24,6 +24,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
+import net.packet.InPacket;
 import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MobSkill;
@@ -34,7 +35,6 @@ import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.exceptions.EmptyMovementException;
 
 import java.awt.*;
@@ -49,7 +49,7 @@ import java.util.List;
 public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         
 	@Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+	public final void handlePacket(InPacket p, MapleClient c) {
                 MapleCharacter player = c.getPlayer();
                 MapleMap map = player.getMap();
                 
@@ -57,8 +57,8 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                     return;
                 }
                 
-		int objectid = slea.readInt();
-		short moveid = slea.readShort();
+		int objectid = p.readInt();
+		short moveid = p.readShort();
 		MapleMapObject mmo = map.getMapObject(objectid);
 		if (mmo == null || mmo.getType() != MapleMapObjectType.MONSTER) {
 			return;
@@ -67,12 +67,12 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 		MapleMonster monster = (MapleMonster) mmo;
                 List<MapleCharacter> banishPlayers = null;
                 
-                byte pNibbles = slea.readByte();
-		byte rawActivity = slea.readByte();
-		int skillId = slea.readByte() & 0xff;
-		int skillLv = slea.readByte() & 0xff;
-		short pOption = slea.readShort();
-                slea.skip(8);
+                byte pNibbles = p.readByte();
+		byte rawActivity = p.readByte();
+		int skillId = p.readByte() & 0xff;
+		int skillLv = p.readByte() & 0xff;
+		short pOption = p.readShort();
+                p.skip(8);
                 
                 if (rawActivity >= 0) {
 			rawActivity = (byte) (rawActivity & 0xFF >> 1);
@@ -139,10 +139,10 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                         }
                 }
                 
-		slea.readByte();
-		slea.readInt(); // whatever
-		short start_x = slea.readShort(); // hmm.. startpos?
-		short start_y = slea.readShort(); // hmm...
+		p.readByte();
+		p.readInt(); // whatever
+		short start_x = p.readShort(); // hmm.. startpos?
+		short start_y = p.readShort(); // hmm...
 		Point startPos = new Point(start_x, start_y - 2);
 		Point serverStartPos = new Point(monster.getPosition());
                 
@@ -157,16 +157,16 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 
                 
                 try {
-                        long movementDataStart = slea.getPosition();
-                        updatePosition(slea, monster, -2);  // Thanks Doodle & ZERO傑洛 for noticing sponge-based bosses moving out of stage in case of no-offset applied
-                        long movementDataLength = slea.getPosition() - movementDataStart; //how many bytes were read by updatePosition
-                        slea.seek(movementDataStart);
+                        int movementDataStart = p.getPosition();
+                        updatePosition(p, monster, -2);  // Thanks Doodle & ZERO傑洛 for noticing sponge-based bosses moving out of stage in case of no-offset applied
+                        long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
+                        p.seek(movementDataStart);
                         
                         if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_MVLIFE) {
                                 System.out.println((isSkill ? "SKILL " : (isAttack ? "ATTCK " : " ")) + "castPos: " + castPos + " rawAct: " + rawActivity + " opt: " + pOption + " skillID: " + useSkillId + " skillLV: " + useSkillLevel + " " + "allowSkill: " + nextMovementCouldBeSkill + " mobMp: " + mobMp);
                         }
                         
-                        map.broadcastMessage(player, PacketCreator.moveMonster(objectid, nextMovementCouldBeSkill, rawActivity, useSkillId, useSkillLevel, pOption, startPos, slea, movementDataLength), serverStartPos);
+                        map.broadcastMessage(player, PacketCreator.moveMonster(objectid, nextMovementCouldBeSkill, rawActivity, useSkillId, useSkillLevel, pOption, startPos, p, movementDataLength), serverStartPos);
                         //updatePosition(res, monster, -2); //does this need to be done after the packet is broadcast?
                         map.moveMonster(monster, monster.getPosition());
                 } catch (EmptyMovementException e) {}

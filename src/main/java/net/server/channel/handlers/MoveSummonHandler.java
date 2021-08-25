@@ -23,9 +23,9 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import net.packet.InPacket;
 import server.maps.MapleSummon;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.exceptions.EmptyMovementException;
 
 import java.awt.*;
@@ -33,9 +33,9 @@ import java.util.Collection;
 
 public final class MoveSummonHandler extends AbstractMovementPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int oid = slea.readInt();
-        Point startPos = new Point(slea.readShort(), slea.readShort());
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int oid = p.readInt();
+        Point startPos = new Point(p.readShort(), p.readShort());
         MapleCharacter player = c.getPlayer();
         Collection<MapleSummon> summons = player.getSummonsValues();
         MapleSummon summon = null;
@@ -47,12 +47,12 @@ public final class MoveSummonHandler extends AbstractMovementPacketHandler {
         }
         if (summon != null) {
             try {
-                long movementDataStart = slea.getPosition();
-                updatePosition(slea, summon, 0);
-                long movementDataLength = slea.getPosition() - movementDataStart; //how many bytes were read by updatePosition
-                slea.seek(movementDataStart);
+                int movementDataStart = p.getPosition();
+                updatePosition(p, summon, 0);
+                long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
+                p.seek(movementDataStart);
                 
-                player.getMap().broadcastMessage(player, PacketCreator.moveSummon(player.getId(), oid, startPos, slea, movementDataLength), summon.getPosition());
+                player.getMap().broadcastMessage(player, PacketCreator.moveSummon(player.getId(), oid, startPos, p, movementDataLength), summon.getPosition());
             } catch (EmptyMovementException e) {}
         }
     }

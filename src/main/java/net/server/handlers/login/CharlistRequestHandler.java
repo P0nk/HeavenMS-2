@@ -23,18 +23,18 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.world.World;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class CharlistRequestHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readByte();
-        int world = slea.readByte();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readByte();
+        int world = p.readByte();
         
         World wserv = Server.getInstance().getWorld(world);
         if(wserv == null || wserv.isWorldCapacityFull()) {
@@ -42,7 +42,7 @@ public final class CharlistRequestHandler extends AbstractMaplePacketHandler {
             return;
         }
         
-        int channel = slea.readByte() + 1;
+        int channel = p.readByte() + 1;
         Channel ch = wserv.getChannel(channel);
         if(ch == null) {
             c.sendPacket(PacketCreator.getServerStatus(2));

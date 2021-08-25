@@ -25,14 +25,14 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class UseItemEffectHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         Item toUse;
-        int itemId = slea.readInt();
+        int itemId = p.readInt();
         if (itemId == 4290001 || itemId == 4290000) {
             toUse = c.getPlayer().getInventory(MapleInventoryType.ETC).findById(itemId);
         } else {

@@ -23,12 +23,12 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MonsterBookCoverHandler extends AbstractMaplePacketHandler {
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int id = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int id = p.readInt();
         if (id == 0 || id / 10000 == 238) {
             c.getPlayer().setMonsterBookCover(id);
             c.sendPacket(PacketCreator.changeCover(id));

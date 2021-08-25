@@ -31,18 +31,18 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
+import net.packet.InPacket;
 import net.packet.Packet;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 
 public final class RangedAttackHandler extends AbstractDealDamageHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         
         /*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);
@@ -51,7 +51,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
         }
         chr.getAutobanManager().spam(8);*/
 		
-        AttackInfo attack = parseDamage(slea, chr, true, false);
+        AttackInfo attack = parseDamage(p, chr, true, false);
         
         if (chr.getBuffEffect(MapleBuffStat.MORPH) != null) {
             if(chr.getBuffEffect(MapleBuffStat.MORPH).isMorphWithoutAttack()) {

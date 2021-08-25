@@ -5,9 +5,9 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import scripting.quest.QuestScriptManager;
 import server.quest.MapleQuest;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -16,8 +16,8 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public class RaiseUIStateHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int infoNumber = slea.readShort();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int infoNumber = p.readShort();
         
         if (c.tryacquireClient()) {
             try {

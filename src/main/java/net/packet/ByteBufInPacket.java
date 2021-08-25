@@ -38,7 +38,7 @@ public class ByteBufInPacket implements InPacket {
     }
 
     @Override
-    public Point readPoint() {
+    public Point readPos() {
         final short x = byteBuf.readShortLE();
         final short y = byteBuf.readShortLE();
         return new Point(x, y);
@@ -77,5 +77,24 @@ public class ByteBufInPacket implements InPacket {
     @Override
     public int getPosition() {
         return byteBuf.readerIndex();
+    }
+
+    @Override
+    public String toString() {
+        final int readerIndex = byteBuf.readerIndex();
+        byteBuf.markReaderIndex();
+        byteBuf.readerIndex(0);
+
+        String hexDumpWithPosition = insertReaderPosition(ByteBufUtil.hexDump(byteBuf).toUpperCase(), readerIndex);
+        String toString = String.format("ByteBufInPacket[%s]", hexDumpWithPosition);
+
+        byteBuf.resetReaderIndex();
+        return toString;
+    }
+
+    private static String insertReaderPosition(String hexDump, int index) {
+        StringBuilder sb = new StringBuilder(hexDump);
+        sb.insert(2 * index, '_');
+        return sb.toString();
     }
 }

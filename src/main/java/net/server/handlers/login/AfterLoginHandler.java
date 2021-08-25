@@ -23,18 +23,18 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.session.SessionCoordinator;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class AfterLoginHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        byte c2 = slea.readByte();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        byte c2 = p.readByte();
         byte c3 = 5;
-        if (slea.available() > 0) {
-            c3 = slea.readByte();
+        if (p.available() > 0) {
+            c3 = p.readByte();
         }
         if (c2 == 1 && c3 == 1) {
             if (c.getPin() == null || c.getPin().equals("")) {
@@ -43,14 +43,14 @@ public final class AfterLoginHandler extends AbstractMaplePacketHandler {
                 c.sendPacket(PacketCreator.requestPin());
             }
         } else if (c2 == 1 && c3 == 0) {
-            String pin = slea.readMapleAsciiString();
+            String pin = p.readString();
             if (c.checkPin(pin)) {
                 c.sendPacket(PacketCreator.pinAccepted());
             } else {
                 c.sendPacket(PacketCreator.requestPinAfterFailure());
             }
         } else if (c2 == 2 && c3 == 0) {
-            String pin = slea.readMapleAsciiString();
+            String pin = p.readString();
             if (c.checkPin(pin)) {
                 c.sendPacket(PacketCreator.registerPin());
             } else {

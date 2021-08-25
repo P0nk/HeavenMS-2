@@ -25,10 +25,10 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.MaplePet;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Set;
 
@@ -38,18 +38,18 @@ import java.util.Set;
  */
 public final class PetLootHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         
-        int petIndex = chr.getPetIndex(slea.readInt());
+        int petIndex = chr.getPetIndex(p.readInt());
         MaplePet pet = chr.getPet(petIndex);
         if (pet == null || !pet.isSummoned()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
         
-        slea.skip(13);
-        int oid = slea.readInt();
+        p.skip(13);
+        int oid = p.readInt();
         MapleMapObject ob = chr.getMap().getMapObject(oid);        
         try {
             MapleMapItem mapitem = (MapleMapItem) ob;

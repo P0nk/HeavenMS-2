@@ -24,16 +24,16 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleMapObject;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class CharInfoRequestHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.skip(4);
-        int cid = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.skip(4);
+        int cid = p.readInt();
         MapleMapObject target = c.getPlayer().getMap().getMapObject(cid);
         if (target != null) {
             if (target instanceof MapleCharacter) {

@@ -30,14 +30,14 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class PetFoodHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         AutobanManager abm = chr.getAutobanManager();
         if (abm.getLastSpam(2) + 500 > currentServerTime()) {
@@ -45,7 +45,7 @@ public final class PetFoodHandler extends AbstractMaplePacketHandler {
             return;
         }
         abm.spam(2);
-        slea.readInt(); // timestamp issue detected thanks to Masterrulax
+        p.readInt(); // timestamp issue detected thanks to Masterrulax
         abm.setTimestamp(1, Server.getInstance().getCurrentTimestamp(), 3);
         if (chr.getNoPets() == 0) {
             c.sendPacket(PacketCreator.enableActions());
@@ -66,8 +66,8 @@ public final class PetFoodHandler extends AbstractMaplePacketHandler {
         MaplePet pet = chr.getPet(slot);
         if(pet == null) return;
         
-        short pos = slea.readShort();
-        int itemId = slea.readInt();
+        short pos = p.readShort();
+        int itemId = p.readInt();
         
         if (c.tryacquireClient()) {
             try {

@@ -25,10 +25,10 @@ import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -37,11 +37,11 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class FamilyAddHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
-        String toAdd = slea.readMapleAsciiString();
+        String toAdd = p.readString();
         MapleCharacter addChr = c.getChannelServer().getPlayerStorage().getCharacterByName(toAdd);
         MapleCharacter chr = c.getPlayer();
         if(addChr == null) {

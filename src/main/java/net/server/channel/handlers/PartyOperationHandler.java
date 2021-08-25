@@ -25,6 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
@@ -34,15 +35,14 @@ import net.server.world.MaplePartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.List;
 
 public final class PartyOperationHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int operation = slea.readByte();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int operation = p.readByte();
         MapleCharacter player = c.getPlayer();
         World world = c.getWorldServer();
         MapleParty party = player.getParty();
@@ -62,7 +62,7 @@ public final class PartyOperationHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 3: { // join
-                int partyid = slea.readInt();
+                int partyid = p.readInt();
                 
                 MapleInviteResult inviteRes = MapleInviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
                 InviteResult res = inviteRes.result;
@@ -74,7 +74,7 @@ public final class PartyOperationHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 4: { // invite
-                String name = slea.readMapleAsciiString();
+                String name = p.readString();
                 MapleCharacter invited = world.getPlayerStorage().getCharacterByName(name);
                 if (invited != null) {
                     if(invited.getLevel() < 10 && (!YamlConfig.config.server.USE_PARTY_FOR_STARTERS || player.getLevel() >= 10)) { //min requirement is level 10
@@ -112,12 +112,12 @@ public final class PartyOperationHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 5: { // expel
-                int cid = slea.readInt();
+                int cid = p.readInt();
                 MapleParty.expelFromParty(party, c, cid);
                 break;
             }
             case 6: { // change leader
-                int newLeader = slea.readInt();
+                int newLeader = p.readInt();
                 MaplePartyCharacter newLeadr = party.getMemberById(newLeader);
                 world.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newLeadr);
                 break;

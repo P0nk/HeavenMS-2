@@ -28,6 +28,7 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import server.CashShop;
 import server.MapleItemInformationProvider;
@@ -35,7 +36,6 @@ import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -179,9 +179,9 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
     }
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.skip(2);
-        String code = slea.readMapleAsciiString();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.skip(2);
+        String code = p.readString();
         
         if (c.tryacquireClient()) {
             try {
@@ -197,9 +197,9 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
                     int nxPrepaid = 0;
                     int mesos = 0;
                     
-                    for (Pair<Integer, Pair<Integer, Integer>> p : codeRes.getRight()) {
-                        type = p.getLeft();
-                        int quantity = p.getRight().getRight();
+                    for (Pair<Integer, Pair<Integer, Integer>> pair : codeRes.getRight()) {
+                        type = pair.getLeft();
+                        int quantity = pair.getRight().getRight();
 
                         CashShop cs = c.getPlayer().getCashShop();
                         switch (type) {
@@ -227,7 +227,7 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
                                 break;
 
                             default:
-                                int item = p.getRight().getLeft();
+                                int item = pair.getRight().getLeft();
                                 
                                 short qty;
                                 if (quantity > Short.MAX_VALUE) {

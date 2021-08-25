@@ -27,6 +27,7 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
@@ -35,7 +36,6 @@ import server.maps.MapleMapObjectType;
 import server.quest.MapleQuest;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,16 +43,16 @@ import java.util.List;
 public final class AdminCommandHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if (!c.getPlayer().isGM()) {
             return;
         }
-        byte mode = slea.readByte();
+        byte mode = p.readByte();
         String victim;
         MapleCharacter target;
         switch (mode) {
             case 0x00: // Level1~Level8 & Package1~Package2
-                int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(slea.readInt());
+                int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(p.readInt());
                 for (int[] toSpawnChild : toSpawn) {
                     if (Randomizer.nextInt(100) < toSpawnChild[1]) {
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
@@ -61,7 +61,7 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case 0x01: { // /d (inv)
-                byte type = slea.readByte();
+                byte type = p.readByte();
                 MapleInventory in = c.getPlayer().getInventory(MapleInventoryType.getByType(type));
                 for (short i = 1; i <= in.getSlotLimit(); i++) { //TODO What is the point of this loop?
                     if (in.getItem(i) != null) {
@@ -72,16 +72,16 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 0x02: // Exp
-                c.getPlayer().setExp(slea.readInt());
+                c.getPlayer().setExp(p.readInt());
                 break;
             case 0x03: // /ban <name>
             	c.getPlayer().yellowMessage("Please use !ban <IGN> <Reason>");
             	break;
             case 0x04: // /block <name> <duration (in days)> <HACK/BOT/AD/HARASS/CURSE/SCAM/MISCONDUCT/SELL/ICASH/TEMP/GM/IPROGRAM/MEGAPHONE>
-            	victim = slea.readMapleAsciiString();
-                int type = slea.readByte(); //reason
-                int duration = slea.readInt();
-                String description = slea.readMapleAsciiString();
+            	victim = p.readString();
+                int type = p.readByte(); //reason
+                int duration = p.readInt();
+                String description = p.readString();
                 String reason = c.getPlayer().getName() + " used /ban to ban";
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
@@ -102,10 +102,10 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 }
                 break;
             case 0x10: // /h, information added by vana -- <and tele mode f1> ... hide ofcourse
-                c.getPlayer().Hide(slea.readByte() == 1);
+                c.getPlayer().Hide(p.readByte() == 1);
                 break;
             case 0x11: // Entering a map
-                switch (slea.readByte()) {
+                switch (p.readByte()) {
                     case 0:// /u
                         StringBuilder sb = new StringBuilder("USERS ON THIS MAP: ");
                         for (MapleCharacter mc : c.getPlayer().getMap().getCharacters()) {
@@ -119,13 +119,13 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 }
                 break;
             case 0x12: // Send
-                victim = slea.readMapleAsciiString();
-                int mapId = slea.readInt();
+                victim = p.readString();
+                int mapId = p.readInt();
                 c.getChannelServer().getPlayerStorage().getCharacterByName(victim).changeMap(c.getChannelServer().getMapFactory().getMap(mapId));
                 break;
             case 0x15: // Kill
-                int mobToKill = slea.readInt();
-                int amount = slea.readInt();
+                int mobToKill = p.readInt();
+                int amount = p.readInt();
                 List<MapleMapObject> monsterx = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (int x = 0; x < amount; x++) {
                     MapleMonster monster = (MapleMonster) monsterx.get(x);
@@ -135,17 +135,17 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 }
                 break;
             case 0x16: // Questreset
-                MapleQuest.getInstance(slea.readShort()).reset(c.getPlayer());
+                MapleQuest.getInstance(p.readShort()).reset(c.getPlayer());
                 break;
             case 0x17: // Summon
-                int mobId = slea.readInt();
-                int quantity = slea.readInt();
+                int mobId = p.readInt();
+                int quantity = p.readInt();
                 for (int i = 0; i < quantity; i++) {
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), c.getPlayer().getPosition());
                 }
                 break;
             case 0x18: // Maple & Mobhp
-                int mobHp = slea.readInt();
+                int mobHp = p.readInt();
                 c.getPlayer().dropMessage("Monsters HP");
                 List<MapleMapObject> monsters = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (MapleMapObject mobs : monsters) {
@@ -156,8 +156,8 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 }
                 break;
             case 0x1E: // Warn
-                victim = slea.readMapleAsciiString();
-                String message = slea.readMapleAsciiString();
+                victim = p.readString();
+                String message = p.readString();
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
                     target.getClient().sendPacket(PacketCreator.serverNotice(1, message));
@@ -169,14 +169,14 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
             case 0x24:// /Artifact Ranking
                 break;
             case 0x77: //Testing purpose
-                if (slea.available() == 4) {
-                    System.out.println(slea.readInt());
-                } else if (slea.available() == 2) {
-                    System.out.println(slea.readShort());
+                if (p.available() == 4) {
+                    System.out.println(p.readInt());
+                } else if (p.available() == 2) {
+                    System.out.println(p.readShort());
                 }
                 break;
             default:
-                System.out.println("New GM packet encountered (MODE : " + mode + ": " + slea.toString());
+                System.out.println("New GM packet encountered (MODE : " + mode + ": " + p.toString());
                 break;
         }
     }

@@ -25,8 +25,8 @@ import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -34,17 +34,17 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class ItemMoveHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.skip(4);
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.skip(4);
         if(c.getPlayer().getAutobanManager().getLastSpam(6) + 300 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
         
-        MapleInventoryType type = MapleInventoryType.getByType(slea.readByte());
-        short src = slea.readShort();     //is there any reason to use byte instead of short in src and action?
-        short action = slea.readShort();
-        short quantity = slea.readShort();
+        MapleInventoryType type = MapleInventoryType.getByType(p.readByte());
+        short src = p.readShort();     //is there any reason to use byte instead of short in src and action?
+        short action = p.readShort();
+        short quantity = p.readShort();
         
         if (src < 0 && action > 0) {
             MapleInventoryManipulator.unequip(c, src, action);

@@ -26,23 +26,21 @@ import client.MapleClient;
 import client.keybind.MapleKeyBinding;
 import client.Skill;
 import client.SkillFactory;
-import client.autoban.AutobanFactory;
 import client.inventory.MapleInventoryType;
 import net.AbstractMaplePacketHandler;
-import tools.FilePrinter;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public final class KeymapChangeHandler extends AbstractMaplePacketHandler {
 	@Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-                if (slea.available() >= 8) {
-			int mode = slea.readInt();
+	public final void handlePacket(InPacket p, MapleClient c) {
+                if (p.available() >= 8) {
+			int mode = p.readInt();
 			if(mode == 0) {
-				int numChanges = slea.readInt();
+				int numChanges = p.readInt();
 				for (int i = 0; i < numChanges; i++) {
-					int key = slea.readInt();
-					int type = slea.readByte();
-					int action = slea.readInt();
+					int key = p.readInt();
+					int type = p.readByte();
+					int action = p.readInt();
                                         
                                         if(type == 1) {
                                                 Skill skill = SkillFactory.getSkill(action);
@@ -66,14 +64,14 @@ public final class KeymapChangeHandler extends AbstractMaplePacketHandler {
 					c.getPlayer().changeKeybinding(key, new MapleKeyBinding(type, action));
 				}
 			} else if(mode == 1) { // Auto HP Potion
-				int itemID = slea.readInt();   
+				int itemID = p.readInt();
 				if(itemID != 0 && c.getPlayer().getInventory(MapleInventoryType.USE).findById(itemID) == null) {
 					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
 					return;
 				}
 				c.getPlayer().changeKeybinding(91, new MapleKeyBinding(7, itemID));
 			} else if(mode == 2) { // Auto MP Potion
-				int itemID = slea.readInt();
+				int itemID = p.readInt();
 				if(itemID != 0 && c.getPlayer().getInventory(MapleInventoryType.USE).findById(itemID) == null) {
 					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
 					return;

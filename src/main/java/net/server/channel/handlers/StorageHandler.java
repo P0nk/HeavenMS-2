@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.processor.npc.StorageProcessor;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 /**
  *
@@ -32,7 +32,7 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class StorageHandler extends AbstractMaplePacketHandler {
 	@Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-		StorageProcessor.storageAction(slea, c);
+	public final void handlePacket(InPacket p, MapleClient c) {
+		StorageProcessor.storageAction(p, c);
 	}
 }

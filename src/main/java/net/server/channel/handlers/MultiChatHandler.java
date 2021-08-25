@@ -26,28 +26,28 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.world.World;
 import tools.FilePrinter;
 import tools.LogHelper;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MultiChatHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter player = c.getPlayer();
         if(player.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
                 return;
         }
         
-        int type = slea.readByte(); // 0 for buddys, 1 for partys
-        int numRecipients = slea.readByte();
+        int type = p.readByte(); // 0 for buddys, 1 for partys
+        int numRecipients = p.readByte();
         int[] recipients = new int[numRecipients];
         for (int i = 0; i < numRecipients; i++) {
-            recipients[i] = slea.readInt();
+            recipients[i] = p.readInt();
         }
-        String chattext = slea.readMapleAsciiString();
+        String chattext = p.readString();
         if (chattext.length() > Byte.MAX_VALUE && !player.isGM()) {
         	AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit chats.");
         	FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to send text with length of " + chattext.length());

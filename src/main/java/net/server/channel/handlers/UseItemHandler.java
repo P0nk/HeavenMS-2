@@ -30,17 +30,17 @@ import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  * @author Matze
  */
 public final class UseItemHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         
         if (!chr.isAlive()) {
@@ -48,9 +48,9 @@ public final class UseItemHandler extends AbstractMaplePacketHandler {
             return;
         }
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        slea.readInt();
-        short slot = slea.readShort();
-        int itemId = slea.readInt();
+        p.readInt();
+        short slot = p.readShort();
+        int itemId = p.readInt();
         Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
             if (itemId == 2050004) {

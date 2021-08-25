@@ -24,10 +24,10 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,11 +40,11 @@ import java.util.Calendar;
  * @author BubblesDev
  */
 public final class ReportHandler extends AbstractMaplePacketHandler {
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-		int type = slea.readByte(); //01 = Conversation claim 00 = illegal program
-		String victim = slea.readMapleAsciiString();
-		int reason = slea.readByte();
-		String description = slea.readMapleAsciiString();
+	public final void handlePacket(InPacket p, MapleClient c) {
+		int type = p.readByte(); //01 = Conversation claim 00 = illegal program
+		String victim = p.readString();
+		int reason = p.readByte();
+		String description = p.readString();
 		if (type == 0) {
 			if (c.getPlayer().getPossibleReports() > 0) {
 				if (c.getPlayer().getMeso() > 299) {
@@ -61,7 +61,7 @@ public final class ReportHandler extends AbstractMaplePacketHandler {
 			Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(6, victim + " was reported for: " + description));
 			addReport(c.getPlayer().getId(), MapleCharacter.getIdByName(victim), 0, description, null);
 		} else if (type == 1) {
-			String chatlog = slea.readMapleAsciiString();
+			String chatlog = p.readString();
 			if (chatlog == null) {
 				return;
 			}

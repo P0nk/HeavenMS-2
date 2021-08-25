@@ -26,11 +26,11 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.LogHelper;
 import tools.PacketCreator;
 import tools.PacketCreator.WhisperFlag;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  * @author Chronos
@@ -44,9 +44,9 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
     public static final byte RT_DIFFERENT_CHANNEL = 0x03;
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        byte request = slea.readByte();
-        String name = slea.readMapleAsciiString();
+    public void handlePacket(InPacket p, MapleClient c) {
+        byte request = p.readByte();
+        String name = p.readString();
         MapleCharacter target = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
 
         if (target == null) {
@@ -59,7 +59,7 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
                 handleFind(c.getPlayer(), target, WhisperFlag.LOCATION);
                 break;
             case WhisperFlag.WHISPER | WhisperFlag.REQUEST:
-                String message = slea.readMapleAsciiString();
+                String message = p.readString();
                 handleWhisper(message, c.getPlayer(), target);
                 break;
             case WhisperFlag.LOCATION_FRIEND | WhisperFlag.REQUEST:

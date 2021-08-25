@@ -25,13 +25,13 @@ import client.MapleClient;
 import client.MapleCharacter;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public final class FaceExpressionHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
-        int emote = slea.readInt();
+        int emote = p.readInt();
         
         if (emote > 7) {
             int itemid = 5159992 + emote;   // thanks RajanGrewal (Darter) for reporting unchecked emote itemid

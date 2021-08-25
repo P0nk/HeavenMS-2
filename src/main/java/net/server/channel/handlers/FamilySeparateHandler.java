@@ -24,20 +24,20 @@ import client.MapleFamily;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public class FamilySeparateHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         MapleFamily oldFamily = c.getPlayer().getFamily();
         if(oldFamily == null) return;
         MapleFamilyEntry forkOn = null;
         boolean isSenior;
-        if(slea.available() > 0) { //packet 0x95 doesn't send id, since there is only one senior
-            forkOn = c.getPlayer().getFamily().getEntryByID(slea.readInt());
+        if(p.available() > 0) { //packet 0x95 doesn't send id, since there is only one senior
+            forkOn = c.getPlayer().getFamily().getEntryByID(p.readInt());
             if(!c.getPlayer().getFamilyEntry().isJunior(forkOn)) return; //packet editing?
             isSenior = true;
         } else {

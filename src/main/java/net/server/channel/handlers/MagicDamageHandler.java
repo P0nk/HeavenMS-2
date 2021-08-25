@@ -28,14 +28,14 @@ import constants.skills.Bishop;
 import constants.skills.Evan;
 import constants.skills.FPArchMage;
 import constants.skills.ILArchMage;
+import net.packet.InPacket;
 import net.packet.Packet;
 import server.MapleStatEffect;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
 	@Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+	public final void handlePacket(InPacket p, MapleClient c) {
 		MapleCharacter chr = c.getPlayer();
 
 		/*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);
@@ -44,7 +44,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
 		}
 		chr.getAutobanManager().spam(8);*/
 
-		AttackInfo attack = parseDamage(slea, chr, false, true);
+		AttackInfo attack = parseDamage(p, chr, false, true);
                 
 		if (chr.getBuffEffect(MapleBuffStat.MORPH) != null) {
 			if(chr.getBuffEffect(MapleBuffStat.MORPH).isMorphWithoutAttack()) {

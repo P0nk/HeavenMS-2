@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -34,14 +34,14 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class MesoDropHandler extends AbstractMaplePacketHandler {
         @Override
-        public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+        public final void handlePacket(InPacket p, MapleClient c) {
             MapleCharacter player = c.getPlayer();
             if (!player.isAlive()) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
-            slea.skip(4);
-            int meso = slea.readInt();
+            p.skip(4);
+            int meso = p.readInt();
 
             if (c.tryacquireClient()) {     // thanks imbee for noticing players not being able to throw mesos too fast
                 try {

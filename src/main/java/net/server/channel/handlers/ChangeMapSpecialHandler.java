@@ -23,18 +23,18 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleTrade;
 import server.MapleTrade.TradeResult;
 import server.maps.MaplePortal;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class ChangeMapSpecialHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-            slea.readByte();
-            String startwp = slea.readMapleAsciiString();
-            slea.readShort();
+    public final void handlePacket(InPacket p, MapleClient c) {
+            p.readByte();
+            String startwp = p.readString();
+            p.readShort();
             MaplePortal portal = c.getPlayer().getMap().getPortal(startwp);
             if (portal == null || c.getPlayer().portalDelay() > currentServerTime() || c.getPlayer().getBlockedPortals().contains(portal.getScriptName())) {
                     c.sendPacket(PacketCreator.enableActions());

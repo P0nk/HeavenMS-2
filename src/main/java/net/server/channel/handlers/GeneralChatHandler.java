@@ -27,15 +27,15 @@ import client.autoban.AutobanFactory;
 import client.command.CommandsExecutor;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.LogHelper;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class GeneralChatHandler extends AbstractMaplePacketHandler {    
 	@Override
-        public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-                String s = slea.readMapleAsciiString();
+        public final void handlePacket(InPacket p, MapleClient c) {
+                String s = p.readString();
                 MapleCharacter chr = c.getPlayer();
                 if(chr.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
                         c.sendPacket(PacketCreator.enableActions());
@@ -51,7 +51,7 @@ public final class GeneralChatHandler extends AbstractMaplePacketHandler {
                 if (CommandsExecutor.isCommand(c, s)) {
                         CommandsExecutor.getInstance().handle(c, s);
                 } else if (heading != '/') {
-                        int show = slea.readByte();
+                        int show = p.readByte();
                         if(chr.getMap().isMuted() && !chr.isGM()) {
                                 chr.dropMessage(5, "The map you are in is currently muted. Please try again later.");
                                 return;

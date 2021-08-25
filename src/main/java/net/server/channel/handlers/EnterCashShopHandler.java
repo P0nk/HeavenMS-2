@@ -24,10 +24,10 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import server.maps.MapleMiniDungeonInfo;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -35,7 +35,7 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public class EnterCashShopHandler extends AbstractMaplePacketHandler {
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         try {
             MapleCharacter mc = c.getPlayer();
 

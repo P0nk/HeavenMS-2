@@ -23,14 +23,14 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.life.MapleMonster;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MonsterBombHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int oid = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int oid = p.readInt();
         MapleMonster monster = c.getPlayer().getMap().getMonsterByOid(oid);
         if (!c.getPlayer().isAlive() || monster == null) {
             return;

@@ -24,18 +24,18 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class DenyPartyRequestHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readByte();
-        String[] cname = slea.readMapleAsciiString().split("PS: ");
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readByte();
+        String[] cname = p.readString().split("PS: ");
         
         MapleCharacter cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(cname[cname.length - 1]);
         if (cfrom != null) {

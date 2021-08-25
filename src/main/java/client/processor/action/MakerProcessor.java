@@ -28,13 +28,13 @@ import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
+import net.packet.InPacket;
 import server.MakerItemFactory;
 import server.MakerItemFactory.MakerItemCreateEntry;
 import server.MapleItemInformationProvider;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -49,11 +49,11 @@ public class MakerProcessor {
     
     private static MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
-    public static void makerAction(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public static void makerAction(InPacket p, MapleClient c) {
         if (c.tryacquireClient()) {
             try {
-                int type = slea.readInt();
-                int toCreate = slea.readInt();
+                int type = p.readInt();
+                int toCreate = p.readInt();
                 int toDisassemble = -1, pos = -1;
                 boolean makerSucceeded = true;
 
@@ -72,16 +72,16 @@ public class MakerProcessor {
                     
                     recipe = MakerItemFactory.generateLeftoverCrystalEntry(fromLeftover, toCreate);
                 } else if(type == 4) {  // disassembling
-                    slea.readInt(); // 1... probably inventory type
-                    pos = slea.readInt();
+                    p.readInt(); // 1... probably inventory type
+                    pos = p.readInt();
 
                     Item it = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((short) pos);
                     if(it != null && it.getItemId() == toCreate) {
                         toDisassemble = toCreate;
                         
-                        Pair<Integer, List<Pair<Integer, Integer>>> p = generateDisassemblyInfo(toDisassemble);
-                        if(p != null) {
-                            recipe = MakerItemFactory.generateDisassemblyCrystalEntry(toDisassemble, p.getLeft(), p.getRight());
+                        Pair<Integer, List<Pair<Integer, Integer>>> pair = generateDisassemblyInfo(toDisassemble);
+                        if(pair != null) {
+                            recipe = MakerItemFactory.generateDisassemblyCrystalEntry(toDisassemble, pair.getLeft(), pair.getRight());
                         } else {
                             c.sendPacket(PacketCreator.serverNotice(1, ii.getName(toCreate) + " is unavailable for Monster Crystal disassembly."));
                             c.sendPacket(PacketCreator.makerEnableActions());
@@ -94,16 +94,16 @@ public class MakerProcessor {
                     }
                 } else {
                     if(ItemConstants.isEquipment(toCreate)) {   // only equips uses stimulant and reagents
-                        if(slea.readByte() != 0) {  // stimulant
+                        if(p.readByte() != 0) {  // stimulant
                             stimulantid = ii.getMakerStimulant(toCreate);
                             if(!c.getAbstractPlayerInteraction().haveItem(stimulantid)) {
                                 stimulantid = -1;
                             }
                         }
 
-                        int reagents = Math.min(slea.readInt(), getMakerReagentSlots(toCreate));
+                        int reagents = Math.min(p.readInt(), getMakerReagentSlots(toCreate));
                         for(int i = 0; i < reagents; i++) {  // crystals
-                            int reagentid = slea.readInt();
+                            int reagentid = p.readInt();
                             if(ItemConstants.isMakerReagent(reagentid)) {
                                 Short rs = reagentids.get(reagentid);
                                 if(rs == null) {
@@ -184,8 +184,8 @@ public class MakerProcessor {
                         if(toDisassemble != -1) {
                             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, (short) pos, (short) 1, false);
                         } else {
-                            for (Pair<Integer, Integer> p : recipe.getReqItems()) {
-                                c.getAbstractPlayerInteraction().gainItem(p.getLeft(), (short) -p.getRight(), false);
+                            for (Pair<Integer, Integer> pair : recipe.getReqItems()) {
+                                c.getAbstractPlayerInteraction().gainItem(pair.getLeft(), (short) -pair.getRight(), false);
                             }
                         }
 
@@ -193,9 +193,9 @@ public class MakerProcessor {
                         if(stimulantid == -1 && reagentids.isEmpty()) {
                             if(cost > 0) c.getPlayer().gainMeso(-cost, false);
                             
-                            for (Pair<Integer, Integer> p : recipe.getGainItems()) {
+                            for (Pair<Integer, Integer> pair : recipe.getGainItems()) {
                                 c.getPlayer().setCS(true);
-                                c.getAbstractPlayerInteraction().gainItem(p.getLeft(), p.getRight().shortValue(), false);
+                                c.getAbstractPlayerInteraction().gainItem(pair.getLeft(), pair.getRight().shortValue(), false);
                                 c.getPlayer().setCS(false);
                             }
                         } else {

@@ -17,9 +17,9 @@ import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleMarriage;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packets.WeddingPackets;
 
 import java.util.Collections;
@@ -32,17 +32,17 @@ import java.util.List;
 public final class WeddingHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         
         if (c.tryacquireClient()) {
             try {
                 MapleCharacter chr = c.getPlayer();
-                final byte mode = slea.readByte();
+                final byte mode = p.readByte();
 
                 if (mode == 6) { //additem
-                    short slot = slea.readShort();
-                    int itemid = slea.readInt();
-                    short quantity = slea.readShort();
+                    short slot = p.readShort();
+                    int itemid = p.readInt();
+                    short quantity = p.readShort();
 
                     MapleMarriage marriage = c.getPlayer().getMarriageInstance();
                     if (marriage != null) {
@@ -102,8 +102,8 @@ public final class WeddingHandler extends AbstractMaplePacketHandler {
                         c.sendPacket(PacketCreator.enableActions());
                     }
                 } else if (mode == 7) { // take items
-                    slea.readByte();    // invType
-                    int itemPos = slea.readByte();
+                    p.readByte();    // invType
+                    int itemPos = p.readByte();
 
                     MapleMarriage marriage = chr.getMarriageInstance();
                     if (marriage != null) {

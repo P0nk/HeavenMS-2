@@ -33,6 +33,7 @@ import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.skills.Aran;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleStatEffect;
 import server.life.MapleLifeFactory.loseItem;
 import server.life.*;
@@ -41,7 +42,6 @@ import server.maps.MapleMapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,14 +51,14 @@ import java.util.List;
 public final class TakeDamageHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         List<MapleCharacter> banishPlayers = new ArrayList<>();
         
         MapleCharacter chr = c.getPlayer();
-        slea.readInt();
-        byte damagefrom = slea.readByte();
-        slea.readByte(); //Element
-        int damage = slea.readInt();
+        p.readInt();
+        byte damagefrom = p.readByte();
+        p.readByte(); //Element
+        int damage = p.readInt();
         int oid = 0, monsteridfrom = 0, pgmr = 0, direction = 0;
         int pos_x = 0, pos_y = 0, fake = 0;
         boolean is_pgmr = false, is_pg = true, is_deadly = false;
@@ -66,8 +66,8 @@ public final class TakeDamageHandler extends AbstractMaplePacketHandler {
         MapleMonster attacker = null;
         final MapleMap map = chr.getMap();
         if (damagefrom != -3 && damagefrom != -4) {
-            monsteridfrom = slea.readInt();
-	    oid = slea.readInt();
+            monsteridfrom = p.readInt();
+	    oid = p.readInt();
             
             try {
                 MapleMapObject mmo = map.getMapObject(oid);
@@ -141,7 +141,7 @@ public final class TakeDamageHandler extends AbstractMaplePacketHandler {
                 return;
             }
             
-            direction = slea.readByte();
+            direction = p.readByte();
         }
         if (damagefrom != -1 && damagefrom != -2 && attacker != null) {
             MobAttackInfo attackInfo = MobAttackInfoFactory.getMobAttackInfo(attacker, damagefrom);

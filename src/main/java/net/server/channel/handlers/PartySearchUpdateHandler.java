@@ -23,12 +23,12 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public final class PartySearchUpdateHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         c.getWorldServer().getPartySearchCoordinator().unregisterPartyLeader(c.getPlayer());
     }
 }

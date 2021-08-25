@@ -24,9 +24,9 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.guild.GuildPackets;
 import tools.DatabaseConnection;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,22 +40,22 @@ public final class BBSOperationHandler extends AbstractMaplePacketHandler {
     }
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if (c.getPlayer().getGuildId() < 1) {
             return;
         }
-        byte mode = slea.readByte();
+        byte mode = p.readByte();
         int localthreadid = 0;
         switch (mode) {
             case 0:
-                boolean bEdit = slea.readByte() == 1;
+                boolean bEdit = p.readByte() == 1;
                 if (bEdit) {
-                    localthreadid = slea.readInt();
+                    localthreadid = p.readInt();
                 }
-                boolean bNotice = slea.readByte() == 1;
-                String title = correctLength(slea.readMapleAsciiString(), 25);
-                String text = correctLength(slea.readMapleAsciiString(), 600);
-                int icon = slea.readInt();
+                boolean bNotice = p.readByte() == 1;
+                String title = correctLength(p.readString(), 25);
+                String text = correctLength(p.readString(), 600);
+                int icon = p.readInt();
                 if (icon >= 0x64 && icon <= 0x6a) {
                     if (!c.getPlayer().haveItemWithId(5290000 + icon - 0x64, false)) {
                         return;
@@ -70,25 +70,25 @@ public final class BBSOperationHandler extends AbstractMaplePacketHandler {
                 }
                 break;
             case 1:
-                localthreadid = slea.readInt();
+                localthreadid = p.readInt();
                 deleteBBSThread(c, localthreadid);
                 break;
             case 2:
-                int start = slea.readInt();
+                int start = p.readInt();
                 listBBSThreads(c, start * 10);
                 break;
             case 3: // list thread + reply, following by id (int)
-                localthreadid = slea.readInt();
+                localthreadid = p.readInt();
                 displayThread(c, localthreadid);
                 break;
             case 4: // reply
-                localthreadid = slea.readInt();
-                text = correctLength(slea.readMapleAsciiString(), 25);
+                localthreadid = p.readInt();
+                text = correctLength(p.readString(), 25);
                 newBBSReply(c, localthreadid, text);
                 break;
             case 5: // delete reply
-                slea.readInt(); // we don't use this
-                int replyid = slea.readInt();
+                p.readInt(); // we don't use this
+                int replyid = p.readInt();
                 deleteBBSReply(c, replyid);
                 break;
             default:

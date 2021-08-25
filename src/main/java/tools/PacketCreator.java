@@ -39,6 +39,7 @@ import constants.skills.ThunderBreaker;
 import net.encryption.InitializationVector;
 import net.opcodes.SendOpcode;
 import net.packet.ByteBufOutPacket;
+import net.packet.InPacket;
 import net.packet.OutPacket;
 import net.packet.Packet;
 import net.server.PlayerCoolDownValueHolder;
@@ -66,7 +67,6 @@ import server.life.MobSkill;
 import server.maps.*;
 import server.maps.MapleMiniGame.MiniGameResult;
 import server.movement.LifeMovementFragment;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
 import java.net.InetAddress;
@@ -2206,11 +2206,11 @@ public class PacketCreator {
         return p;
     }
 
-    private static void rebroadcastMovementList(OutPacket op, SeekableLittleEndianAccessor slea, long movementDataLength) {
+    private static void rebroadcastMovementList(OutPacket op, InPacket ip, long movementDataLength) {
         //movement command length is sent by client, probably not a big issue? (could be calculated on server)
         //if multiple write/reads are slow, could use (and cache?) a byte[] buffer
         for (long i = 0; i < movementDataLength; i++) {
-            op.writeByte(slea.readByte());
+            op.writeByte(ip.readByte());
         }
     }
 
@@ -2221,24 +2221,25 @@ public class PacketCreator {
         }
     }
 
-    public static Packet movePlayer(int chrId, SeekableLittleEndianAccessor movementSlea, long movementDataLength) {
+    public static Packet movePlayer(int chrId, InPacket movementPacket, long movementDataLength) {
         OutPacket p = OutPacket.create(SendOpcode.MOVE_PLAYER);
         p.writeInt(chrId);
         p.writeInt(0);
-        rebroadcastMovementList(p, movementSlea, movementDataLength);
+        rebroadcastMovementList(p, movementPacket, movementDataLength);
         return p;
     }
 
-    public static Packet moveSummon(int cid, int oid, Point startPos, SeekableLittleEndianAccessor movementSlea, long movementDataLength) {
+    public static Packet moveSummon(int cid, int oid, Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_SUMMON);
         p.writeInt(cid);
         p.writeInt(oid);
         p.writePos(startPos);
-        rebroadcastMovementList(p, movementSlea, movementDataLength);
+        rebroadcastMovementList(p, movementPacket, movementDataLength);
         return p;
     }
 
-    public static Packet moveMonster(int oid, boolean skillPossible, int skill, int skillId, int skillLevel, int pOption, Point startPos, SeekableLittleEndianAccessor movementSlea, long movementDataLength) {
+    public static Packet moveMonster(int oid, boolean skillPossible, int skill, int skillId, int skillLevel, int pOption,
+                                     Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_MONSTER);
         p.writeInt(oid);
         p.writeByte(0);
@@ -2248,7 +2249,7 @@ public class PacketCreator {
         p.writeByte(skillLevel);
         p.writeShort(pOption);
         p.writePos(startPos);
-        rebroadcastMovementList(p, movementSlea, movementDataLength);
+        rebroadcastMovementList(p, movementPacket, movementDataLength);
         return p;
     }
 
@@ -7287,11 +7288,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet moveDragon(MapleDragon dragon, Point startPos, SeekableLittleEndianAccessor movementSlea, long movementDataLength) {
+    public static Packet moveDragon(MapleDragon dragon, Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_DRAGON);
         p.writeInt(dragon.getOwner().getId());
         p.writePos(startPos);
-        rebroadcastMovementList(p, movementSlea, movementDataLength);
+        rebroadcastMovementList(p, movementPacket, movementDataLength);
         return p;
     }
 

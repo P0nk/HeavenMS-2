@@ -24,26 +24,26 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.opcodes.SendOpcode;
+import net.packet.InPacket;
 import net.packet.OutPacket;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class NPCAnimationHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if (c.getPlayer().isChangingMaps()) {   // possible cause of error 38 in some map transition scenarios, thanks Arnah
             return;
         }
 
-        OutPacket p = OutPacket.create(SendOpcode.NPC_ACTION);
-        int length = (int) slea.available();
+        OutPacket op = OutPacket.create(SendOpcode.NPC_ACTION);
+        int length = p.available();
         if (length == 6) { // NPC Talk
-            p.writeInt(slea.readInt());
-            p.writeByte(slea.readByte());   // 2 bytes, thanks resinate
-            p.writeByte(slea.readByte());
+            op.writeInt(p.readInt());
+            op.writeByte(p.readByte());   // 2 bytes, thanks resinate
+            op.writeByte(p.readByte());
         } else if (length > 6) { // NPC Move
-            byte[] bytes = slea.read(length - 9);
-            p.writeBytes(bytes);
+            byte[] bytes = p.readBytes(length - 9);
+            op.writeBytes(bytes);
         }
-        c.sendPacket(p);
+        c.sendPacket(op);
     }
 }

@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.MaplePet;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 /**
  * @author BubblesDev
@@ -35,9 +35,9 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class PetExcludeItemsHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        final int petId = slea.readInt();
-        slea.skip(4); // timestamp
+    public final void handlePacket(InPacket p, MapleClient c) {
+        final int petId = p.readInt();
+        p.skip(4); // timestamp
 
         MapleCharacter chr = c.getPlayer();
         byte petIndex = chr.getPetIndex(petId);
@@ -49,9 +49,9 @@ public final class PetExcludeItemsHandler extends AbstractMaplePacketHandler {
         }
 
         chr.resetExcluded(petId);
-        byte amount = slea.readByte();
+        byte amount = p.readByte();
         for (int i = 0; i < amount; i++) {
-            int itemId = slea.readInt();
+            int itemId = p.readInt();
             if (itemId >= 0) {
                 chr.addExcluded(petId, itemId);
             } else {

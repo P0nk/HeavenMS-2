@@ -24,13 +24,13 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.guild.GuildPackets;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -39,7 +39,7 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleAlliance alliance = null;
         MapleCharacter chr = c.getPlayer();
         
@@ -52,7 +52,7 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
             alliance = chr.getAlliance();
         }
         
-        byte b = slea.readByte();
+        byte b = p.readByte();
         if (alliance == null) {
             if (b != 4) {
                 c.sendPacket(PacketCreator.enableActions());
@@ -85,7 +85,7 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 0x03: // Send Invite
-                String guildName = slea.readMapleAsciiString();
+                String guildName = p.readString();
                 
                 if (alliance.getGuilds().size() == alliance.getCapacity()) {
                     chr.dropMessage(5, "Your alliance cannot comport any more guilds at the moment.");
@@ -100,7 +100,7 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
                     return;
                 }
                 
-                int allianceid = slea.readInt();
+                int allianceid = p.readInt();
                 //slea.readMapleAsciiString();  //recruiter's guild name
                 
                 alliance = Server.getInstance().getAlliance(allianceid);
@@ -138,8 +138,8 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 0x06: { // Expel Guild
-                int guildid = slea.readInt();
-                int allianceid = slea.readInt();
+                int guildid = p.readInt();
+                int allianceid = p.readInt();
                 if (chr.getGuild().getAllianceId() == 0 || chr.getGuild().getAllianceId() != allianceid) {
                     return;
                 }
@@ -158,7 +158,7 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
                 if (chr.getGuild().getAllianceId() == 0 || chr.getGuildId() < 1) {
                     return;
                 }
-                int victimid = slea.readInt();
+                int victimid = p.readInt();
                 MapleCharacter player = Server.getInstance().getWorld(c.getWorld()).getPlayerStorage().getCharacterById(victimid);
                 if (player.getAllianceRank() != 2) {
                     return;
@@ -171,14 +171,14 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
             case 0x08:
                 String[] ranks = new String[5];
                 for (int i = 0; i < 5; i++) {
-                    ranks[i] = slea.readMapleAsciiString();
+                    ranks[i] = p.readString();
                 }
                 Server.getInstance().setAllianceRanks(alliance.getId(), ranks);
                 Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.changeAllianceRankTitle(alliance.getId(), ranks), -1, -1);
                 break;
             case 0x09: {
-                int int1 = slea.readInt();
-                byte byte1 = slea.readByte();
+                int int1 = p.readInt();
+                byte byte1 = p.readByte();
                 
                 //Server.getInstance().allianceMessage(alliance.getId(), sendChangeRank(chr.getGuild().getAllianceId(), chr.getId(), int1, byte1), -1, -1);
                 MapleCharacter player = Server.getInstance().getWorld(c.getWorld()).getPlayerStorage().getCharacterById(int1);
@@ -187,7 +187,7 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 0x0A:
-                String notice = slea.readMapleAsciiString();
+                String notice = p.readString();
                 Server.getInstance().setAllianceNotice(alliance.getId(), notice);
                 Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.allianceNotice(alliance.getId(), notice), -1, -1);
                 

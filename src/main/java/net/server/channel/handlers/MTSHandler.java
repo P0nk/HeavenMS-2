@@ -29,6 +29,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.channel.Channel;
@@ -37,7 +38,6 @@ import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,52 +50,52 @@ import java.util.List;
 public final class MTSHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         // TODO add karma-to-untradeable flag on sold items here
         
         if (!c.getPlayer().getCashShop().isOpened()) {
             return;
         }
-        if (slea.available() > 0) {
-            byte op = slea.readByte();
+        if (p.available() > 0) {
+            byte op = p.readByte();
             if (op == 2) { //put item up for sale
-                byte itemtype = slea.readByte();
-                int itemid = slea.readInt();
-                slea.readShort();
-                slea.skip(7);
+                byte itemtype = p.readByte();
+                int itemid = p.readInt();
+                p.readShort();
+                p.skip(7);
                 short stars = 1;
                 if (itemtype == 1) {
-                    slea.skip(32);
+                    p.skip(32);
                 } else {
-                    stars = slea.readShort();
+                    stars = p.readShort();
                 }
-                slea.readMapleAsciiString(); //another useless thing (owner)
+                p.readString(); //another useless thing (owner)
                 if (itemtype == 1) {
-                    slea.skip(32);
+                    p.skip(32);
                 } else {
-                    slea.readShort();
+                    p.readShort();
                 }
                 short slot;
                 short quantity;
                 if (itemtype != 1) {
                     if (itemid / 10000 == 207 || itemid / 10000 == 233) {
-                        slea.skip(8);
+                        p.skip(8);
                     }
-                    slot = (short) slea.readInt();
+                    slot = (short) p.readInt();
                 } else {
-                    slot = (short) slea.readInt();
+                    slot = (short) p.readInt();
                 }
                 if (itemtype != 1) {
                     if (itemid / 10000 == 207 || itemid / 10000 == 233) {
                         quantity = stars;
-                        slea.skip(4);
+                        p.skip(4);
                     } else {
-                        quantity = (short) slea.readInt();
+                        quantity = (short) p.readInt();
                     }
                 } else {
-                    quantity = (byte) slea.readInt();
+                    quantity = (byte) p.readInt();
                 }
-                int price = slea.readInt();
+                int price = p.readInt();
                 if (itemtype == 1) {
                     quantity = 1;
                 }
@@ -228,15 +228,15 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                 }
             } else if (op == 3) { //send offer for wanted item
             } else if (op == 4) { //list wanted item
-                slea.readInt();
-                slea.readInt();
-                slea.readInt();
-                slea.readShort();
-                slea.readMapleAsciiString();
+                p.readInt();
+                p.readInt();
+                p.readInt();
+                p.readShort();
+                p.readString();
             } else if (op == 5) { //change page
-                int tab = slea.readInt();
-                int type = slea.readInt();
-                int page = slea.readInt();
+                int tab = p.readInt();
+                int type = p.readInt();
+                int page = p.readInt();
                 c.getPlayer().changePage(page);
                 if (tab == 4 && type == 0) {
                     c.sendPacket(getCart(c.getPlayer().getId()));
@@ -252,11 +252,11 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                 c.sendPacket(PacketCreator.transferInventory(getTransfer(c.getPlayer().getId())));
                 c.sendPacket(PacketCreator.notYetSoldInv(getNotYetSold(c.getPlayer().getId())));
             } else if (op == 6) { //search
-                int tab = slea.readInt();
-                int type = slea.readInt();
-                slea.readInt();
-                int ci = slea.readInt();
-                String search = slea.readMapleAsciiString();
+                int tab = p.readInt();
+                int type = p.readInt();
+                p.readInt();
+                int ci = p.readInt();
+                String search = p.readString();
                 c.getPlayer().setSearch(search);
                 c.getPlayer().changeTab(tab);
                 c.getPlayer().changeType(type);
@@ -268,7 +268,7 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                 c.sendPacket(PacketCreator.transferInventory(getTransfer(c.getPlayer().getId())));
                 c.sendPacket(PacketCreator.notYetSoldInv(getNotYetSold(c.getPlayer().getId())));
             } else if (op == 7) { //cancel sale
-                int id = slea.readInt(); //id of the item
+                int id = p.readInt(); //id of the item
                 Connection con = null;
                 try {
                     con = DatabaseConnection.getConnection();
@@ -290,7 +290,7 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                 c.sendPacket(PacketCreator.notYetSoldInv(getNotYetSold(c.getPlayer().getId())));
                 c.sendPacket(PacketCreator.transferInventory(getTransfer(c.getPlayer().getId())));
             } else if (op == 8) { //transfer item from transfer inv.
-                int id = slea.readInt(); //id of the item
+                int id = p.readInt(); //id of the item
                 Connection con = null;
                 PreparedStatement ps;
                 ResultSet rs;
@@ -358,7 +358,7 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                     System.out.println("MTS Transfer error: " + e);
                 }
             } else if (op == 9) { //add to cart
-                int id = slea.readInt(); //id of the item
+                int id = p.readInt(); //id of the item
                 Connection con;
                 try {
                     con = DatabaseConnection.getConnection();
@@ -392,7 +392,7 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                 c.sendPacket(PacketCreator.transferInventory(getTransfer(c.getPlayer().getId())));
                 c.sendPacket(PacketCreator.notYetSoldInv(getNotYetSold(c.getPlayer().getId())));
             } else if (op == 10) { //delete from cart
-                int id = slea.readInt(); //id of the item
+                int id = p.readInt(); //id of the item
                 Connection con = null;
                 try {
                     con = DatabaseConnection.getConnection();
@@ -413,7 +413,7 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
             } else if (op == 13) { //cancel wanted cart thing
             } else if (op == 14) { //buy auction item now
             } else if (op == 16) { //buy
-                int id = slea.readInt(); //id of the item
+                int id = p.readInt(); //id of the item
                 Connection con = null;
                 PreparedStatement ps;
                 ResultSet rs;
@@ -477,7 +477,7 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                     c.sendPacket(PacketCreator.MTSFailBuy());
                 }
             } else if (op == 17) { //buy from cart
-                int id = slea.readInt(); //id of the item
+                int id = p.readInt(); //id of the item
                 Connection con = null;
                 PreparedStatement ps;
                 ResultSet rs;
@@ -537,7 +537,7 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                     c.sendPacket(PacketCreator.MTSFailBuy());
                 }
             } else {
-                System.out.println("Unhandled OP(MTS): " + op + " Packet: " + slea.toString());
+                System.out.println("Unhandled OP(MTS): " + op + " Packet: " + p.toString());
             }
         } else {
             c.sendPacket(PacketCreator.showMTSCash(c.getPlayer()));

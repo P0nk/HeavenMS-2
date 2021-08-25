@@ -24,23 +24,23 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.events.gm.MapleCoconut;
 import server.events.gm.MapleCoconuts;
 import server.maps.MapleMap;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author kevintjuh93
  */
 public final class CoconutHandler extends AbstractMaplePacketHandler {
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+	public final void handlePacket(InPacket p, MapleClient c) {
 		/*CB 00 A6 00 06 01
 		 * A6 00 = coconut id
 		 * 06 01 = ?
 		 */
-		int id = slea.readShort();
+		int id = p.readShort();
 		MapleMap map = c.getPlayer().getMap();
 		MapleCoconut event = map.getCoconut();
 		MapleCoconuts nut = event.getCoconut(id);

@@ -25,19 +25,19 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.processor.action.PetAutopotProcessor;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class PetAutoPotHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readByte();
-        slea.readLong();
-        slea.readInt();
-        short slot = slea.readShort();
-        int itemId = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readByte();
+        p.readLong();
+        p.readInt();
+        short slot = p.readShort();
+        int itemId = p.readInt();
         
         MapleCharacter chr = c.getPlayer();
         MapleStatEffect stat = MapleItemInformationProvider.getInstance().getItemEffect(itemId);

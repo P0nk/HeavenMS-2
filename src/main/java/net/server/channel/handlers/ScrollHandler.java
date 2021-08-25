@@ -30,9 +30,9 @@ import client.inventory.Equip.ScrollResult;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +45,13 @@ import java.util.Map;
 public final class ScrollHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if (c.tryacquireClient()) {
             try {
-                slea.readInt(); // whatever...
-                short slot = slea.readShort();
-                short dst = slea.readShort();
-                byte ws = (byte) slea.readShort();
+                p.readInt(); // whatever...
+                short slot = p.readShort();
+                short dst = p.readShort();
+                byte ws = (byte) p.readShort();
                 boolean whiteScroll = false; // white scroll being used?
                 boolean legendarySpirit = false; // legendary spirit skill
                 if ((ws & 2) == 2) {

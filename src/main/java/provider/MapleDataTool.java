@@ -24,7 +24,6 @@ package provider;
 import provider.wz.MapleDataType;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class MapleDataTool {
     public static String getString(MapleData data) {
@@ -136,10 +135,6 @@ public class MapleDataTool {
         } else {
             return getInt(d, def);
         }
-    }
-
-    public static BufferedImage getImage(MapleData data) {
-        return ((MapleCanvas) data.getData()).getImage();
     }
 
     public static Point getPoint(MapleData data) {

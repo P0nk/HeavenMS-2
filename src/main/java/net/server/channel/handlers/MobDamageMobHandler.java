@@ -27,12 +27,12 @@ import client.autoban.AutobanFactory;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.maps.MapleMap;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Map;
 
@@ -43,12 +43,12 @@ import java.util.Map;
  */
 public final class MobDamageMobHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int from = slea.readInt();
-        slea.readInt();
-        int to = slea.readInt();
-        boolean magic = slea.readByte() == 0;
-        int dmg = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int from = p.readInt();
+        p.readInt();
+        int to = p.readInt();
+        boolean magic = p.readByte() == 0;
+        int dmg = p.readInt();
         MapleCharacter chr = c.getPlayer();
         
         MapleMap map = chr.getMap();

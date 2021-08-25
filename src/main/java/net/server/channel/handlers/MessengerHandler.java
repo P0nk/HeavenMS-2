@@ -24,6 +24,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
@@ -32,21 +33,20 @@ import net.server.world.MapleMessenger;
 import net.server.world.MapleMessengerCharacter;
 import net.server.world.World;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MessengerHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if (c.tryacquireClient()) {
             try {
                 String input;
-                byte mode = slea.readByte();
+                byte mode = p.readByte();
                 MapleCharacter player = c.getPlayer();
                 World world = c.getWorldServer();
                 MapleMessenger messenger = player.getMessenger();
                 switch (mode) {
                     case 0x00:
-                        int messengerid = slea.readInt();
+                        int messengerid = p.readInt();
                         if (messenger == null) {
                             if (messengerid == 0) {
                                 MapleInviteCoordinator.removeInvite(InviteType.MESSENGER, player.getId());
@@ -84,7 +84,7 @@ public final class MessengerHandler extends AbstractMaplePacketHandler {
                         if (messenger == null) {
                             c.sendPacket(PacketCreator.messengerChat(player.getName() + " : This Maple Messenger is currently unavailable. Please quit this chat."));
                         } else if (messenger.getMembers().size() < 3) {
-                            input = slea.readMapleAsciiString();
+                            input = p.readString();
                             MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
                             if (target != null) {
                                 if (target.getMessenger() == null) {
@@ -109,13 +109,13 @@ public final class MessengerHandler extends AbstractMaplePacketHandler {
                         }
                         break;
                     case 0x05:
-                        String targeted = slea.readMapleAsciiString();
+                        String targeted = p.readString();
                         world.declineChat(targeted, player);
                         break;
                     case 0x06:
                         if (messenger != null) {
                             MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, player.getMessengerPosition());
-                            input = slea.readMapleAsciiString();
+                            input = p.readString();
                             world.messengerChat(messenger, input, messengerplayer.getName());
                         }
                         break;

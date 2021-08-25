@@ -24,11 +24,11 @@ import client.MapleBuffStat;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.life.MapleMonster;
 import server.maps.MapleMapObject;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.List;
 public final class PlayerMapTransitionHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         chr.setMapTransitionComplete();
         

@@ -30,9 +30,9 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.skills.*;
+import net.packet.InPacket;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class AssignAPProcessor {
     
-    public static void APAutoAssignAction(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public static void APAutoAssignAction(InPacket inPacket, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         if (chr.getRemainingAp() < 1) return;
         
@@ -58,12 +58,12 @@ public class AssignAPProcessor {
             statGain[0] = 0; statGain[1] = 0; statGain[2] = 0; statGain[3] = 0;
 
             int remainingAp = chr.getRemainingAp();
-            slea.skip(8);
+            inPacket.skip(8);
 
             if(YamlConfig.config.server.USE_SERVER_AUTOASSIGNER) {
                 // --------- Ronan Lana's AUTOASSIGNER ---------
                 // This method excels for assigning APs in such a way to cover all equipments AP requirements.
-                byte opt = slea.readByte();     // useful for pirate autoassigning
+                byte opt = inPacket.readByte();     // useful for pirate autoassigning
 
                 int str = 0, dex = 0, luk = 0, int_ = 0;
                 List<Short> eqpStrList = new ArrayList<>();
@@ -335,7 +335,7 @@ public class AssignAPProcessor {
 
                 c.sendPacket(PacketCreator.serverNotice(1, "Better AP applications detected:\r\nSTR: +" + statGain[0] + "\r\nDEX: +" + statGain[1] + "\r\nINT: +" + statGain[3] + "\r\nLUK: +" + statGain[2]));
             } else {
-                if(slea.available() < 16) {
+                if(inPacket.available() < 16) {
                     AutobanFactory.PACKET_EDIT.alert(chr, "Didn't send full packet for Auto Assign.");
                     
                     c.disconnect(true, false);
@@ -343,8 +343,8 @@ public class AssignAPProcessor {
                 }
                 
                 for (int i = 0; i < 2; i++) {
-                    int type = slea.readInt();
-                    int tempVal = slea.readInt();
+                    int type = inPacket.readInt();
+                    int tempVal = inPacket.readInt();
                     if (tempVal < 0 || tempVal > remainingAp) {
                         return;
                     }

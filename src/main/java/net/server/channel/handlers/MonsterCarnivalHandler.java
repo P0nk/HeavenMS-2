@@ -25,6 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleDisease;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import server.life.MapleLifeFactory;
@@ -34,7 +35,6 @@ import server.partyquest.MapleCarnivalFactory.MCSkill;
 import server.partyquest.MonsterCarnival;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
 import java.util.List;
@@ -47,12 +47,12 @@ import java.util.List;
 public final class MonsterCarnivalHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         if (c.tryacquireClient()) {
             try {
                 try {
-                    int tab = slea.readByte();
-                    int num = slea.readByte();
+                    int tab = p.readByte();
+                    int num = p.readByte();
                     int neededCP = 0;
                     if (tab == 0) { 
                         final List<Pair<Integer, Integer>> mobs = c.getPlayer().getMap().getMobsToSpawn();

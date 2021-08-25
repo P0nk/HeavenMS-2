@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 import client.MapleClient;
 
 /**
@@ -32,5 +32,5 @@ import client.MapleClient;
 public class PartySearchRegisterHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {}
+    public void handlePacket(InPacket p, MapleClient c) {}
 }

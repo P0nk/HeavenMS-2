@@ -24,9 +24,9 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.events.gm.MapleSnowball;
 import server.maps.MapleMap;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -34,13 +34,13 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class SnowballHandler extends AbstractMaplePacketHandler{
 
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         //D3 00 02 00 00 A5 01
         MapleCharacter chr = c.getPlayer();
         MapleMap map = chr.getMap();
         final MapleSnowball snowball = map.getSnowball(chr.getTeam());
         final MapleSnowball othersnowball = map.getSnowball(chr.getTeam() == 0 ? (byte) 1 : 0);
-        int what = slea.readByte();
+        int what = p.readByte();
         //slea.skip(4);
 
         if (snowball == null || othersnowball == null || snowball.getSnowmanHP() == 0) return;

@@ -27,12 +27,12 @@ import client.SkillFactory;
 import constants.game.GameConstants;
 import constants.skills.Aran;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public class AranComboHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         final MapleCharacter player = c.getPlayer();
         int skillLevel = player.getSkillLevel(SkillFactory.getSkill(Aran.COMBO_ABILITY));
         if (GameConstants.isAran(player.getJob().getId()) && (skillLevel > 0 || player.getJob().getId() == 2000)) {

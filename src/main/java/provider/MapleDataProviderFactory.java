@@ -21,24 +21,14 @@
 */
 package provider;
 
-import provider.wz.WZFile;
 import provider.wz.WZFiles;
 import provider.wz.XMLWZFile;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MapleDataProviderFactory {
     private static MapleDataProvider getWZ(File in) {
-        if (in.getName().toLowerCase().endsWith("wz") && !in.isDirectory()) {
-            try {
-                return new WZFile(in, false);
-            } catch (IOException e) {
-                throw new RuntimeException("Loading WZ File failed", e);
-            }
-        } else {
-            return new XMLWZFile(in);
-        }
+        return new XMLWZFile(in);
     }
 
     public static MapleDataProvider getDataProvider(WZFiles in) {

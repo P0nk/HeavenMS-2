@@ -26,28 +26,28 @@ import client.MapleClient;
 import client.SkillMacro;
 import client.autoban.AutobanFactory;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public final class SkillMacroHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
-        int num = slea.readByte();
+        int num = p.readByte();
         if (num > 5) return;
 
         for (int i = 0; i < num; i++) {
-            String name = slea.readMapleAsciiString();
+            String name = p.readString();
             if (name.length() > 12) {
                 AutobanFactory.PACKET_EDIT.alert(chr, "Invalid name length " + name + " (" + name.length() + ") for skill macro.");
                 c.disconnect(false, false);
                 break;
             }
 
-            int shout = slea.readByte();
-            int skill1 = slea.readInt();
-            int skill2 = slea.readInt();
-            int skill3 = slea.readInt();
+            int shout = p.readByte();
+            int skill1 = p.readInt();
+            int skill2 = p.readInt();
+            int skill3 = p.readInt();
             SkillMacro macro = new SkillMacro(skill1, skill2, skill3, name, shout, i);
             chr.updateMacros(i, macro);
         }

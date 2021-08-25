@@ -7,11 +7,11 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleItemInformationProvider.QuestConsItem;
 import server.quest.MapleQuest;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Map;
 
@@ -23,10 +23,10 @@ import java.util.Map;
 public class RaiseIncExpHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        byte inventorytype = slea.readByte();//nItemIT
-        short slot = slea.readShort();//nSlotPosition
-        int itemid = slea.readInt();//nItemID
+    public final void handlePacket(InPacket p, MapleClient c) {
+        byte inventorytype = p.readByte();//nItemIT
+        short slot = p.readShort();//nSlotPosition
+        int itemid = p.readInt();//nItemID
         
         if (c.tryacquireClient()) {
             try {

@@ -25,8 +25,8 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -37,7 +37,7 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public class UseGachaExpHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         
         if (c.tryacquireClient()) {
             try {

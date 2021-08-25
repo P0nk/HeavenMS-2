@@ -21,40 +21,35 @@
  */
 package net.server.channel.handlers;
 
-import java.awt.Point;
+import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
+import server.maps.AnimatedMapleMapObject;
+import server.movement.*;
+import tools.exceptions.EmptyMovementException;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.AbstractMaplePacketHandler;
-import server.maps.AnimatedMapleMapObject;
-import server.movement.AbsoluteLifeMovement;
-import server.movement.ChangeEquip;
-import server.movement.JumpDownMovement;
-import server.movement.LifeMovementFragment;
-import server.movement.RelativeLifeMovement;
-import server.movement.TeleportMovement;
-import tools.data.input.LittleEndianAccessor;
-import tools.exceptions.EmptyMovementException;
-
 public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketHandler {
 
-    protected List<LifeMovementFragment> parseMovement(LittleEndianAccessor lea) throws EmptyMovementException {
+    protected List<LifeMovementFragment> parseMovement(InPacket p) throws EmptyMovementException {
         List<LifeMovementFragment> res = new ArrayList<>();
-        byte numCommands = lea.readByte();
-        if (numCommands < 1) throw new EmptyMovementException(lea);
+        byte numCommands = p.readByte();
+        if (numCommands < 1) throw new EmptyMovementException(p);
         for (byte i = 0; i < numCommands; i++) {
-            byte command = lea.readByte();
+            byte command = p.readByte();
             switch (command) {
                 case 0: // normal move
                 case 5:
                 case 17: { // Float
-                    short xpos = lea.readShort();
-                    short ypos = lea.readShort();
-                    short xwobble = lea.readShort();
-                    short ywobble = lea.readShort();
-                    short fh = lea.readShort();
-                    byte newstate = lea.readByte();
-                    short duration = lea.readShort();
+                    short xpos = p.readShort();
+                    short ypos = p.readShort();
+                    short xwobble = p.readShort();
+                    short ywobble = p.readShort();
+                    short fh = p.readShort();
+                    byte newstate = p.readByte();
+                    short duration = p.readShort();
                     AbsoluteLifeMovement alm = new AbsoluteLifeMovement(command, new Point(xpos, ypos), duration, newstate);
                     alm.setFh(fh);
                     alm.setPixelsPerSecond(new Point(xwobble, ywobble));
@@ -71,10 +66,10 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                 case 19: // Springs on maps
                 case 20: // Aran Combat Step
                 case 22: {
-                    short xpos = lea.readShort();
-                    short ypos = lea.readShort();
-                    byte newstate = lea.readByte();
-                    short duration = lea.readShort();
+                    short xpos = p.readShort();
+                    short ypos = p.readShort();
+                    byte newstate = p.readByte();
+                    short duration = p.readShort();
                     RelativeLifeMovement rlm = new RelativeLifeMovement(command, new Point(xpos, ypos), duration, newstate);
                     res.add(rlm);
                     break;
@@ -87,21 +82,21 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                 case 11: //chair
                 {
 //                case 14: {
-                    short xpos = lea.readShort();
-                    short ypos = lea.readShort();
-                    short xwobble = lea.readShort();
-                    short ywobble = lea.readShort();
-                    byte newstate = lea.readByte();
+                    short xpos = p.readShort();
+                    short ypos = p.readShort();
+                    short xwobble = p.readShort();
+                    short ywobble = p.readShort();
+                    byte newstate = p.readByte();
                     TeleportMovement tm = new TeleportMovement(command, new Point(xpos, ypos), newstate);
                     tm.setPixelsPerSecond(new Point(xwobble, ywobble));
                     res.add(tm);
                     break;
                 }
                 case 14:
-                    lea.skip(9); // jump down (?)
+                    p.skip(9); // jump down (?)
                     break;
                 case 10: // Change Equip
-                    res.add(new ChangeEquip(lea.readByte()));
+                    res.add(new ChangeEquip(p.readByte()));
                     break;
                 /*case 11: { // Chair
                     short xpos = lea.readShort();
@@ -115,14 +110,14 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                     break;
                 }*/
                 case 15: {
-                    short xpos = lea.readShort();
-                    short ypos = lea.readShort();
-                    short xwobble = lea.readShort();
-                    short ywobble = lea.readShort();
-                    short fh = lea.readShort();
-                    short ofh = lea.readShort();
-                    byte newstate = lea.readByte();
-                    short duration = lea.readShort();
+                    short xpos = p.readShort();
+                    short ypos = p.readShort();
+                    short xwobble = p.readShort();
+                    short ywobble = p.readShort();
+                    short fh = p.readShort();
+                    short ofh = p.readShort();
+                    byte newstate = p.readByte();
+                    short duration = p.readShort();
                     JumpDownMovement jdm = new JumpDownMovement(command, new Point(xpos, ypos), duration, newstate);
                     jdm.setFh(fh);
                     jdm.setPixelsPerSecond(new Point(xwobble, ywobble));
@@ -135,39 +130,39 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                      short unk = lea.readShort();
                      AranMovement am = new AranMovement(command, null, unk, newstate);
                      res.add(am);*/
-                    lea.skip(3);
+                    p.skip(3);
                     break;
                 }
                 default:
                     System.out.println("Unhandled Case:" + command);
-                    throw new EmptyMovementException(lea);
+                    throw new EmptyMovementException(p);
             }
         }
         
         if (res.isEmpty()) {
-            throw new EmptyMovementException(lea);
+            throw new EmptyMovementException(p);
         }
         return res;
     }
     
-    protected void updatePosition(LittleEndianAccessor lea, AnimatedMapleMapObject target, int yOffset) throws EmptyMovementException {
+    protected void updatePosition(InPacket p, AnimatedMapleMapObject target, int yOffset) throws EmptyMovementException {
     	
-        byte numCommands = lea.readByte();
-        if (numCommands < 1) throw new EmptyMovementException(lea);
+        byte numCommands = p.readByte();
+        if (numCommands < 1) throw new EmptyMovementException(p);
         for (byte i = 0; i < numCommands; i++) {
-            byte command = lea.readByte();
+            byte command = p.readByte();
             switch (command) {
                 case 0: // normal move
                 case 5:
                 case 17: { // Float
                 	//Absolute movement - only this is important for the server, other movement can be passed to the client
-                    short xpos = lea.readShort(); //is signed fine here?
-                    short ypos = lea.readShort();
+                    short xpos = p.readShort(); //is signed fine here?
+                    short ypos = p.readShort();
                     target.setPosition(new Point(xpos, ypos + yOffset));
-                    lea.skip(6); //xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort();
-                    byte newstate = lea.readByte();
+                    p.skip(6); //xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort();
+                    byte newstate = p.readByte();
                     target.setStance(newstate);
-                    lea.readShort(); //duration
+                    p.readShort(); //duration
                     break;
                 }
                 case 1:
@@ -181,10 +176,10 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                 case 20: // Aran Combat Step
                 case 22: {
                 	//Relative movement - server only cares about stance
-                	lea.skip(4); //xpos = lea.readShort(); ypos = lea.readShort();
-                    byte newstate = lea.readByte();
+                	p.skip(4); //xpos = lea.readShort(); ypos = lea.readShort();
+                    byte newstate = p.readByte();
                     target.setStance(newstate);
-                    lea.readShort(); //duration
+                    p.readShort(); //duration
                     break;
                 }
                 case 3:
@@ -196,17 +191,17 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                 {
 //                case 14: {
                 	//Teleport movement - same as above
-                	lea.skip(8); //xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort();
-                    byte newstate = lea.readByte();
+                	p.skip(8); //xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort();
+                    byte newstate = p.readByte();
                     target.setStance(newstate);
                     break;
                 }
                 case 14:
-                    lea.skip(9); // jump down (?)
+                    p.skip(9); // jump down (?)
                     break;
                 case 10: // Change Equip
                     //ignored server-side
-                    lea.readByte();
+                    p.readByte();
                     break;
                 /*case 11: { // Chair
                     short xpos = lea.readShort();
@@ -221,10 +216,10 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                 }*/
                 case 15: {
                 	//Jump down movement - stance only
-                	lea.skip(12); //short xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort(); ofh = lea.readShort();
-                    byte newstate = lea.readByte();
+                	p.skip(12); //short xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort(); ofh = lea.readShort();
+                    byte newstate = p.readByte();
                     target.setStance(newstate);
-                    lea.readShort(); // duration
+                    p.readShort(); // duration
                     break;
                 }
                 case 21: {//Causes aran to do weird stuff when attacking o.o
@@ -232,12 +227,12 @@ public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketH
                      short unk = lea.readShort();
                      AranMovement am = new AranMovement(command, null, unk, newstate);
                      res.add(am);*/
-                    lea.skip(3);
+                    p.skip(3);
                     break;
                 }
                 default:
                     System.out.println("Unhandled Case:" + command);
-                    throw new EmptyMovementException(lea);
+                    throw new EmptyMovementException(p);
             }
         }
     }

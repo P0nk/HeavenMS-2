@@ -30,8 +30,8 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.game.ExpTable;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  * @author PurpleMadness
@@ -39,10 +39,10 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class UseMountFoodHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.skip(4);
-        short pos = slea.readShort();
-        int itemid = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.skip(4);
+        short pos = p.readShort();
+        int itemid = p.readInt();
         
         MapleCharacter chr = c.getPlayer();
         MapleMount mount = chr.getMount();

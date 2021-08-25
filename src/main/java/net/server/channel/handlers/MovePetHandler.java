@@ -23,23 +23,23 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import net.packet.InPacket;
 import server.movement.LifeMovementFragment;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.exceptions.EmptyMovementException;
 
 import java.util.List;
 
 public final class MovePetHandler extends AbstractMovementPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int petId = slea.readInt();
-        slea.readLong();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int petId = p.readInt();
+        p.readLong();
 //        Point startPos = StreamUtil.readShortPoint(slea);
         List<LifeMovementFragment> res;
         
         try {
-            res = parseMovement(slea);
+            res = parseMovement(p);
         } catch (EmptyMovementException e) {
             return;
         }

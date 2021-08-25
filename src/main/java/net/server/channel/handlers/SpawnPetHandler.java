@@ -24,16 +24,16 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.processor.action.SpawnPetProcessor;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public final class SpawnPetHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readInt();
-        byte slot = slea.readByte();
-        slea.readByte();
-        boolean lead = slea.readByte() == 1;
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readInt();
+        byte slot = p.readByte();
+        p.readByte();
+        boolean lead = p.readByte() == 1;
         
         SpawnPetProcessor.processSpawnPet(c, slot, lead);
     }

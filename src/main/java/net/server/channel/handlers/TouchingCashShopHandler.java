@@ -23,8 +23,8 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -32,7 +32,7 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class TouchingCashShopHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         c.sendPacket(PacketCreator.showCash(c.getPlayer()));
     }
 }

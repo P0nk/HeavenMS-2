@@ -25,16 +25,16 @@ import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.List;
 
 public final class ViewAllCharHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         try {
             if(!c.canRequestCharlist()) {   // client breaks if the charlist request pops too soon
                 c.sendPacket(PacketCreator.showAllCharacter(0, 0));

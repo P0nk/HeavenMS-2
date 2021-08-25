@@ -25,10 +25,10 @@ import client.*;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.skills.*;
+import net.packet.InPacket;
 import server.MapleStatEffect;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,7 +37,7 @@ import java.util.List;
 public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         
         /*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);
@@ -46,7 +46,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         }
         chr.getAutobanManager().spam(8);*/
         
-        AttackInfo attack = parseDamage(slea, chr, false, false);
+        AttackInfo attack = parseDamage(p, chr, false, false);
         if (chr.getBuffEffect(MapleBuffStat.MORPH) != null) {
             if(chr.getBuffEffect(MapleBuffStat.MORPH).isMorphWithoutAttack()) {
                 // How are they attacking when the client won't let them?

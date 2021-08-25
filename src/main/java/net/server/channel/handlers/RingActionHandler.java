@@ -30,6 +30,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.processor.npc.DueyProcessor;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.channel.Channel;
 import net.server.world.World;
 import scripting.event.EventInstanceManager;
@@ -37,7 +38,6 @@ import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packets.WeddingPackets;
 
 import java.sql.Connection;
@@ -291,13 +291,13 @@ public final class RingActionHandler extends AbstractMaplePacketHandler {
     }
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        byte mode = slea.readByte();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        byte mode = p.readByte();
         String name;
         byte slot;
         switch(mode) {
             case 0: // Send Proposal
-                sendEngageProposal(c, slea.readMapleAsciiString(), slea.readInt());
+                sendEngageProposal(c, p.readString(), p.readInt());
                 break;
                 
             case 1: // Cancel Proposal
@@ -307,9 +307,9 @@ public final class RingActionHandler extends AbstractMaplePacketHandler {
                 break;
                 
             case 2: // Accept/Deny Proposal
-                final boolean accepted = slea.readByte() > 0;
-                name = slea.readMapleAsciiString();
-                final int id = slea.readInt();
+                final boolean accepted = p.readByte() > 0;
+                name = p.readString();
+                final int id = p.readInt();
                 
                 final MapleCharacter source = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
                 final MapleCharacter target = c.getPlayer();
@@ -362,13 +362,13 @@ public final class RingActionHandler extends AbstractMaplePacketHandler {
                 break;
                 
             case 3: // Break Engagement
-                breakMarriageRing(c.getPlayer(), slea.readInt());
+                breakMarriageRing(c.getPlayer(), p.readInt());
                 break;
                 
             case 5: // Invite %s to Wedding
-                name = slea.readMapleAsciiString();
-                int marriageId = slea.readInt();
-                slot = slea.readByte(); // this is an int
+                name = p.readString();
+                int marriageId = p.readInt();
+                slot = p.readByte(); // this is an int
                 
                 int itemId;
                 try {
@@ -438,8 +438,8 @@ public final class RingActionHandler extends AbstractMaplePacketHandler {
                 break;
                 
             case 6: // Open Wedding Invitation
-                slot = (byte) slea.readInt();
-                int invitationid = slea.readInt();
+                slot = (byte) p.readInt();
+                int invitationid = p.readInt();
                 
                 if(invitationid == 4031406 || invitationid == 4031407) {
                     Item item = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem(slot);
@@ -470,14 +470,14 @@ public final class RingActionHandler extends AbstractMaplePacketHandler {
                         boolean isMarrying = (player.getId() == eim.getIntProperty("groomId") || player.getId() == eim.getIntProperty("brideId"));
 
                         if (isMarrying) {
-                            int amount = slea.readShort();
+                            int amount = p.readShort();
                             if (amount > 10) {
                                 amount = 10;
                             }
 
                             String wishlistItems = "";
                             for (int i = 0; i < amount; i++) {
-                                String s = slea.readMapleAsciiString();
+                                String s = p.readString();
                                 wishlistItems += (s + "\r\n");
                             }
 
@@ -498,7 +498,7 @@ public final class RingActionHandler extends AbstractMaplePacketHandler {
                 break;
                 
             default:
-                System.out.println("Unhandled RING_ACTION Mode: " + slea.toString());
+                System.out.println("Unhandled RING_ACTION Mode: " + p.toString());
                 break;
         }
         

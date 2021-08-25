@@ -24,17 +24,17 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import constants.skills.*;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class SkillEffectHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int skillId = slea.readInt();
-        int level = slea.readByte();
-        byte flags = slea.readByte();
-        int speed = slea.readByte();
-        byte aids = slea.readByte();//Mmmk
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int skillId = p.readInt();
+        int level = p.readByte();
+        byte flags = p.readByte();
+        int speed = p.readByte();
+        byte aids = p.readByte();//Mmmk
         switch (skillId) {
             case FPMage.EXPLOSION:
             case FPArchMage.BIG_BANG:

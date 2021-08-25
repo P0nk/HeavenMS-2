@@ -21,14 +21,15 @@
 */
 package net.server.channel.handlers;
 
-import java.awt.Point;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import scripting.quest.QuestScriptManager;
-import server.quest.MapleQuest;
 import server.life.MapleNPC;
-import tools.data.input.SeekableLittleEndianAccessor;
+import server.quest.MapleQuest;
+
+import java.awt.*;
 
 /**
  *
@@ -37,12 +38,12 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class QuestActionHandler extends AbstractMaplePacketHandler {
     
     // isNpcNearby thanks to GabrielSin
-    private static boolean isNpcNearby(SeekableLittleEndianAccessor slea, MapleCharacter player, MapleQuest quest, int npcId) {
+    private static boolean isNpcNearby(InPacket p, MapleCharacter player, MapleQuest quest, int npcId) {
         Point playerP;
         Point pos = player.getPosition();
         
-        if(slea.available() >= 4) {
-            playerP = new Point(slea.readShort(), slea.readShort());
+        if(p.available() >= 4) {
+            playerP = new Point(p.readShort(), p.readShort());
             if (playerP.distance(pos) > 1000) {     // thanks Darter (YungMoozi) for reporting unchecked player position
                 playerP = pos;
             }
@@ -67,19 +68,19 @@ public final class QuestActionHandler extends AbstractMaplePacketHandler {
     }
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        byte action = slea.readByte();
-        short questid = slea.readShort();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        byte action = p.readByte();
+        short questid = p.readShort();
         MapleCharacter player = c.getPlayer();
         MapleQuest quest = MapleQuest.getInstance(questid);
         
         if (action == 0) { // Restore lost item, Credits Darter ( Rajan )
-            slea.readInt();
-            int itemid = slea.readInt();
+            p.readInt();
+            int itemid = p.readInt();
             quest.restoreLostItem(player, itemid);
         } else if (action == 1) { //Start Quest
-            int npc = slea.readInt();
-            if(!isNpcNearby(slea, player, quest, npc)) {
+            int npc = p.readInt();
+            if(!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
             
@@ -87,14 +88,14 @@ public final class QuestActionHandler extends AbstractMaplePacketHandler {
                 quest.start(player, npc);
             }
         } else if (action == 2) { // Complete Quest
-            int npc = slea.readInt();
-            if(!isNpcNearby(slea, player, quest, npc)) {
+            int npc = p.readInt();
+            if(!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
             
             if(quest.canComplete(player, npc)) {
-                if (slea.available() >= 2) {
-                    int selection = slea.readShort();
+                if (p.available() >= 2) {
+                    int selection = p.readShort();
                     quest.complete(player, npc, selection);
                 } else {
                     quest.complete(player, npc);
@@ -103,8 +104,8 @@ public final class QuestActionHandler extends AbstractMaplePacketHandler {
         } else if (action == 3) {// forfeit quest
             quest.forfeit(player);
         } else if (action == 4) { // scripted start quest
-            int npc = slea.readInt();
-            if(!isNpcNearby(slea, player, quest, npc)) {
+            int npc = p.readInt();
+            if(!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
             
@@ -112,8 +113,8 @@ public final class QuestActionHandler extends AbstractMaplePacketHandler {
                 QuestScriptManager.getInstance().start(c, questid, npc);
             }
         } else if (action == 5) { // scripted end quests
-            int npc = slea.readInt();
-            if(!isNpcNearby(slea, player, quest, npc)) {
+            int npc = p.readInt();
+            if(!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
             

@@ -24,11 +24,11 @@ package net.server.handlers.login;
 import client.MapleClient;
 import client.MapleFamily;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,9 +38,9 @@ import java.sql.SQLException;
 public final class DeleteCharHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-		String pic = slea.readMapleAsciiString();
-		int cid = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+		String pic = p.readString();
+		int cid = p.readInt();
 		if (c.checkPic(pic)) {
 			//check for family, guild leader, pending marriage, world transfer
 			try (Connection con = DatabaseConnection.getConnection();

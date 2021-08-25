@@ -26,9 +26,9 @@ import client.creator.novice.BeginnerCreator;
 import client.creator.novice.LegendCreator;
 import client.creator.novice.NoblesseCreator;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -52,20 +52,20 @@ public final class CreateCharHandler extends AbstractMaplePacketHandler {
 
 
 	@Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-                String name = slea.readMapleAsciiString();
-                int job = slea.readInt();
-		int face = slea.readInt();
+	public final void handlePacket(InPacket p, MapleClient c) {
+                String name = p.readString();
+                int job = p.readInt();
+		int face = p.readInt();
 
-		int hair = slea.readInt();
-		int haircolor = slea.readInt();
-		int skincolor = slea.readInt();
+		int hair = p.readInt();
+		int haircolor = p.readInt();
+		int skincolor = p.readInt();
 
-		int top = slea.readInt();
-		int bottom = slea.readInt();
-		int shoes = slea.readInt();
-		int weapon = slea.readInt();
-                int gender = slea.readByte();
+		int top = p.readInt();
+		int bottom = p.readInt();
+		int shoes = p.readInt();
+		int weapon = p.readInt();
+                int gender = p.readByte();
                 
                 int [] items = new int [] {weapon, top, bottom, shoes, hair, face};
 		for (int item : items) {

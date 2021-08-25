@@ -23,9 +23,9 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import net.packet.InPacket;
 import server.maps.MapleDragon;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.exceptions.EmptyMovementException;
 
 import java.awt.*;
@@ -33,21 +33,21 @@ import java.awt.*;
 
 public class MoveDragonHandler extends AbstractMovementPacketHandler {
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         final MapleCharacter chr = c.getPlayer();
-        final Point startPos = new Point(slea.readShort(), slea.readShort());
+        final Point startPos = new Point(p.readShort(), p.readShort());
         final MapleDragon dragon = chr.getDragon();
         if (dragon != null) {
             try {
-                long movementDataStart = slea.getPosition();
-                updatePosition(slea, dragon, 0);
-                long movementDataLength = slea.getPosition() - movementDataStart; //how many bytes were read by updatePosition
-                slea.seek(movementDataStart);
+                int movementDataStart = p.getPosition();
+                updatePosition(p, dragon, 0);
+                long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
+                p.seek(movementDataStart);
                 
                 if (chr.isHidden()) {
-                    chr.getMap().broadcastGMPacket(chr, PacketCreator.moveDragon(dragon, startPos, slea, movementDataLength));
+                    chr.getMap().broadcastGMPacket(chr, PacketCreator.moveDragon(dragon, startPos, p, movementDataLength));
                 } else {
-                    chr.getMap().broadcastMessage(chr, PacketCreator.moveDragon(dragon, startPos, slea, movementDataLength), dragon.getPosition());
+                    chr.getMap().broadcastMessage(chr, PacketCreator.moveDragon(dragon, startPos, p, movementDataLength), dragon.getPosition());
                 }
             } catch (EmptyMovementException e) {}
         }

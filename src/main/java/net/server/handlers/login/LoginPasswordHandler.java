@@ -25,13 +25,13 @@ import client.DefaultDates;
 import client.MapleClient;
 import config.YamlConfig;
 import net.MaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
 import tools.BCrypt;
 import tools.DatabaseConnection;
 import tools.HexTool;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -54,19 +54,19 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
     }
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         String remoteHost = c.getRemoteAddress();
         if (remoteHost.contentEquals("null")) {
             c.sendPacket(PacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
             return;
         }
 
-        String login = slea.readMapleAsciiString();
-        String pwd = slea.readMapleAsciiString();
+        String login = p.readString();
+        String pwd = p.readString();
         c.setAccountName(login);
 
-        slea.skip(6);   // localhost masked the initial part with zeroes...
-        byte[] hwidNibbles = slea.read(4);
+        p.skip(6);   // localhost masked the initial part with zeroes...
+        byte[] hwidNibbles = p.readBytes(4);
         Hwid hwid = new Hwid(HexTool.bytesToHex(hwidNibbles));
         int loginok = c.login(login, pwd, hwid);
 

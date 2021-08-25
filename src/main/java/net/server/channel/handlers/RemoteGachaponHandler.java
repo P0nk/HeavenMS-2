@@ -25,8 +25,8 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -34,9 +34,9 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class RemoteGachaponHandler extends AbstractMaplePacketHandler {
         @Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-		int ticket = slea.readInt();
-		int gacha = slea.readInt();
+	public final void handlePacket(InPacket p, MapleClient c) {
+		int ticket = p.readInt();
+		int gacha = p.readInt();
 		if (ticket != 5451000){
 			AutobanFactory.GENERAL.alert(c.getPlayer(), " Tried to use RemoteGachaponHandler with item id: " + ticket);
 			c.disconnect(false, false);

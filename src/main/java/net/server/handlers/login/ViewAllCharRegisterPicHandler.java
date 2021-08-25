@@ -2,6 +2,7 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.SessionCoordinator;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -30,13 +30,13 @@ public final class ViewAllCharRegisterPicHandler extends AbstractMaplePacketHand
     }
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readByte();
-        int charId = slea.readInt();
-        slea.readInt(); // please don't let the client choose which world they should login
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readByte();
+        int charId = p.readInt();
+        p.readInt(); // please don't let the client choose which world they should login
         
-        String mac = slea.readMapleAsciiString();
-        String hostString = slea.readMapleAsciiString();
+        String mac = p.readString();
+        String hostString = p.readString();
 
         final Hwid hwid;
         try {
@@ -77,7 +77,7 @@ public final class ViewAllCharRegisterPicHandler extends AbstractMaplePacketHand
         int channel = Randomizer.rand(1, server.getWorld(c.getWorld()).getChannelsSize());
         c.setChannel(channel);
         
-        String pic = slea.readMapleAsciiString();
+        String pic = p.readString();
         c.setPic(pic);
         
         String[] socket = server.getInetSocket(c, c.getWorld(), channel);

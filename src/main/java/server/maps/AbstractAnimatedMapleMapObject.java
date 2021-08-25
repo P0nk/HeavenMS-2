@@ -23,12 +23,8 @@ package server.maps;
 
 import java.util.Arrays;
 
-import net.packet.ByteBufOutPacket;
-import net.packet.OutPacket;
-import net.packet.Packet;
-import tools.data.input.ByteArrayByteStream;
-import tools.data.input.GenericSeekableLittleEndianAccessor;
-import tools.data.input.SeekableLittleEndianAccessor;
+import io.netty.buffer.Unpooled;
+import net.packet.*;
 
 public abstract class AbstractAnimatedMapleMapObject extends AbstractMapleMapObject implements AnimatedMapleMapObject {
 	public static final int IDLE_MOVEMENT_PACKET_LENGTH = 15;
@@ -51,7 +47,7 @@ public abstract class AbstractAnimatedMapleMapObject extends AbstractMapleMapObj
         return Math.abs(stance) % 2 == 1;
     }
     
-    public SeekableLittleEndianAccessor getIdleMovement() {
+    public InPacket getIdleMovement() {
     	final byte[] idleMovementBytes = IDLE_MOVEMENT_PACKET.getBytes();
     	byte[] movementData = Arrays.copyOf(idleMovementBytes, idleMovementBytes.length);
     	//seems wasteful to create a whole packet writer when only a few values are changed
@@ -62,7 +58,7 @@ public abstract class AbstractAnimatedMapleMapObject extends AbstractMapleMapObj
     	movementData[4] = (byte) (y & 0xFF); //y
     	movementData[5] = (byte) (y >> 8 & 0xFF);
     	movementData[12] = (byte) (getStance() & 0xFF);
-    	return new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(movementData));
+    	return new ByteBufInPacket(Unpooled.wrappedBuffer(movementData));
     }
 
     private static Packet createIdleMovementPacket() {

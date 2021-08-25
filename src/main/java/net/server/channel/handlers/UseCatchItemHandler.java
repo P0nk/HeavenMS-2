@@ -28,11 +28,11 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import server.MapleItemInformationProvider;
 import server.life.MapleMonster;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -40,14 +40,14 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class UseCatchItemHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         AutobanManager abm = chr.getAutobanManager();
-        slea.readInt();
+        p.readInt();
         abm.setTimestamp(5, Server.getInstance().getCurrentTimestamp(), 4);
-        slea.readShort();
-        int itemId = slea.readInt();
-        int monsterid = slea.readInt();
+        p.readShort();
+        int itemId = p.readInt();
+        int monsterid = p.readInt();
         
         MapleMonster mob = chr.getMap().getMonsterByOid(monsterid);
         if (chr.getInventory(ItemConstants.getInventoryType(itemId)).countById(itemId) <= 0) {

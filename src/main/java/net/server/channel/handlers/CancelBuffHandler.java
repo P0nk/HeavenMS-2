@@ -26,14 +26,14 @@ import client.SkillFactory;
 import constants.skills.*;
 import net.AbstractMaplePacketHandler;
 import net.MaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class CancelBuffHandler extends AbstractMaplePacketHandler implements MaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int sourceid = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int sourceid = p.readInt();
         
         switch (sourceid) {
             case FPArchMage.BIG_BANG:

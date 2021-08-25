@@ -6,21 +6,21 @@ import client.MapleFamilyEntitlement;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
 import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
 import server.maps.MapleMap;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public class FamilySummonResponseHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
-        slea.readMapleAsciiString(); //family name
-        boolean accept = slea.readByte() != 0;
+        p.readString(); //family name
+        boolean accept = p.readByte() != 0;
         MapleInviteResult inviteResult = MapleInviteCoordinator.answerInvite(InviteType.FAMILY_SUMMON, c.getPlayer().getId(), c.getPlayer(), accept);
         if(inviteResult.result == InviteResult.NOT_FOUND) return;
         MapleCharacter inviter = inviteResult.from;

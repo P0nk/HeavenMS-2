@@ -31,6 +31,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import client.status.MonsterStatusEffect;
 import constants.skills.Outlaw;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.life.MapleMonster;
@@ -38,7 +39,6 @@ import server.life.MapleMonsterInformationProvider;
 import server.maps.MapleSummon;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +66,8 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
     }
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int oid = slea.readInt();
+    public void handlePacket(InPacket p, MapleClient c) {
+        int oid = p.readInt();
         MapleCharacter player = c.getPlayer();
         if (!player.isAlive()) {
             return;
@@ -83,15 +83,15 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         }
         Skill summonSkill = SkillFactory.getSkill(summon.getSkill());
         MapleStatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
-        slea.skip(4);
+        p.skip(4);
         List<SummonAttackEntry> allDamage = new ArrayList<>();
-        byte direction = slea.readByte();
-        int numAttacked = slea.readByte();
-        slea.skip(8); // I failed lol (mob x,y and summon x,y), Thanks Gerald
+        byte direction = p.readByte();
+        int numAttacked = p.readByte();
+        p.skip(8); // I failed lol (mob x,y and summon x,y), Thanks Gerald
         for (int x = 0; x < numAttacked; x++) {
-            int monsterOid = slea.readInt(); // attacked oid
-            slea.skip(18);
-            int damage = slea.readInt();
+            int monsterOid = p.readInt(); // attacked oid
+            p.skip(18);
+            int damage = p.readInt();
             allDamage.add(new SummonAttackEntry(monsterOid, damage));
         }
         player.getMap().broadcastMessage(player, PacketCreator.summonAttack(player.getId(), summon.getObjectId(), direction, allDamage), summon.getPosition());

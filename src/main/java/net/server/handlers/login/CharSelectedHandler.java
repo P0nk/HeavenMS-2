@@ -23,6 +23,7 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.SessionCoordinator;
@@ -31,7 +32,6 @@ import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -50,11 +50,11 @@ public final class CharSelectedHandler extends AbstractMaplePacketHandler {
     }
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int charId = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int charId = p.readInt();
         
-        String macs = slea.readMapleAsciiString();
-        String hostString = slea.readMapleAsciiString();
+        String macs = p.readString();
+        String hostString = p.readString();
 
         final Hwid hwid;
         try {

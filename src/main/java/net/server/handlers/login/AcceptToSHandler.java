@@ -2,8 +2,8 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -17,8 +17,8 @@ public final class AcceptToSHandler extends AbstractMaplePacketHandler {
     }
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        if (slea.available() == 0 || slea.readByte() != 1 || c.acceptToS()) {
+    public final void handlePacket(InPacket p, MapleClient c) {
+        if (p.available() == 0 || p.readByte() != 1 || c.acceptToS()) {
             c.disconnect(false, false);//Client dc's but just because I am cool I do this (:
             return;
         }

@@ -25,24 +25,24 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.LogHelper;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class PetChatHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int petId = slea.readInt();
-        slea.readInt();
-        slea.readByte();
-        int act = slea.readByte();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int petId = p.readInt();
+        p.readInt();
+        p.readByte();
+        int act = p.readByte();
         byte pet = c.getPlayer().getPetIndex(petId);
         if ((pet < 0 || pet > 3) || (act < 0 || act > 9)) {
         	return;
         }
-        String text = slea.readMapleAsciiString();
+        String text = p.readString();
         if (text.length() > Byte.MAX_VALUE) {
         	AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with pets.");
         	FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to send text with length of " + text.length());

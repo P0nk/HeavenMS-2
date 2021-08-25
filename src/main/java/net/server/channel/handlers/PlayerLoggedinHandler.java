@@ -27,6 +27,7 @@ import client.keybind.MapleKeyBinding;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.PlayerBuffValueHolder;
 import net.server.Server;
 import net.server.channel.Channel;
@@ -46,7 +47,6 @@ import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packets.WeddingPackets;
 
 import java.sql.Connection;
@@ -84,8 +84,8 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
     }
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        final int cid = slea.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
+    public final void handlePacket(InPacket p, MapleClient c) {
+        final int cid = p.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
         final Server server = Server.getInstance();
         
         if (!c.tryacquireClient()) {

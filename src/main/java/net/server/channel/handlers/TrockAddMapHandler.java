@@ -24,9 +24,9 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.maps.FieldLimit;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -35,12 +35,12 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class TrockAddMapHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
-        byte type = slea.readByte();
-        boolean vip = slea.readByte() == 1;
+        byte type = p.readByte();
+        boolean vip = p.readByte() == 1;
         if (type == 0x00) {
-            int mapId = slea.readInt();
+            int mapId = p.readInt();
             if (vip)
                 chr.deleteFromVipTrocks(mapId);
             else

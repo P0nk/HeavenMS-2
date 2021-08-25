@@ -25,12 +25,12 @@ import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 public final class UseChairHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int itemId = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int itemId = p.readInt();
         
         // thanks Darter (YungMoozi) for reporting unchecked chair item
         if (!ItemConstants.isChair(itemId) || c.getPlayer().getInventory(MapleInventoryType.SETUP).findById(itemId) == null) {

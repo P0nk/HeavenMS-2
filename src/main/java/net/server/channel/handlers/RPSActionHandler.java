@@ -3,9 +3,9 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.minigame.MapleRockPaperScissor;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  * @Author Arnah
@@ -15,19 +15,19 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class RPSActionHandler extends AbstractMaplePacketHandler{
 
 	@Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c){
+	public final void handlePacket(InPacket p, MapleClient c){
                 MapleCharacter chr = c.getPlayer();
                 MapleRockPaperScissor rps = chr.getRPS();
                 
                 if (c.tryacquireClient()) {
                         try {
-                                if(slea.available() == 0 || !chr.getMap().containsNPC(9000019)){
+                                if(p.available() == 0 || !chr.getMap().containsNPC(9000019)){
                                         if(rps != null){
                                                 rps.dispose(c);
                                         }
                                         return;
                                 }
-                                final byte mode = slea.readByte();
+                                final byte mode = p.readByte();
                                 switch (mode){
                                         case 0: // start game
                                         case 5: // retry
@@ -41,7 +41,7 @@ public final class RPSActionHandler extends AbstractMaplePacketHandler{
                                                 }
                                                 break;
                                         case 1: // answer
-                                                if(rps == null || !rps.answer(c, slea.readByte())){
+                                                if(rps == null || !rps.answer(c, p.readByte())){
                                                         c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));// 13
                                                 }
                                                 break;

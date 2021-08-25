@@ -23,8 +23,8 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /*
  * @author David
@@ -32,9 +32,9 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class GuestLoginHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         c.sendPacket(PacketCreator.sendGuestTOS());
         //System.out.println(slea.toString());
-        new LoginPasswordHandler().handlePacket(slea, c);
+        new LoginPasswordHandler().handlePacket(p, c);
     }
 }

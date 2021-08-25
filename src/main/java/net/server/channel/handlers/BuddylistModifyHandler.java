@@ -25,10 +25,10 @@ import client.*;
 import client.BuddyList.BuddyAddResult;
 import client.BuddyList.BuddyOperation;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import net.server.world.World;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -76,13 +76,13 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
     }
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int mode = slea.readByte();
+    public void handlePacket(InPacket p, MapleClient c) {
+        int mode = p.readByte();
         MapleCharacter player = c.getPlayer();
         BuddyList buddylist = player.getBuddylist();
         if (mode == 1) { // add
-            String addName = slea.readMapleAsciiString();
-            String group = slea.readMapleAsciiString();
+            String addName = p.readString();
+            String group = p.readString();
             if (group.length() > 16 || addName.length() < 4 || addName.length() > 13) {
                 return; //hax.
             }
@@ -165,7 +165,7 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
                 c.sendPacket(PacketCreator.updateBuddylist(buddylist.getBuddies()));
             }
         } else if (mode == 2) { // accept buddy
-            int otherCid = slea.readInt();
+            int otherCid = p.readInt();
             if (!buddylist.isFull()) {
                 try {
                     int channel = c.getWorldServer().find(otherCid);//worldInterface.find(otherCid);
@@ -196,7 +196,7 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
             }
             nextPendingRequest(c);
         } else if (mode == 3) { // delete
-            int otherCid = slea.readInt();
+            int otherCid = p.readInt();
             player.deleteBuddy(otherCid);
         }
     }

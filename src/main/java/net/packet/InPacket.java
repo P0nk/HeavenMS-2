@@ -7,7 +7,7 @@ public interface InPacket extends Packet {
     short readShort();
     int readInt();
     long readLong();
-    Point readPoint();
+    Point readPos();
     String readString();
     byte[] readBytes(int numberOfBytes);
     void skip(int numberOfBytes);

@@ -23,9 +23,9 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestScriptManager;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -33,12 +33,12 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class NPCMoreTalkHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {        
-        byte lastMsg = slea.readByte(); // 00 (last msg type I think)
-        byte action = slea.readByte(); // 00 = end chat, 01 == follow
+    public final void handlePacket(InPacket p, MapleClient c) {
+        byte lastMsg = p.readByte(); // 00 (last msg type I think)
+        byte action = p.readByte(); // 00 = end chat, 01 == follow
         if (lastMsg == 2) {
             if (action != 0) {
-                String returnText = slea.readMapleAsciiString();
+                String returnText = p.readString();
                 if (c.getQM() != null) {
                     c.getQM().setGetText(returnText);
                     if (c.getQM().isStart()) {
@@ -57,10 +57,10 @@ public final class NPCMoreTalkHandler extends AbstractMaplePacketHandler {
             }
         } else {
             int selection = -1;
-            if (slea.available() >= 4) {
-                selection = slea.readInt();
-            } else if (slea.available() > 0) {
-                selection = slea.readByte();
+            if (p.available() >= 4) {
+                selection = p.readInt();
+            } else if (p.available() > 0) {
+                selection = p.readByte();
             }
             if (c.getQM() != null) {
                 if (c.getQM().isStart()) {

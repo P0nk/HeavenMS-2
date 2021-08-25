@@ -22,9 +22,9 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packets.WeddingPackets;
 
 /**
@@ -34,8 +34,8 @@ import tools.packets.WeddingPackets;
 public final class WeddingTalkHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        byte action = slea.readByte();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        byte action = p.readByte();
         if(action == 1) {
             EventInstanceManager eim = c.getPlayer().getEventInstance();
             

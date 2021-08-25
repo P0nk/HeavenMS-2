@@ -25,18 +25,18 @@ import client.MapleBuffStat;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleMapObject;
 import server.maps.MapleSummon;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class DamageSummonHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int oid = slea.readInt();
-        slea.skip(1);   // -1
-        int damage = slea.readInt();
-        int monsterIdFrom = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int oid = p.readInt();
+        p.skip(1);   // -1
+        int damage = p.readInt();
+        int monsterIdFrom = p.readInt();
         
         MapleCharacter player = c.getPlayer();
         MapleMapObject mmo = player.getMap().getMapObject(oid);

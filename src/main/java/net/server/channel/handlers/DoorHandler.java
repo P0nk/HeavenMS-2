@@ -24,10 +24,10 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleDoorObject;
 import server.maps.MapleMapObject;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -35,9 +35,9 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class DoorHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int ownerid = slea.readInt();
-        slea.readByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int ownerid = p.readInt();
+        p.readByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
         
         MapleCharacter chr = c.getPlayer();
         if (chr.isChangingMaps() || chr.isBanned()) {

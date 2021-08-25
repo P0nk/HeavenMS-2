@@ -22,9 +22,9 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packets.WeddingPackets;
 
 /**
@@ -34,7 +34,7 @@ import tools.packets.WeddingPackets;
 public final class WeddingTalkMoreHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         EventInstanceManager eim = c.getPlayer().getEventInstance();
         if(eim != null && !(c.getPlayer().getId() == eim.getIntProperty("groomId") || c.getPlayer().getId() == eim.getIntProperty("brideId"))) {
             eim.gridInsert(c.getPlayer(), 1);

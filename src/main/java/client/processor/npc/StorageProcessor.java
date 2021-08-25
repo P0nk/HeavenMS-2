@@ -31,11 +31,11 @@ import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleStorage;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -44,11 +44,11 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public class StorageProcessor {
     
-        public static void storageAction(SeekableLittleEndianAccessor slea, MapleClient c) {
+        public static void storageAction(InPacket p, MapleClient c) {
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 MapleCharacter chr = c.getPlayer();
                 MapleStorage storage = chr.getStorage();
-                byte mode = slea.readByte();
+                byte mode = p.readByte();
 
                 if (chr.getLevel() < 15){
                         chr.dropMessage(1, "You may only use the storage once you have reached level 15.");
@@ -59,8 +59,8 @@ public class StorageProcessor {
                 if (c.tryacquireClient()) {
                         try {
                                 if (mode == 4) { // take out
-                                        byte type = slea.readByte();
-                                        byte slot = slea.readByte();
+                                        byte type = p.readByte();
+                                        byte slot = p.readByte();
                                         if (slot < 0 || slot > storage.getSlots()) { // removal starts at zero
                                                 AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with storage.");
                                                 FilePrinter.print(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to work with storage slot " + slot);
@@ -103,9 +103,9 @@ public class StorageProcessor {
                                                 }
                                         }
                                 } else if (mode == 5) { // store
-                                        short slot = slea.readShort();
-                                        int itemId = slea.readInt();
-                                        short quantity = slea.readShort();
+                                        short slot = p.readShort();
+                                        int itemId = p.readInt();
+                                        short quantity = p.readShort();
                                         MapleInventoryType invType = ItemConstants.getInventoryType(itemId);
                                         MapleInventory inv = chr.getInventory(invType);
                                         if (slot < 1 || slot > inv.getSlotLimit()) { //player inv starts at one
@@ -170,7 +170,7 @@ public class StorageProcessor {
                                         if(YamlConfig.config.server.USE_STORAGE_ITEM_SORT) storage.arrangeItems(c);
                                         c.sendPacket(PacketCreator.enableActions());
                                 } else if (mode == 7) { // meso
-                                        int meso = slea.readInt();
+                                        int meso = p.readInt();
                                         int storageMesos = storage.getMeso();
                                         int playerMesos = chr.getMeso();
                                         if ((meso > 0 && storageMesos >= meso) || (meso < 0 && playerMesos >= -meso)) {

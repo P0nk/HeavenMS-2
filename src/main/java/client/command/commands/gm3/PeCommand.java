@@ -26,15 +26,13 @@ package client.command.commands.gm3;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
+import io.netty.buffer.Unpooled;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
-import net.packet.ByteBufOutPacket;
-import net.packet.OutPacket;
+import net.packet.ByteBufInPacket;
+import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.HexTool;
-import tools.data.input.ByteArrayByteStream;
-import tools.data.input.GenericSeekableLittleEndianAccessor;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -62,17 +60,17 @@ public class PeCommand extends Command {
             return;
 
         }
-        OutPacket p = new ByteBufOutPacket();
-        p.writeBytes(HexTool.getByteArrayFromHexString(packet));
-        SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(p.getBytes()));
-        short packetId = slea.readShort();
+
+        byte[] packetContent = HexTool.getByteArrayFromHexString(packet);
+        InPacket inPacket = new ByteBufInPacket(Unpooled.wrappedBuffer(packetContent));
+        short packetId = inPacket.readShort();
         final MaplePacketHandler packetHandler = PacketProcessor.getProcessor(0, c.getChannel()).getHandler(packetId);
         if (packetHandler != null && packetHandler.validateState(c)) {
             try {
                 player.yellowMessage("Receiving: " + packet);
-                packetHandler.handlePacket(slea, c);
+                packetHandler.handlePacket(inPacket, c);
             } catch (final Throwable t) {
-                FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (c.getPlayer() == null ? "" : "player ; " + c.getPlayer() + " on map ; " + c.getPlayer().getMapId() + " - ") + "account ; " + c.getAccountName() + "\r\n" + slea.toString());
+                FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (c.getPlayer() == null ? "" : "player ; " + c.getPlayer() + " on map ; " + c.getPlayer().getMapId() + " - ") + "account ; " + c.getAccountName() + "\r\n" + inPacket);
             }
         }
     }

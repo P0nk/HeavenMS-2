@@ -23,8 +23,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -33,8 +33,8 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class TransferNameResultHandler extends AbstractMaplePacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        String name = slea.readMapleAsciiString();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        String name = p.readString();
         c.sendPacket(PacketCreator.sendNameTransferCheck(name, MapleCharacter.canCreateChar(name)));
     }
 }

@@ -25,17 +25,17 @@ import client.MapleClient;
 import client.processor.npc.DueyProcessor;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
 import server.life.MapleNPC;
 import server.life.MaplePlayerNPC;
 import server.maps.MapleMapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class NPCTalkHandler extends AbstractMaplePacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if (!c.getPlayer().isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -46,7 +46,7 @@ public final class NPCTalkHandler extends AbstractMaplePacketHandler {
             return;
         }
         
-        int oid = slea.readInt();
+        int oid = p.readInt();
         MapleMapObject obj = c.getPlayer().getMap().getMapObject(oid);
         if (obj instanceof MapleNPC) {
             MapleNPC npc = (MapleNPC) obj;

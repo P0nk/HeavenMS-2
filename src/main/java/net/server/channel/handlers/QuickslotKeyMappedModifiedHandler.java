@@ -3,7 +3,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.keybind.MapleQuickslotBinding;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.packet.InPacket;
 
 /**
  *
@@ -12,10 +12,10 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public class QuickslotKeyMappedModifiedHandler extends AbstractMaplePacketHandler
 {
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c)
+    public void handlePacket(InPacket p, MapleClient c)
     {
         // Invalid size for the packet.
-        if(slea.available() != MapleQuickslotBinding.QUICKSLOT_SIZE * Integer.BYTES ||
+        if(p.available() != MapleQuickslotBinding.QUICKSLOT_SIZE * Integer.BYTES ||
         // not logged in-game
             c.getPlayer() == null)
         {
@@ -26,7 +26,7 @@ public class QuickslotKeyMappedModifiedHandler extends AbstractMaplePacketHandle
 
         for(int i = 0; i < MapleQuickslotBinding.QUICKSLOT_SIZE; i++)
         {
-            aQuickslotKeyMapped[i] = (byte) slea.readInt();
+            aQuickslotKeyMapped[i] = (byte) p.readInt();
         }
 
         c.getPlayer().changeQuickslotKeybinding(aQuickslotKeyMapped);

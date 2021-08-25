@@ -22,8 +22,8 @@
 package net.server.channel.handlers;
 
 import net.AbstractMaplePacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleMapObject;
-import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleCharacter;
 import client.MapleClient;
 import java.awt.Point;
@@ -37,11 +37,11 @@ import tools.FilePrinter;
 public final class ItemPickupHandler extends AbstractMaplePacketHandler {
 
     @Override
-    public final void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
-        slea.readInt(); //Timestamp
-        slea.readByte();
-        slea.readPos(); //cpos
-        int oid = slea.readInt();
+    public final void handlePacket(final InPacket p, final MapleClient c) {
+        p.readInt(); //Timestamp
+        p.readByte();
+        p.readPos(); //cpos
+        int oid = p.readInt();
         MapleCharacter chr = c.getPlayer();
         MapleMapObject ob = chr.getMap().getMapObject(oid);
         if(ob == null) return;

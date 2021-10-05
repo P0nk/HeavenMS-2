@@ -48,7 +48,7 @@ public class QuestScriptManager extends AbstractScriptManager {
     }
 
     private ScriptEngine getQuestScriptEngine(Client c, short questid) {
-        ScriptEngine engine = getInvocableScriptEngine("quest/" + questid + ".js", c);
+        ScriptEngine engine = getInvocableScriptEngine("quest/" + c.getPlayer().getLanguage() +  "/" + questid + ".js", c);
         if (engine == null && GameConstants.isMedalQuest(questid)) {
             engine = getInvocableScriptEngine("quest/medalQuest.js", c);   // start generic medal quest
         }
@@ -198,7 +198,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         qms.remove(c);
         scripts.remove(c);
         c.getPlayer().setNpcCooldown(System.currentTimeMillis());
-        resetContext("quest/" + qm.getQuest() + ".js", c);
+        resetContext("quest/" + c.getPlayer().getLanguage() +  "/" + qm.getQuest() + ".js", c);
         c.getPlayer().flushDelayedUpdateQuests();
     }
 

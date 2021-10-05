@@ -52,7 +52,7 @@ public class NPCScriptManager extends AbstractScriptManager {
     public boolean isNpcScriptAvailable(Client c, String fileName) {
         ScriptEngine engine = null;
         if (fileName != null) {
-            engine = getInvocableScriptEngine("npc/" + fileName + ".js", c);
+            engine = getInvocableScriptEngine("npc/" + c.getPlayer().getLanguage() +  "/" + fileName + ".js", c);
         }
 
         return engine != null;
@@ -86,7 +86,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 return;
             }
             cms.put(c, cm);
-            ScriptEngine engine = getInvocableScriptEngine("npc/" + filename + ".js", c);
+            ScriptEngine engine = getInvocableScriptEngine("npc/" + c.getPlayer().getLanguage() +  "/" + filename + ".js", c);
 
             if (engine == null) {
                 c.getPlayer().dropMessage(1, "NPC " + npc + " is uncoded.");
@@ -120,15 +120,15 @@ public class NPCScriptManager extends AbstractScriptManager {
                 ScriptEngine engine = null;
                 if (!itemScript) {
                     if (fileName != null) {
-                        engine = getInvocableScriptEngine("npc/" + fileName + ".js", c);
+                        engine = getInvocableScriptEngine("npc/" + c.getPlayer().getLanguage() +  "/" + fileName + ".js", c);
                     }
                 } else {
                     if (fileName != null) {     // thanks MiLin for drafting NPC-based item scripts
-                        engine = getInvocableScriptEngine("item/" + fileName + ".js", c);
+                        engine = getInvocableScriptEngine("item/" + c.getPlayer().getLanguage() +  "/" + fileName + ".js", c);
                     }
                 }
                 if (engine == null) {
-                    engine = getInvocableScriptEngine("npc/" + npc + ".js", c);
+                    engine = getInvocableScriptEngine("npc/" + c.getPlayer().getLanguage() +  "/" + npc + ".js", c);
                     cm.resetItemScript();
                 }
                 if (engine == null) {
@@ -185,9 +185,9 @@ public class NPCScriptManager extends AbstractScriptManager {
 
         String scriptFolder = (cm.isItemScript() ? "item" : "npc");
         if (cm.getScriptName() != null) {
-            resetContext(scriptFolder + "/" + cm.getScriptName() + ".js", c);
+            resetContext(scriptFolder + "/" + c.getPlayer().getLanguage() +  "/" + cm.getScriptName() + ".js", c);
         } else {
-            resetContext(scriptFolder + "/" + cm.getNpc() + ".js", c);
+            resetContext(scriptFolder + "/" + c.getPlayer().getLanguage() +  "/" + cm.getNpc() + ".js", c);
         }
 
         c.getPlayer().flushDelayedUpdateQuests();

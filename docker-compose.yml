@@ -4,6 +4,8 @@ services:
     build: .
     depends_on:
       - db
+      - prometheus
+      - grafana
     ports:
       # Login server
       - "8484:8484"
@@ -19,9 +21,11 @@ services:
       - ./wz:/opt/server/wz
     environment:
       DB_HOST: "db"
-    
+      JAVA_OPTS: "$JAVA_OPTS -javaagent:/jmx_exporter/jmx_prometheus_javaagent-0.13.0.jar=19080:/jmx_exporter/tomcat.yaml"
   db:
     image: mysql:8.0.23
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
       MYSQL_DATABASE: "cosmic"
@@ -30,3 +34,19 @@ services:
     volumes:
       - ./database/docker-db-data:/var/lib/mysql
       - ./database/sql:/docker-entrypoint-initdb.d
+
+    prometheus:
+      image: prom/prometheus:master
+      restart: unless-stopped
+      volumes:
+        - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+      ports:
+        - 9090:9090
+
+    grafana:
+      image: grafana/grafana:6.7.3
+      restart: unless-stopped
+      # environment:
+      #     GF_INSTALL_PLUGINS: ""
+      ports:
+        - 3000:3000

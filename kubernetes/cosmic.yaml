@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+type: NodePort
+metadata:
+  name: cosmic-service
+  labels:
+    app: cosmic
+spec:
+  nodePort:
+    - port: 8484
+    - port: 7575
+    - port: 7576
+    - port: 7577
+  selector:
+    app: cosmic
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cosmic-deployment
+spec:
+  selector:
+    matchLabels:
+      app: cosmic
+  serviceName: "cosmic"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cosmic
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: cosmic
+          image: nexus83/cosmic:latest
+          ports:
+            - containerPort: 8484
+            - containerPort: 7575
+            - containerPort: 7576
+            - containerPort: 7577
+              name: channels
+          volumeMounts:
+            - name: wz
+              mountPath: /opt/server/wz
+  volumeClaimTemplates:
+    - metadata:
+        name: wz
+      spec:
+        accessModes: [ "ReadOnlyMany" ]
+        storageClassName: "rook-ceph-block"
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-specific-node
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500M

@@ -1,4 +1,6 @@
 ﻿# Cosmic - MapleStory v83
+![example workflow](https://github.com/owenhelloworld/Cosmic/actions/workflows/pr-pipeline.yml/badge.svg)
+
 Cosmic launched as a successor to HeavenMS on March 21st 2021.
 
 This document is currently being worked on, so it may not be fully accurate.

@@ -386,10 +386,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.commitExcludedItems();
             showDueyNotification(c, player);
 
-            if (player.getMap().getHPDec() > 0) {
-                player.resetHpDecreaseTask();
-            }
-
             player.resetPlayerRates();
             if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) {
                 player.setPlayerRates();

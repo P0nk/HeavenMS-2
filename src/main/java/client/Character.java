@@ -251,7 +251,6 @@ public class Character extends AbstractCharacterObject {
     private boolean loggedIn = false;
     private boolean useCS;  //chaos scroll upon crafting item.
     private long npcCd;
-    private long lastHpDec = 0;
     private int newWarpMap = -1;
     private boolean canWarpMap = true;  //only one "warp" must be used per call, and this will define the right one.
     private int canWarpCounter = 0;     //counts how many times "inner warps" have been called.
@@ -2768,29 +2767,10 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void doHurtHp() {
+    public void doHurtHp() {
         if (!(this.getInventory(InventoryType.EQUIPPED).findById(getMap().getHPDecProtect()) != null || buffMapProtection())) {
             addHP(-getMap().getHPDec());
-            lastHpDec = Server.getInstance().getCurrentTime();
         }
-    }
-
-    private void startHpDecreaseTask(long lastHpTask) {
-        hpDecreaseTask = TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                doHurtHp();
-            }
-        }, YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL, YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL - lastHpTask);
-    }
-
-    public void resetHpDecreaseTask() {
-        if (hpDecreaseTask != null) {
-            hpDecreaseTask.cancel(false);
-        }
-
-        long lastHpTask = Server.getInstance().getCurrentTime() - lastHpDec;
-        startHpDecreaseTask((lastHpTask > YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL) ? YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL : lastHpTask);
     }
 
     public void dropMessage(String message) {

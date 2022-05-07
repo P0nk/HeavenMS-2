@@ -180,6 +180,7 @@ public class ServerConfig {
     public int ITEM_LIMIT_ON_MAP;
     public int MAP_VISITED_SIZE;
     public int MAP_DAMAGE_OVERTIME_INTERVAL;
+    public int MAP_DAMAGE_OVERTIME_COUNT;
 
     //Channel Mob Disease Monitor Configuration
     public int MOB_STATUS_MONITOR_PROC;

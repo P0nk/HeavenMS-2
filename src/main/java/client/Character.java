@@ -1719,10 +1719,6 @@ public class Character extends AbstractCharacterObject {
                 Character.this.getParty().setEnemy(k);
             }
             silentPartyUpdateInternal(getParty());  // EIM script calls inside
-
-            if (getMap().getHPDec() > 0) {
-                resetHpDecreaseTask();
-            }
         } else {
             log.warn("Chr {} got stuck when moving to map {}", getName(), map.getId());
             client.disconnect(true, false);     // thanks BHB for noticing a player storage stuck case here

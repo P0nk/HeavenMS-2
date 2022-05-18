@@ -153,7 +153,7 @@ public class World {
     private MonitoredReentrantLock timedMapObjectLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MAPOBJS, true);
 
     private final Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
-    private Map<MapleCharacter, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
+    private Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
 
     private ScheduledFuture<?> charactersSchedule;
     private ScheduledFuture<?> marriagesSchedule;
@@ -1719,20 +1719,20 @@ public class World {
         }
     }
     
-    public void addPlayerHpDecrease(MapleCharacter chr) {
-        playerHpDec.put(chr, 0);
+    public void addPlayerHpDecrease(Character chr) {
+        playerHpDec.putIfAbsent(chr, 0);
     }
     
-    public void removePlayerHpDecrease(MapleCharacter chr) {
+    public void removePlayerHpDecrease(Character chr) {
         playerHpDec.remove(chr);
     }
     
     public void runPlayerHpDecreaseSchedule() {
-        Map<MapleCharacter, Integer> m = new HashMap<>();
+        Map<Character, Integer> m = new HashMap<>();
         m.putAll(playerHpDec);
         
-        for (Entry<MapleCharacter, Integer> e : m.entrySet()) {
-            MapleCharacter chr = e.getKey();
+        for (Entry<Character, Integer> e : m.entrySet()) {
+            Character chr = e.getKey();
             
             int c = e.getValue();
             c = (c + 1) % YamlConfig.config.server.MAP_DAMAGE_OVERTIME_COUNT;

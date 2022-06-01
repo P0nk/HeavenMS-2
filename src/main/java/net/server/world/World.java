@@ -1734,12 +1734,14 @@ public class World {
         for (Entry<Character, Integer> e : m.entrySet()) {
             Character chr = e.getKey();
             
-            int c = e.getValue();
-            c = (c + 1) % YamlConfig.config.server.MAP_DAMAGE_OVERTIME_COUNT;
-            playerHpDec.replace(chr, c);
-            
-            if (c == 0) {
-                chr.doHurtHp();
+            if (!chr.isAwayFromWorld()) {
+                int c = e.getValue();
+                c = (c + 1) % YamlConfig.config.server.MAP_DAMAGE_OVERTIME_COUNT;
+                playerHpDec.replace(chr, c);
+
+                if (c == 0) {
+                    chr.doHurtHp();
+                }
             }
         }
     }

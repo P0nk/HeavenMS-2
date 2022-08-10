@@ -34,6 +34,7 @@ import client.newyear.NewYearCardRecord;
 import client.processor.action.PetAutopotProcessor;
 import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
+import constants.character.CharacterConstants;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
 import constants.id.ItemId;
@@ -104,11 +105,7 @@ import static java.util.concurrent.TimeUnit.*;
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
-    private static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
-    private static final String[] BLOCKED_NAMES = {"admin", "owner", "moderator", "intern", "donor", "administrator", "FREDRICK", "help", "helper", "alert", "notice", "maplestory", "fuck", "wizet", "fucking", "negro", "fuk", "fuc", "penis", "pussy", "asshole", "gay",
-            "nigger", "homo", "suck", "cum", "shit", "shitty", "condom", "security", "official", "rape", "nigga", "sex", "tit", "boner", "orgy", "clit", "asshole", "fatass", "bitch", "support", "gamemaster", "cock", "gaay", "gm",
-            "operate", "master", "sysop", "party", "GameMaster", "community", "message", "event", "test", "meso", "Scania", "yata", "AsiaSoft", "henesys"};
-
+   
     private int world;
     private int accountid, id, level;
     private int rank, rankMove, jobRank, jobRankMove;
@@ -889,7 +886,7 @@ public class Character extends AbstractCharacterObject {
 
     public static boolean canCreateChar(String name) {
         String lname = name.toLowerCase();
-        for (String nameTest : BLOCKED_NAMES) {
+        for (String nameTest : CharacterConstants.BLOCKED_NAMES) {
             if (lname.contains(nameTest)) {
                 return false;
             }
@@ -1117,20 +1114,6 @@ public class Character extends AbstractCharacterObject {
             addhp += Randomizer.rand(300, 350);
             addmp += Randomizer.rand(150, 200);
         }
-        
-        /*
-        //aran perks?
-        int newJobId = newJob.getId();
-        if(newJobId == 2100) {          // become aran1
-            addhp += 275;
-            addmp += 15;
-        } else if(newJobId == 2110) {   // become aran2
-            addmp += 275;
-        } else if(newJobId == 2111) {   // become aran3
-            addhp += 275;
-            addmp += 275;
-        }
-        */
 
         effLock.lock();
         statWlock.lock();
@@ -6289,10 +6272,6 @@ public class Character extends AbstractCharacterObject {
     }
 
     public synchronized void levelUp(boolean takeexp) {
-        Skill improvingMaxHP = null;
-        Skill improvingMaxMP = null;
-        int improvingMaxHPLevel = 0;
-        int improvingMaxMPLevel = 0;
 
         boolean isBeginner = isBeginnerJob();
         if (YamlConfig.config.server.USE_AUTOASSIGN_STARTERS_AP && isBeginner && level < 11) {
@@ -6330,54 +6309,26 @@ public class Character extends AbstractCharacterObject {
             gainAp(remainingAp, true);
         }
 
+        // use constants for additional gained HP/MP
         int addhp = 0, addmp = 0;
-        if (isBeginner) {
-            addhp += Randomizer.rand(12, 16);
-            addmp += Randomizer.rand(10, 12);
-        } else if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1)) {
-            improvingMaxHP = isCygnus() ? SkillFactory.getSkill(DawnWarrior.MAX_HP_INCREASE) : SkillFactory.getSkill(Warrior.IMPROVED_MAXHP);
-            if (job.isA(Job.CRUSADER)) {
-                improvingMaxMP = SkillFactory.getSkill(1210000);
-            } else if (job.isA(Job.DAWNWARRIOR2)) {
-                improvingMaxMP = SkillFactory.getSkill(11110000);
-            }
-            improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
-            addhp += Randomizer.rand(24, 28);
-            addmp += Randomizer.rand(4, 6);
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            improvingMaxMP = isCygnus() ? SkillFactory.getSkill(BlazeWizard.INCREASING_MAX_MP) : SkillFactory.getSkill(Magician.IMPROVED_MAX_MP_INCREASE);
-            improvingMaxMPLevel = getSkillLevel(improvingMaxMP);
-            addhp += Randomizer.rand(10, 14);
-            addmp += Randomizer.rand(22, 24);
-        } else if (job.isA(Job.BOWMAN) || job.isA(Job.THIEF) || (job.getId() > 1299 && job.getId() < 1500)) {
-            addhp += Randomizer.rand(20, 24);
-            addmp += Randomizer.rand(14, 16);
-        } else if (job.isA(Job.GM)) {
-            addhp += 30000;
-            addmp += 30000;
-        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
-            improvingMaxHP = isCygnus() ? SkillFactory.getSkill(ThunderBreaker.IMPROVE_MAX_HP) : SkillFactory.getSkill(Brawler.IMPROVE_MAX_HP);
-            improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
-            addhp += Randomizer.rand(22, 28);
-            addmp += Randomizer.rand(18, 23);
-        } else if (job.isA(Job.ARAN1)) {
-            addhp += Randomizer.rand(44, 48);
-            int aids = Randomizer.rand(4, 8);
-            addmp += aids + Math.floor(aids * 0.1);
-        }
-        if (improvingMaxHPLevel > 0 && (job.isA(Job.WARRIOR) || job.isA(Job.PIRATE) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.THUNDERBREAKER1))) {
-            addhp += improvingMaxHP.getEffect(improvingMaxHPLevel).getX();
-        }
-        if (improvingMaxMPLevel > 0 && (job.isA(Job.MAGICIAN) || job.isA(Job.CRUSADER) || job.isA(Job.BLAZEWIZARD1))) {
-            addmp += improvingMaxMP.getEffect(improvingMaxMPLevel).getX();
-        }
-
-        if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-            if (getJobStyle() == Job.MAGICIAN) {
-                addmp += localint_ / 20;
-            } else {
-                addmp += localint_ / 10;
-            }
+        if (job.isA(Job.WARRIOR)) {
+            addhp += Randomizer.rand(CharacterConstants.WARRIOR_HP_GAIN_MINIMUM, CharacterConstants.WARRIOR_HP_GAIN_MAXIMUM);
+            addmp += Randomizer.rand(CharacterConstants.WARRIOR_MP_GAIN_MINIMUM, CharacterConstants.WARRIOR_MP_GAIN_MAXIMUM);
+        } else if (job.isA(Job.MAGICIAN)) {
+            addhp += Randomizer.rand(CharacterConstants.MAGE_HP_GAIN_MINIMUM, CharacterConstants.MAGE_HP_GAIN_MAXIMUM);
+            addmp += Randomizer.rand(CharacterConstants.MAGE_MP_GAIN_MINIMUM, CharacterConstants.MAGE_MP_GAIN_MAXIMUM);
+        } else if (job.isA(Job.BOWMAN)) {
+            addhp += Randomizer.rand(CharacterConstants.ARCHER_HP_GAIN_MINIMUM, CharacterConstants.ARCHER_HP_GAIN_MAXIMUM);
+            addmp += Randomizer.rand(CharacterConstants.ARCHER_MP_GAIN_MINIMUM, CharacterConstants.ARCHER_MP_GAIN_MAXIMUM);
+        } else if (job.isA(Job.THIEF)) {
+            addhp += Randomizer.rand(CharacterConstants.THIEF_HP_GAIN_MINIMUM, CharacterConstants.THIEF_HP_GAIN_MAXIMUM);
+            addmp += Randomizer.rand(CharacterConstants.THIEF_MP_GAIN_MINIMUM, CharacterConstants.THIEF_MP_GAIN_MAXIMUM);
+        } else if (job.isA(Job.PIRATE)) {
+            addhp += Randomizer.rand(CharacterConstants.PIRATE_HP_GAIN_MINIMUM, CharacterConstants.PIRATE_HP_GAIN_MAXIMUM);
+            addmp += Randomizer.rand(CharacterConstants.PIRATE_MP_GAIN_MINIMUM, CharacterConstants.PIRATE_MP_GAIN_MAXIMUM);
+        } else{
+            addhp += Randomizer.rand(CharacterConstants.BEGINNER_HP_GAIN_MINIMUM, CharacterConstants.BEGINNER_HP_GAIN_MAXIMUM);
+            addmp += Randomizer.rand(CharacterConstants.BEGINNER_MP_GAIN_MINIMUM, CharacterConstants.BEGINNER_MP_GAIN_MAXIMUM);
         }
 
         addMaxMPMaxHP(addhp, addmp, true);
@@ -6406,7 +6357,7 @@ public class Character extends AbstractCharacterObject {
                     }
 
                     final String names = (getMedalText() + name);
-                    getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, String.format(LEVEL_200, names, maxClassLevel, names)));
+                    getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, String.format(CharacterConstants.LEVEL_200, names, maxClassLevel, names)));
                 }
             }
 
@@ -6975,7 +6926,8 @@ public class Character extends AbstractCharacterObject {
                     ret.setMaxHp(rs.getInt("maxhp"));
                     ret.mp = rs.getInt("mp");
                     ret.setMaxMp(rs.getInt("maxmp"));
-                    ret.hpMpApUsed = rs.getInt("hpMpUsed");
+                    ret.hpApUsed = rs.getInt("hpApUsed");
+                    ret.mpApUsed = rs.getInt("mpApUsed");
                     ret.hasMerchant = rs.getInt("HasMerchant") == 1;
                     ret.remainingAp = rs.getInt("ap");
                     ret.loadCharSkillPoints(rs.getString("sp").split(","));
@@ -8345,7 +8297,7 @@ public class Character extends AbstractCharacterObject {
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
             try {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, hpApUsed = ?, mpApUsed = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);
 
@@ -8393,74 +8345,75 @@ public class Character extends AbstractCharacterObject {
                         }
                     }
                     ps.setInt(22, meso.get());
-                    ps.setInt(23, hpMpApUsed);
                     if (map == null || map.getId() == MapId.CRIMSONWOOD_VALLEY_1 || map.getId() == MapId.CRIMSONWOOD_VALLEY_2) {  // reset to first spawnpoint on those maps
-                        ps.setInt(24, 0);
+                        ps.setInt(23, 0);
                     } else {
                         Portal closest = map.findClosestPlayerSpawnpoint(getPosition());
                         if (closest != null) {
-                            ps.setInt(24, closest.getId());
+                            ps.setInt(23, closest.getId());
                         } else {
-                            ps.setInt(24, 0);
+                            ps.setInt(23, 0);
                         }
                     }
 
                     prtLock.lock();
                     try {
                         if (party != null) {
-                            ps.setInt(25, party.getId());
+                            ps.setInt(24, party.getId());
                         } else {
-                            ps.setInt(25, -1);
+                            ps.setInt(24, -1);
                         }
                     } finally {
                         prtLock.unlock();
                     }
 
-                    ps.setInt(26, buddylist.getCapacity());
+                    ps.setInt(25, buddylist.getCapacity());
                     if (messenger != null) {
-                        ps.setInt(27, messenger.getId());
-                        ps.setInt(28, messengerposition);
+                        ps.setInt(26, messenger.getId());
+                        ps.setInt(27, messengerposition);
                     } else {
-                        ps.setInt(27, 0);
-                        ps.setInt(28, 4);
+                        ps.setInt(26, 0);
+                        ps.setInt(27, 4);
                     }
                     if (maplemount != null) {
-                        ps.setInt(29, maplemount.getLevel());
-                        ps.setInt(30, maplemount.getExp());
-                        ps.setInt(31, maplemount.getTiredness());
+                        ps.setInt(28, maplemount.getLevel());
+                        ps.setInt(29, maplemount.getExp());
+                        ps.setInt(30, maplemount.getTiredness());
                     } else {
-                        ps.setInt(29, 1);
+                        ps.setInt(28, 1);
+                        ps.setInt(29, 0);
                         ps.setInt(30, 0);
-                        ps.setInt(31, 0);
                     }
                     for (int i = 1; i < 5; i++) {
-                        ps.setInt(i + 31, getSlots(i));
+                        ps.setInt(i + 30, getSlots(i));
                     }
 
                     monsterbook.saveCards(con, id);
 
-                    ps.setInt(36, bookCover);
-                    ps.setInt(37, vanquisherStage);
-                    ps.setInt(38, dojoPoints);
-                    ps.setInt(39, dojoStage);
-                    ps.setInt(40, finishedDojoTutorial ? 1 : 0);
-                    ps.setInt(41, vanquisherKills);
-                    ps.setInt(42, matchcardwins);
-                    ps.setInt(43, matchcardlosses);
-                    ps.setInt(44, matchcardties);
-                    ps.setInt(45, omokwins);
-                    ps.setInt(46, omoklosses);
-                    ps.setInt(47, omokties);
-                    ps.setString(48, dataString);
-                    ps.setInt(49, quest_fame);
-                    ps.setLong(50, jailExpiration);
-                    ps.setInt(51, partnerId);
-                    ps.setInt(52, marriageItemid);
-                    ps.setTimestamp(53, new Timestamp(lastExpGainTime));
-                    ps.setInt(54, ariantPoints);
-                    ps.setBoolean(55, canRecvPartySearchInvite);
-                    ps.setInt(56, id);
-
+                    ps.setInt(35, bookCover);
+                    ps.setInt(36, vanquisherStage);
+                    ps.setInt(37, dojoPoints);
+                    ps.setInt(38, dojoStage);
+                    ps.setInt(39, finishedDojoTutorial ? 1 : 0);
+                    ps.setInt(40, vanquisherKills);
+                    ps.setInt(41, matchcardwins);
+                    ps.setInt(42, matchcardlosses);
+                    ps.setInt(43, matchcardties);
+                    ps.setInt(44, omokwins);
+                    ps.setInt(45, omoklosses);
+                    ps.setInt(46, omokties);
+                    ps.setString(47, dataString);
+                    ps.setInt(48, quest_fame);
+                    ps.setLong(49, jailExpiration);
+                    ps.setInt(50, partnerId);
+                    ps.setInt(51, marriageItemid);
+                    ps.setTimestamp(52, new Timestamp(lastExpGainTime));
+                    ps.setInt(53, ariantPoints);
+                    ps.setBoolean(54, canRecvPartySearchInvite);
+                    ps.setInt(55, this.hpApUsed);
+                    ps.setInt(56, this.mpApUsed);
+                    ps.setInt(57, id);
+                    
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
                         throw new RuntimeException("Character not in database (" + id + ")");

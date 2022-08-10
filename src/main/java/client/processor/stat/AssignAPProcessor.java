@@ -30,6 +30,7 @@ import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import config.YamlConfig;
+import constants.character.CharacterConstants;
 import constants.skills.*;
 import net.packet.InPacket;
 import tools.PacketCreator;
@@ -524,78 +525,26 @@ public class AssignAPProcessor {
                     }
                     break;
                 case 2048: // HP
-                    if (YamlConfig.config.server.USE_ENFORCE_HPMP_SWAP) {
-                        if (APTo != 8192) {
-                            player.message("You can only swap HP ability points to MP.");
-                            c.sendPacket(PacketCreator.enableActions());
-                            return false;
-                        }
-                    }
-
-                    if (player.getHpMpApUsed() < 1) {
-                        player.message("You don't have enough HPMP stat points to spend on AP Reset.");
-                        c.sendPacket(PacketCreator.enableActions());
-                        return false;
-                    }
-
-                    int hp = player.getMaxHp();
-                    int level_ = player.getLevel();
-                    if (hp < level_ * 14 + 148) {
-                        player.message("You don't have the minimum HP pool required to swap.");
+                    if (player.getHpApUsed() < 1) {
+                        player.message("You don't have enough HP stat points to spend on AP Reset.");
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
 
                     int curHp = player.getHp();
-                    int hplose = -takeHp(player.getJob());
+                    int hplose = -CharacterConstants.AP_ASSIGNMENT_HP;
                     player.assignHP(hplose, -1);
-                    if (!YamlConfig.config.server.USE_FIXED_RATIO_HPMP_UPDATE) {
-                        player.updateHp(Math.max(1, curHp + hplose));
-                    }
-
                     break;
                 case 8192: // MP
-                    if (YamlConfig.config.server.USE_ENFORCE_HPMP_SWAP) {
-                        if (APTo != 2048) {
-                            player.message("You can only swap MP ability points to HP.");
-                            c.sendPacket(PacketCreator.enableActions());
-                            return false;
-                        }
-                    }
-
-                    if (player.getHpMpApUsed() < 1) {
-                        player.message("You don't have enough HPMP stat points to spend on AP Reset.");
-                        c.sendPacket(PacketCreator.enableActions());
-                        return false;
-                    }
-
-                    int mp = player.getMaxMp();
-                    int level = player.getLevel();
-                    Job job = player.getJob();
-
-                    boolean canWash = true;
-                    if (job.isA(Job.SPEARMAN) && mp < 4 * level + 156) {
-                        canWash = false;
-                    } else if ((job.isA(Job.FIGHTER) || job.isA(Job.ARAN1)) && mp < 4 * level + 56) {
-                        canWash = false;
-                    } else if (job.isA(Job.THIEF) && job.getId() % 100 > 0 && mp < level * 14 - 4) {
-                        canWash = false;
-                    } else if (mp < level * 14 + 148) {
-                        canWash = false;
-                    }
-
-                    if (!canWash) {
-                        player.message("You don't have the minimum MP pool required to swap.");
+                    if (player.getMpApUsed() < 1) {
+                        player.message("You don't have enough MP stat points to spend on AP Reset.");
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
 
                     int curMp = player.getMp();
-                    int mplose = -takeMp(job);
+                    int mplose = -CharacterConstants.AP_ASSIGNMENT_MP;
                     player.assignMP(mplose, -1);
-                    if (!YamlConfig.config.server.USE_FIXED_RATIO_HPMP_UPDATE) {
-                        player.updateMp(Math.max(0, curMp + mplose));
-                    }
                     break;
                 default:
                     c.sendPacket(PacketCreator.updatePlayerStats(PacketCreator.EMPTY_STATUPDATE, true, player));
@@ -649,14 +598,14 @@ public class AssignAPProcessor {
                 }
                 break;
             case 2048:
-                if (!chr.assignHP(calcHpChange(chr, usedAPReset), 1)) {
+                if (!chr.assignHP(CharacterConstants.AP_ASSIGNMENT_HP, 1)) {
                     chr.message("Couldn't execute AP assign operation.");
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 break;
             case 8192:
-                if (!chr.assignMP(calcMpChange(chr, usedAPReset), 1)) {
+                if (!chr.assignMP(CharacterConstants.AP_ASSIGNMENT_MP, 1)) {
                     chr.message("Couldn't execute AP assign operation.");
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
@@ -667,219 +616,6 @@ public class AssignAPProcessor {
                 return false;
         }
         return true;
-    }
-
-    private static int calcHpChange(Character player, boolean usedAPReset) {
-        Job job = player.getJob();
-        int MaxHP = 0;
-
-        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1)) {
-            if (!usedAPReset) {
-                Skill increaseHP = SkillFactory.getSkill(job.isA(Job.DAWNWARRIOR1) ? DawnWarrior.MAX_HP_INCREASE : Warrior.IMPROVED_MAXHP);
-                int sLvl = player.getSkillLevel(increaseHP);
-
-                if (sLvl > 0) {
-                    MaxHP += increaseHP.getEffect(sLvl).getY();
-                }
-            }
-
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (usedAPReset) {
-                    MaxHP += 20;
-                } else {
-                    MaxHP += Randomizer.rand(18, 22);
-                }
-            } else {
-                MaxHP += 20;
-            }
-        } else if (job.isA(Job.ARAN1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (usedAPReset) {
-                    MaxHP += 20;
-                } else {
-                    MaxHP += Randomizer.rand(26, 30);
-                }
-            } else {
-                MaxHP += 28;
-            }
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (usedAPReset) {
-                    MaxHP += 6;
-                } else {
-                    MaxHP += Randomizer.rand(5, 9);
-                }
-            } else {
-                MaxHP += 6;
-            }
-        } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (usedAPReset) {
-                    MaxHP += 16;
-                } else {
-                    MaxHP += Randomizer.rand(14, 18);
-                }
-            } else {
-                MaxHP += 16;
-            }
-        } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (usedAPReset) {
-                    MaxHP += 16;
-                } else {
-                    MaxHP += Randomizer.rand(14, 18);
-                }
-            } else {
-                MaxHP += 16;
-            }
-        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
-            if (!usedAPReset) {
-                Skill increaseHP = SkillFactory.getSkill(job.isA(Job.PIRATE) ? Brawler.IMPROVE_MAX_HP : ThunderBreaker.IMPROVE_MAX_HP);
-                int sLvl = player.getSkillLevel(increaseHP);
-
-                if (sLvl > 0) {
-                    MaxHP += increaseHP.getEffect(sLvl).getY();
-                }
-            }
-
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (usedAPReset) {
-                    MaxHP += 18;
-                } else {
-                    MaxHP += Randomizer.rand(16, 20);
-                }
-            } else {
-                MaxHP += 18;
-            }
-        } else if (usedAPReset) {
-            MaxHP += 8;
-        } else {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                MaxHP += Randomizer.rand(8, 12);
-            } else {
-                MaxHP += 10;
-            }
-        }
-
-        return MaxHP;
-    }
-
-    private static int calcMpChange(Character player, boolean usedAPReset) {
-        Job job = player.getJob();
-        int MaxMP = 0;
-
-        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (!usedAPReset) {
-                    MaxMP += (Randomizer.rand(2, 4) + (player.getInt() / 10));
-                } else {
-                    MaxMP += 2;
-                }
-            } else {
-                MaxMP += 3;
-            }
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            if (!usedAPReset) {
-                Skill increaseMP = SkillFactory.getSkill(job.isA(Job.BLAZEWIZARD1) ? BlazeWizard.INCREASING_MAX_MP : Magician.IMPROVED_MAX_MP_INCREASE);
-                int sLvl = player.getSkillLevel(increaseMP);
-
-                if (sLvl > 0) {
-                    MaxMP += increaseMP.getEffect(sLvl).getY();
-                }
-            }
-
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (!usedAPReset) {
-                    MaxMP += (Randomizer.rand(12, 16) + (player.getInt() / 20));
-                } else {
-                    MaxMP += 18;
-                }
-            } else {
-                MaxMP += 18;
-            }
-        } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (!usedAPReset) {
-                    MaxMP += (Randomizer.rand(6, 8) + (player.getInt() / 10));
-                } else {
-                    MaxMP += 10;
-                }
-            } else {
-                MaxMP += 10;
-            }
-        } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (!usedAPReset) {
-                    MaxMP += (Randomizer.rand(6, 8) + (player.getInt() / 10));
-                } else {
-                    MaxMP += 10;
-                }
-            } else {
-                MaxMP += 10;
-            }
-        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (!usedAPReset) {
-                    MaxMP += (Randomizer.rand(7, 9) + (player.getInt() / 10));
-                } else {
-                    MaxMP += 14;
-                }
-            } else {
-                MaxMP += 14;
-            }
-        } else {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-                if (!usedAPReset) {
-                    MaxMP += (Randomizer.rand(4, 6) + (player.getInt() / 10));
-                } else {
-                    MaxMP += 6;
-                }
-            } else {
-                MaxMP += 6;
-            }
-        }
-
-        return MaxMP;
-    }
-
-    private static int takeHp(Job job) {
-        int MaxHP = 0;
-
-        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
-            MaxHP += 54;
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            MaxHP += 10;
-        } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
-            MaxHP += 20;
-        } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
-            MaxHP += 20;
-        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
-            MaxHP += 42;
-        } else {
-            MaxHP += 12;
-        }
-
-        return MaxHP;
-    }
-
-    private static int takeMp(Job job) {
-        int MaxMP = 0;
-
-        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
-            MaxMP += 4;
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            MaxMP += 31;
-        } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
-            MaxMP += 12;
-        } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
-            MaxMP += 12;
-        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
-            MaxMP += 16;
-        } else {
-            MaxMP += 8;
-        }
-
-        return MaxMP;
     }
 
 }

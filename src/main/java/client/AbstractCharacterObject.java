@@ -42,7 +42,7 @@ import java.util.concurrent.locks.Lock;
 public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject {
     protected MapleMap map;
     protected int str, dex, luk, int_, hp, maxhp, mp, maxmp;
-    protected int hpMpApUsed, remainingAp;
+    protected int hpApUsed, mpApUsed, remainingAp;
     protected int[] remainingSp = new int[10];
     protected transient int clientmaxhp, clientmaxmp, localmaxhp = 50, localmaxmp = 5;
     protected float transienthp = Float.NEGATIVE_INFINITY, transientmp = Float.NEGATIVE_INFINITY;
@@ -139,10 +139,19 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         }
     }
 
-    public int getHpMpApUsed() {
+    public int getHpApUsed() {
         statRlock.lock();
         try {
-            return hpMpApUsed;
+            return this.hpApUsed;
+        } finally {
+            statRlock.unlock();
+        }
+    }
+    
+    public int getMpApUsed() {
+        statRlock.lock();
+        try {
+            return mpApUsed;
         } finally {
             statRlock.unlock();
         }
@@ -209,8 +218,12 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         return localmaxmp;
     }
 
-    private void setHpMpApUsed(int mpApUsed) {
-        this.hpMpApUsed = mpApUsed;
+    private void setHpApUsed(int hpAPused) {
+        this.hpApUsed = hpAPused;
+    }
+    
+    private void setMpApUsed(int mpApUsed) {
+        this.mpApUsed = mpApUsed;
     }
 
     private void dispatchHpChanged(final int oldHp) {
@@ -607,7 +620,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         effLock.lock();
         statWlock.lock();
         try {
-            if (remainingAp - deltaAp < 0 || hpMpApUsed + deltaAp < 0 || maxhp >= 30000) {
+            if (remainingAp - deltaAp < 0 || hpApUsed + deltaAp < 0 || maxhp >= 30000) {
                 return false;
             }
 
@@ -615,7 +628,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             long strDexIntLuk = calcStatPoolLong(str, dex, int_, luk);
 
             changeStatPool(hpMpPool, strDexIntLuk, null, remainingAp - deltaAp, false);
-            setHpMpApUsed(hpMpApUsed + deltaAp);
+            setHpApUsed(hpApUsed + deltaAp);
             return true;
         } finally {
             statWlock.unlock();
@@ -627,7 +640,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         effLock.lock();
         statWlock.lock();
         try {
-            if (remainingAp - deltaAp < 0 || hpMpApUsed + deltaAp < 0 || maxmp >= 30000) {
+            if (remainingAp - deltaAp < 0 || mpApUsed + deltaAp < 0 || maxmp >= 30000) {
                 return false;
             }
 
@@ -635,7 +648,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             long strDexIntLuk = calcStatPoolLong(str, dex, int_, luk);
 
             changeStatPool(hpMpPool, strDexIntLuk, null, remainingAp - deltaAp, false);
-            setHpMpApUsed(hpMpApUsed + deltaAp);
+            setMpApUsed(mpApUsed + deltaAp);
             return true;
         } finally {
             statWlock.unlock();

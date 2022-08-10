@@ -10,9 +10,5 @@
 /.settings
 /out
 *.onetoc2
-
-# Eclipse m2e generated files
-# Eclipse Core
-.project
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
+/.vs/MapleSyrup/v17
+/.vs

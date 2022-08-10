@@ -10435,7 +10435,7 @@ INSERT IGNORE INTO `temp_data` (`dropperid`, `itemid`, `minimum_quantity`, `maxi
 (3230104, 4031209, 1, 1, 3072, 500000),
 (3230306, 4031159, 1, 1, 2074, 500000),
 (9500400, 4031224, 1, 1, 3607, 1000000),
-(9500400, 4031223, 1, 1, 3608, 1000000),    # thanks Lame for noticing Hongbu's gourd unavailable
+(9500400, 4031223, 1, 1, 3608, 1000000),    # thanks Lame for noticing Hongbus gourd unavailable
 (9420003, 4031400, 1, 1, 8761, 1000000),
 (9420001, 4031401, 1, 1, 8761, 1000000),
 (9300097, 4031472, 1, 1, 6301, 100000),
@@ -12796,18 +12796,19 @@ CREATE TABLE IF NOT EXISTS `drop_data_global` (
   `maximum_quantity` int(11) NOT NULL DEFAULT '1',
   `questid` int(11) NOT NULL DEFAULT '0',
   `chance` int(11) NOT NULL DEFAULT '0',
+  `minLevel` int(3) NOT NULL DEFAULT '0',
   `comments` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `mobid` (`continent`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=5 ;
 
-INSERT INTO `drop_data_global` (`id`, `continent`, `itemid`, `minimum_quantity`, `maximum_quantity`, `questid`, `chance`, `comments`) VALUES
-(1, -1, 4031865, 1, 1, 0, 35000, 'NX Card 100 PTS'),
-(2, -1, 4031866, 1, 1, 0, 20000, 'NX Card 250 PTS'),
-(3, -1, 4001126, 1, 2, 0, 8000, 'Maple Leaves'),
-(4, -1, 2049100, 1, 1, 0, 1200, 'Chaos Scroll 60%'),
-(5, -1, 2340000, 1, 1, 0, 1200, 'White Scroll'),
-(6, -1, 4001006, 1, 1, 0, 10000, 'Flaming Feather');
+INSERT INTO `drop_data_global` (`id`, `continent`, `itemid`, `minimum_quantity`, `maximum_quantity`, `questid`, `chance`, `minLevel`, `comments`) VALUES
+(1, -1, 4031865, 1, 1, 0, 35000, 0, 'NX Card 100 PTS'),
+(2, -1, 4031866, 1, 1, 0, 20000, 0, 'NX Card 250 PTS'),
+(3, -1, 4001126, 1, 2, 0, 8000, 0, 'Maple Leaves'),
+(4, -1, 2049100, 1, 1, 0, 1200, 0, 'Chaos Scroll 60%'),
+(5, -1, 2340000, 1, 1, 0, 1200, 0, 'White Scroll'),
+(6, -1, 4001006, 1, 1, 0, 10000, 0, 'Flaming Feather');
 
 CREATE TABLE IF NOT EXISTS `dueyitems` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

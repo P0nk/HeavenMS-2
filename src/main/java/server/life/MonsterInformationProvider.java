@@ -70,21 +70,21 @@ public class MonsterInformationProvider {
         retrieveGlobal();
     }
 
-    public final List<MonsterGlobalDropEntry> getRelevantGlobalDrops(int mapid) {
+    public final List<MonsterGlobalDropEntry> getRelevantGlobalDrops(int mapid, int level) {
         int continentid = mapid / 100000000;
 
-        List<MonsterGlobalDropEntry> contiItems = continentdrops.get(continentid);
-        if (contiItems == null) {   // continent separated global drops found thanks to marcuswoon
-            contiItems = new ArrayList<>();
+        continentdrops.clear(); // need to clear each time to account for changing mob levels
+        List<MonsterGlobalDropEntry> contiItems = new ArrayList<>();
+        // continent separated global drops found thanks to marcuswoon
+        contiItems = new ArrayList<>();
 
-            for (MonsterGlobalDropEntry e : globaldrops) {
-                if (e.continentid < 0 || e.continentid == continentid) {
-                    contiItems.add(e);
-                }
+        for (MonsterGlobalDropEntry e : globaldrops) {
+            if ((e.continentid < 0 || e.continentid == continentid) && level >= e.minLevel) {
+                contiItems.add(e);
             }
-
-            continentdrops.put(continentid, contiItems);
         }
+
+        continentdrops.put(continentid, contiItems);
 
         return contiItems;
     }
@@ -100,7 +100,8 @@ public class MonsterInformationProvider {
                         rs.getByte("continent"),
                         rs.getInt("minimum_quantity"),
                         rs.getInt("maximum_quantity"),
-                        rs.getShort("questid")));
+                        rs.getShort("questid"),
+                        rs.getInt("minLevel")));
             }
         } catch (SQLException e) {
             log.error("Error retrieving global drops", e);

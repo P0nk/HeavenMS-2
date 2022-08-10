@@ -18,8 +18,7 @@
     <int name="VRBottom" value="300"/>
   </imgdir>
   <imgdir name="miniMap">
-    <canvas name="canvas" width="81" height="57">
-    </canvas>
+    <canvas name="canvas" width="81" height="57"> </canvas>
     <int name="width" value="1297"/>
     <int name="height" value="913"/>
     <int name="centerX" value="449"/>
@@ -27,8 +26,7 @@
     <int name="mag" value="4"/>
   </imgdir>
   <imgdir name="0">
-    <imgdir name="info">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
     <imgdir name="obj">
       <imgdir name="0">
         <int name="x" value="-101"/>
@@ -108,20 +106,15 @@
         <int name="f" value="0"/>
       </imgdir>
     </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="1">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
+    <imgdir name="obj"> </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="2">
-    <imgdir name="info">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
     <imgdir name="obj">
       <imgdir name="0">
         <int name="x" value="-154"/>
@@ -245,12 +238,10 @@
         <int name="f" value="0"/>
       </imgdir>
     </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="3">
-    <imgdir name="info">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
     <imgdir name="obj">
       <imgdir name="0">
         <int name="x" value="196"/>
@@ -330,40 +321,27 @@
         <int name="f" value="0"/>
       </imgdir>
     </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="4">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
+    <imgdir name="obj"> </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="5">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
+    <imgdir name="obj"> </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="6">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
+    <imgdir name="obj"> </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="7">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"> </imgdir>
+    <imgdir name="obj"> </imgdir>
+    <imgdir name="tile"> </imgdir>
   </imgdir>
   <imgdir name="ladderRope">
     <imgdir name="1">
@@ -420,10 +398,8 @@
       <string name="script" value="rankDeveloperRoom"/>
     </imgdir>
   </imgdir>
-  <imgdir name="reactor">
-  </imgdir>
-  <imgdir name="back">
-  </imgdir>
+  <imgdir name="reactor"> </imgdir>
+  <imgdir name="back"> </imgdir>
   <imgdir name="foothold">
     <imgdir name="0">
       <imgdir name="2">

@@ -1,14 +1,14 @@
 package tools.mapletools;
 
-import org.apache.commons.io.FileUtils;
 import provider.wz.WZFiles;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -21,7 +21,6 @@ public class MapInfoRetriever {
     private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("map_info_report.txt");
     private static final List<Integer> missingInfo = new ArrayList<>();
 
-    private static BufferedReader bufferedReader = null;
     private static byte status = 0;
     private static boolean hasInfo;
 
@@ -41,11 +40,11 @@ public class MapInfoRetriever {
         return (d.trim());
     }
 
-    private static void forwardCursor(int st) {
+    private static void forwardCursor(BufferedReader reader, int st) {
         String line = null;
 
         try {
-            while (status >= st && (line = bufferedReader.readLine()) != null) {
+            while (status >= st && (line = reader.readLine()) != null) {
                 simpleToken(line);
             }
         } catch (Exception e) {
@@ -61,7 +60,7 @@ public class MapInfoRetriever {
         }
     }
 
-    private static boolean translateToken(String token) {
+    private static boolean translateToken(BufferedReader reader, String token) {
         String d;
         int temp;
 
@@ -76,7 +75,7 @@ public class MapInfoRetriever {
                 }
 
                 temp = status;
-                forwardCursor(temp);
+                forwardCursor(reader, temp);
             }
 
             status += 1;
@@ -86,45 +85,40 @@ public class MapInfoRetriever {
     }
 
     private static void searchMapDirectory(int mapArea) {
-        final File mapDirectory = new File(WZFiles.MAP.getFilePath() + "/Map/Map" + mapArea);
+        final Path mapDirectory = Path.of(WZFiles.MAP.getFilePath() + "/Map/Map" + Integer.toString(mapArea));
+        System.out.println("Parsing map area " + mapArea);
         try {
-            Iterator<File> iter = FileUtils.iterateFiles(mapDirectory, new String[]{"xml"}, true);
-            System.out.println("Parsing map area " + mapArea);
-
-            while (iter.hasNext()) {
-                File file = iter.next();
-                searchMapFile(file);
-            }
-        } catch (UncheckedIOException e) {
-            System.err.println("Directory " + mapDirectory.getPath() + " does not exist");
+            Files.walk(mapDirectory)
+                    .filter(MapInfoRetriever::isRelevantFile)
+                    .forEach(MapInfoRetriever::searchMapFile);
+        } catch (UncheckedIOException | IOException e) {
+            System.err.println("Directory " + mapDirectory.getFileName().toString() + " does not exist");
         }
     }
 
-    private static void searchMapFile(File file) {
+    private static boolean isRelevantFile(Path file) {
+        return file.getFileName().toString().endsWith(".xml");
+    }
+
+    private static void searchMapFile(Path file) {
         // This will reference one line at a time
         String line = null;
 
-        try {
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
-
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
             hasInfo = false;
             status = 0;
 
-            while ((line = bufferedReader.readLine()) != null) {
-                if (translateToken(line)) {
+            while ((line = reader.readLine()) != null) {
+                if (translateToken(reader, line)) {
                     break;
                 }
             }
 
             if (!hasInfo) {
-                missingInfo.add(Integer.valueOf(file.getName().split(".img.xml")[0]));
+                missingInfo.add(Integer.valueOf(file.getFileName().toString().split(".img.xml")[0]));
             }
-
-            bufferedReader.close();
-            fileReader.close();
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + file.getName() + "'");
+            System.out.println("Error reading file '" + file.getFileName().toString() + "'");
         } catch (Exception e) {
             e.printStackTrace();
         }

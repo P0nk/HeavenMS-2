@@ -70,48 +70,47 @@ public class PartyQuest {
         synchronized (participants) {
             participants.remove(chr);
             chr.setPartyQuest(null);
-            if (participants.isEmpty()) {
-                super.finalize();
-            }
             //System.gc();
         }
     }
 
     public static int getExp(String PQ, int level) {
-        if (PQ.equals("HenesysPQ")) {
+        switch (PQ) {
+        case "HenesysPQ":
             return 1250 * level / 5;
-        } else if (PQ.equals("KerningPQFinal")) {
+        case "KerningPQFinal":
             return 500 * level / 5;
-        } else if (PQ.equals("KerningPQ4th")) {
+        case "KerningPQ4th":
             return 400 * level / 5;
-        } else if (PQ.equals("KerningPQ3rd")) {
+        case "KerningPQ3rd":
             return 300 * level / 5;
-        } else if (PQ.equals("KerningPQ2nd")) {
+        case "KerningPQ2nd":
             return 200 * level / 5;
-        } else if (PQ.equals("KerningPQ1st")) {
+        case "KerningPQ1st":
             return 100 * level / 5;
-        } else if (PQ.equals("LudiMazePQ")) {
+        case "LudiMazePQ":
             return 2000 * level / 5;
-        } else if (PQ.equals("LudiPQ1st")) {
+        case "LudiPQ1st":
             return 100 * level / 5;
-        } else if (PQ.equals("LudiPQ2nd")) {
+        case "LudiPQ2nd":
             return 250 * level / 5;
-        } else if (PQ.equals("LudiPQ3rd")) {
+        case "LudiPQ3rd":
             return 350 * level / 5;
-        } else if (PQ.equals("LudiPQ4th")) {
+        case "LudiPQ4th":
             return 350 * level / 5;
-        } else if (PQ.equals("LudiPQ5th")) {
+        case "LudiPQ5th":
             return 400 * level / 5;
-        } else if (PQ.equals("LudiPQ6th")) {
+        case "LudiPQ6th":
             return 450 * level / 5;
-        } else if (PQ.equals("LudiPQ7th")) {
+        case "LudiPQ7th":
             return 500 * level / 5;
-        } else if (PQ.equals("LudiPQ8th")) {
+        case "LudiPQ8th":
             return 650 * level / 5;
-        } else if (PQ.equals("LudiPQLast")) {
+        case "LudiPQLast":
             return 800 * level / 5;
+        default:
+            log.warn("Unhandled PartyQuest: {}", PQ);
+            return 0;
         }
-        log.warn("Unhandled PartyQuest: {}", PQ);
-        return 0;
     }
 }

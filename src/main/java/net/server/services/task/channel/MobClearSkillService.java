@@ -20,7 +20,6 @@
 package net.server.services.task.channel;
 
 import config.YamlConfig;
-import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
@@ -52,10 +51,6 @@ public class MobClearSkillService extends BaseService {
     }
 
     private class MobClearSkillScheduler extends BaseScheduler {
-
-        public MobClearSkillScheduler() {
-            super(MonitoredLockType.CHANNEL_MOBSKILL);
-        }
 
         public void registerClearSkillAction(Runnable runAction, long delay) {
             registerEntry(runAction, runAction, delay);

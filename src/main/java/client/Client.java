@@ -36,8 +36,6 @@ import net.packet.Packet;
 import net.packet.logging.LoggingUtil;
 import net.packet.logging.MonitoredChrLogger;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.login.LoginBypassCoordinator;
 import net.server.coordinator.session.Hwid;
@@ -81,6 +79,7 @@ import java.util.Date;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -122,9 +121,9 @@ public class Client extends ChannelInboundHandlerAdapter {
     private byte gender = -1;
     private boolean disconnecting = false;
     private final Semaphore actionsSemaphore = new Semaphore(7);
-    private final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CLIENT, true);
-    private final Lock encoderLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CLIENT_ENCODER, true);
-    private final Lock announcerLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CLIENT_ANNOUNCER, true);
+    private final Lock lock = new ReentrantLock(true);
+    private final Lock encoderLock = new ReentrantLock(true);
+    private final Lock announcerLock = new ReentrantLock(true);
     // thanks Masterrulax & try2hack for pointing out a bottleneck issue with shared locks, shavit for noticing an opportunity for improvement
     private Calendar tempBanCalendar;
     private int votePoints;

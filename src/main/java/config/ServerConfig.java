@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerConfig {
-    //Thread Tracker Configuration
-    public boolean USE_THREAD_TRACKER;
 
     //Database Configuration
     public String DB_URL_FORMAT;

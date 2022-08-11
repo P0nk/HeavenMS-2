@@ -269,8 +269,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         cs.removeFromInventory(item);
                         c.sendPacket(PacketCreator.takeFromCashInventory(item));
 
-                        if (item instanceof Equip) {
-                            Equip equip = (Equip) item;
+                        if (item instanceof Equip equip) {
                             if (equip.getRingId() >= 0) {
                                 Ring ring = Ring.loadFromDb(equip.getRingId());
                                 chr.addPlayerRing(ring);
@@ -323,8 +322,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 return;
                             }*/ //Gotta let them faggots marry too, hence why this is commented out <3 
 
-                            if (itemRing.toItem() instanceof Equip) {
-                                Equip eqp = (Equip) itemRing.toItem();
+                            if (itemRing.toItem() instanceof Equip eqp) {
                                 Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
                                 cs.addToInventory(eqp);
@@ -387,8 +385,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xBE));
                         } else {
                             // Need to check to make sure its actually an equip and the right SN...
-                            if (itemRing.toItem() instanceof Equip) {
-                                Equip eqp = (Equip) itemRing.toItem();
+                            if (itemRing.toItem() instanceof Equip eqp) {
                                 Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
                                 cs.addToInventory(eqp);

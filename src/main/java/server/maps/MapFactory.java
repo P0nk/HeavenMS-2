@@ -112,8 +112,7 @@ public class MapFactory {
 
     private static void loadLifeRaw(MapleMap map, int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide, int mobTime, int team) {
         AbstractLoadedLife myLife = loadLife(id, type, cy, f, fh, rx0, rx1, x, y, hide);
-        if (myLife instanceof Monster) {
-            Monster monster = (Monster) myLife;
+        if (myLife instanceof Monster monster) {
 
             if (mobTime == -1) { //does not respawn, force spawn once
                 map.spawnMonster(monster);

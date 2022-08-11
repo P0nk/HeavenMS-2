@@ -8,8 +8,9 @@ import server.ThreadManager;
 import tools.exceptions.IdTypeNotSupportedException;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,12 +76,13 @@ public class IdCommand extends Command {
             throw new IdTypeNotSupportedException();
         }
         itemMap.put(type, new HashMap<>());
-        BufferedReader reader = new BufferedReader(new FileReader(handbookDirectory.get(type)));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] row = line.split(" - ", 2);
-            if (row.length == 2) {
-                itemMap.get(type).put(row[1].toLowerCase(), row[0]);
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(handbookDirectory.get(type)))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] row = line.split(" - ", 2);
+                if (row.length == 2) {
+                    itemMap.get(type).put(row[1].toLowerCase(), row[0]);
+                }
             }
         }
     }

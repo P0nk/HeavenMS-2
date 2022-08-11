@@ -1033,8 +1033,7 @@ public class ItemInformationProvider {
     public Item scrollEquipWithId(Item equip, int scrollId, boolean usingWhiteScroll, int vegaItemId, boolean isGM) {
         boolean assertGM = (isGM && YamlConfig.config.server.USE_PERFECT_GM_SCROLL);
 
-        if (equip instanceof Equip) {
-            Equip nEquip = (Equip) equip;
+        if (equip instanceof Equip nEquip) {
             Map<String, Integer> stats = this.getEquipStats(scrollId);
 
             if (((nEquip.getUpgradeSlots() > 0 || ItemConstants.isCleanSlate(scrollId))) || assertGM) {

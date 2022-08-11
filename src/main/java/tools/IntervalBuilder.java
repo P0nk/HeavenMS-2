@@ -19,31 +19,25 @@
 */
 package tools;
 
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Ronan
  */
 public class IntervalBuilder {
-
     private final List<Line2D> intervalLimits = new ArrayList<>();
-
-    protected MonitoredReadLock intervalRlock;
-    protected MonitoredWriteLock intervalWlock;
+    private final Lock intervalRlock;
+    private final Lock intervalWlock;
 
     public IntervalBuilder() {
-        MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.INTERVAL, true);
-        intervalRlock = MonitoredReadLockFactory.createLock(locks);
-        intervalWlock = MonitoredWriteLockFactory.createLock(locks);
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+        this.intervalRlock = readWriteLock.readLock();
+        this.intervalWlock = readWriteLock.writeLock();
     }
 
     private void refitOverlappedIntervals(int st, int en, int newFrom, int newTo) {

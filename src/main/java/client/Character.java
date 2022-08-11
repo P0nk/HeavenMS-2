@@ -46,16 +46,12 @@ import net.packet.Packet;
 import net.server.PlayerBuffValueHolder;
 import net.server.PlayerCoolDownValueHolder;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
 import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.world.CharacterSaveService;
-import net.server.services.type.ChannelServices;
 import net.server.services.type.WorldServices;
 import net.server.world.*;
 import org.slf4j.Logger;
@@ -97,6 +93,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -215,11 +212,11 @@ public class Character extends AbstractCharacterObject {
     private ScheduledFuture<?> chairRecoveryTask = null;
     private ScheduledFuture<?> pendantOfSpirit = null; //1122017
     private ScheduledFuture<?> cpqSchedule = null;
-    private final Lock chrLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHARACTER_CHR, true);
-    private final Lock evtLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHARACTER_EVT, true);
-    private final Lock petLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHARACTER_PET, true);
-    private final Lock prtLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHARACTER_PRT);
-    private final Lock cpnLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHARACTER_CPN);
+    private final Lock chrLock = new ReentrantLock(true);
+    private final Lock evtLock = new ReentrantLock(true);
+    private final Lock petLock = new ReentrantLock(true);
+    private final Lock prtLock = new ReentrantLock();
+    private final Lock cpnLock = new ReentrantLock();
     private final Map<Integer, Set<Integer>> excluded = new LinkedHashMap<>();
     private final Set<Integer> excludedItems = new LinkedHashSet<>();
     private final Set<Integer> disabledPartySearchInvites = new LinkedHashSet<>();
@@ -2737,11 +2734,10 @@ public class Character extends AbstractCharacterObject {
 
     public void changeFaceExpression(int emote) {
         long timeNow = Server.getInstance().getCurrentTime();
-        if (timeNow - lastExpression > 2000) {
+        // Client allows changing every 2 seconds. Give it a little bit of overhead for packet delays.
+        if (timeNow - lastExpression > 1500) {
             lastExpression = timeNow;
-
-            FaceExpressionService service = (FaceExpressionService) client.getChannelServer().getServiceAccess(ChannelServices.FACE_EXPRESSION);
-            service.registerFaceExpression(map, this, emote);
+            getMap().broadcastMessage(this, PacketCreator.facialExpression(this, emote), false);
         }
     }
 
@@ -7382,10 +7378,18 @@ public class Character extends AbstractCharacterObject {
                         }
                     }
                 }
-
+                
                 ret.buddylist.loadFromDb(charid);
                 ret.storage = wserv.getAccountStorage(ret.accountid);
 
+                /* Double-check storage incase player is first time on server
+                 * The storage won't exist so nothing to load
+                 */
+                if(ret.storage == null) {
+                    wserv.loadAccountStorage(ret.accountid);
+                    ret.storage = wserv.getAccountStorage(ret.accountid);
+                }
+                
                 int startHp = ret.hp, startMp = ret.mp;
                 ret.reapplyLocalStats();
                 ret.changeHpMp(startHp, startMp, true);
@@ -8276,7 +8280,7 @@ public class Character extends AbstractCharacterObject {
                         ps.executeBatch();
                     }
                 }
-
+                
                 con.commit();
                 return true;
             } catch (Exception e) {

@@ -21,8 +21,6 @@
 */
 package client;
 
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -33,13 +31,14 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public final class MonsterBook {
     private int specialCard = 0;
     private int normalCard = 0;
     private int bookLevel = 1;
     private final Map<Integer, Integer> cards = new LinkedHashMap<>();
-    private final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.BOOK);
+    private final Lock lock = new ReentrantLock();
 
     public Set<Entry<Integer, Integer>> getCardSet() {
         lock.lock();

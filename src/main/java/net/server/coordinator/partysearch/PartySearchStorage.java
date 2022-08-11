@@ -20,15 +20,12 @@
 package net.server.coordinator.partysearch;
 
 import client.Character;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import tools.IntervalBuilder;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Ronan
@@ -38,9 +35,14 @@ public class PartySearchStorage {
     private final List<PartySearchCharacter> storage = new ArrayList<>(20);
     private final IntervalBuilder emptyIntervals = new IntervalBuilder();
 
-    private final MonitoredReentrantReadWriteLock psLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_PARTY_SEARCH_STORAGE, true);
-    private final MonitoredReadLock psRLock = MonitoredReadLockFactory.createLock(psLock);
-    private final MonitoredWriteLock psWLock = MonitoredWriteLockFactory.createLock(psLock);
+    private final Lock psRLock;
+    private final Lock psWLock;
+
+    public PartySearchStorage() {
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+        this.psRLock = readWriteLock.readLock();
+        this.psWLock = readWriteLock.writeLock();
+    }
 
     public List<PartySearchCharacter> getStorageList() {
         psRLock.lock();

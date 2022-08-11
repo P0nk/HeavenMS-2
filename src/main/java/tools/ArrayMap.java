@@ -53,11 +53,10 @@ public class ArrayMap<K, V> extends AbstractMap<K, V> {
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof Map.Entry<?, ?>)) {
-                return false;
+            if (o instanceof Map.Entry<?, ?> e) {
+                return (key == null ? e.getKey() == null : key.equals(e.getKey())) && (value == null ? e.getValue() == null : value.equals(e.getValue()));
             }
-            Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
-            return (key == null ? e.getKey() == null : key.equals(e.getKey())) && (value == null ? e.getValue() == null : value.equals(e.getValue()));
+            return false;
         }
 
         @Override

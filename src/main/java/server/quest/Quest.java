@@ -111,12 +111,15 @@ public class Quest {
         if (startReqData != null) {
             for (Data startReq : startReqData.getChildren()) {
                 QuestRequirementType type = QuestRequirementType.getByWZName(startReq.getName());
-                if (type.equals(QuestRequirementType.INTERVAL)) {
+                switch (type) {
+                case INTERVAL:
                     repeatable = true;
-                } else if (type.equals(QuestRequirementType.MOB)) {
+                    break;
+                case MOB:
                     for (Data mob : startReq.getChildren()) {
                         relevantMobs.add(DataTool.getInt(mob.getChildByPath("id")));
                     }
+                    break;
                 }
 
                 AbstractQuestRequirement req = this.getRequirement(type, startReq);

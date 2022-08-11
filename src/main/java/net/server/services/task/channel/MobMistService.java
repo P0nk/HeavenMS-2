@@ -20,7 +20,6 @@
 package net.server.services.task.channel;
 
 import config.YamlConfig;
-import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
@@ -52,10 +51,6 @@ public class MobMistService extends BaseService {
     }
 
     private class MobMistScheduler extends BaseScheduler {
-
-        public MobMistScheduler() {
-            super(MonitoredLockType.CHANNEL_MOBMIST);
-        }
 
         public void registerMistCancelAction(Runnable runAction, long delay) {
             registerEntry(runAction, runAction, delay);

@@ -1,7 +1,5 @@
 package net.server.coordinator.session;
 
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Manages session initialization using remote host (ip address).
@@ -24,7 +23,7 @@ public class SessionInitialization {
 
     SessionInitialization() {
         for (int i = 0; i < 100; i++) {
-            locks.add(MonitoredReentrantLockFactory.createLock(MonitoredLockType.SERVER_LOGIN_COORD));
+            locks.add(new ReentrantLock());
         }
     }
 

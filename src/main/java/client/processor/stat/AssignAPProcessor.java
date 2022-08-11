@@ -419,7 +419,8 @@ public class AssignAPProcessor {
         }
 
         int newVal = 0;
-        if (type.equals(Stat.STR)) {
+        switch (type) {
+        case STR:
             newVal = statUpdate[0] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[0] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -428,7 +429,8 @@ public class AssignAPProcessor {
                 statGain[0] += gain;
                 statUpdate[0] = newVal;
             }
-        } else if (type.equals(Stat.INT)) {
+            break;
+        case INT:
             newVal = statUpdate[3] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[3] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -437,7 +439,8 @@ public class AssignAPProcessor {
                 statGain[3] += gain;
                 statUpdate[3] = newVal;
             }
-        } else if (type.equals(Stat.LUK)) {
+            break;
+        case LUK:
             newVal = statUpdate[2] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[2] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -446,7 +449,8 @@ public class AssignAPProcessor {
                 statGain[2] += gain;
                 statUpdate[2] = newVal;
             }
-        } else if (type.equals(Stat.DEX)) {
+            break;
+        case DEX:
             newVal = statUpdate[1] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[1] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -455,6 +459,7 @@ public class AssignAPProcessor {
                 statGain[1] += gain;
                 statUpdate[1] = newVal;
             }
+            break;
         }
 
         if (newVal > YamlConfig.config.server.MAX_AP) {

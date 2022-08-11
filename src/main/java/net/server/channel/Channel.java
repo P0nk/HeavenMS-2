@@ -28,11 +28,6 @@ import net.netty.ChannelServer;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.*;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.services.BaseService;
 import net.server.services.ServicesManager;
 import net.server.services.type.ChannelServices;
@@ -58,6 +53,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.concurrent.TimeUnit.*;
 
@@ -106,13 +104,9 @@ public final class Channel {
     private Set<Integer> ongoingCathedralGuests = null;
     private long ongoingStartTime;
 
-    private final MonitoredReentrantReadWriteLock merchantLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MERCHANT, true);
-    private final MonitoredReadLock merchRlock = MonitoredReadLockFactory.createLock(merchantLock);
-    private final MonitoredWriteLock merchWlock = MonitoredWriteLockFactory.createLock(merchantLock);
-
-    private final MonitoredReentrantLock[] faceLock = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
-
-    private MonitoredReentrantLock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHANNEL, true);
+    private final Lock lock = new ReentrantLock(true);;
+    private final Lock merchRlock;
+    private final Lock merchWlock;
 
     public Channel(final int world, final int channel, long startTime) {
         this.world = world;
@@ -122,6 +116,10 @@ public final class Channel {
         this.mapManager = new MapManager(null, world, channel);
         this.port = BASE_PORT + (this.channel - 1) + (world * 100);
         this.ip = YamlConfig.config.server.HOST + ":" + port;
+
+        ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock(true);
+        this.merchRlock = rwLock.readLock();
+        this.merchWlock = rwLock.writeLock();
 
         try {
             this.channelServer = initServer(port, world, channel);
@@ -216,19 +214,6 @@ public final class Channel {
         }
 
         closeChannelServices();
-        disposeLocks();
-    }
-
-    private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-    }
-
-    private void emptyLocks() {
-        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
-            faceLock[i] = faceLock[i].dispose();
-        }
-
-        lock = lock.dispose();
     }
 
     private void closeAllMerchants() {

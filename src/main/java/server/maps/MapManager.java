@@ -19,16 +19,13 @@
 */
 package server.maps;
 
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import scripting.event.EventInstanceManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MapManager {
     private final int channel;
@@ -37,17 +34,17 @@ public class MapManager {
 
     private final Map<Integer, MapleMap> maps = new HashMap<>();
 
-    private final MonitoredReadLock mapsRLock;
-    private final MonitoredWriteLock mapsWLock;
+    private final Lock mapsRLock;
+    private final Lock mapsWLock;
 
     public MapManager(EventInstanceManager eim, int world, int channel) {
         this.world = world;
         this.channel = channel;
         this.event = eim;
 
-        MonitoredReentrantReadWriteLock rrwl = new MonitoredReentrantReadWriteLock(MonitoredLockType.MAP_MANAGER);
-        this.mapsRLock = MonitoredReadLockFactory.createLock(rrwl);
-        this.mapsWLock = MonitoredWriteLockFactory.createLock(rrwl);
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+        this.mapsRLock = readWriteLock.readLock();
+        this.mapsWLock = readWriteLock.writeLock();
     }
 
     public MapleMap resetMap(int mapid) {

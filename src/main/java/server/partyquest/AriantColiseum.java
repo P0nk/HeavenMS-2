@@ -249,16 +249,14 @@ public class AriantColiseum {
     }
 
     private ExpeditionType getExpeditionType() {
-        ExpeditionType type;
-        if (map.getId() == MapId.ARPQ_ARENA_1) {
-            type = ExpeditionType.ARIANT;
-        } else if (map.getId() == MapId.ARPQ_ARENA_2) {
-            type = ExpeditionType.ARIANT1;
-        } else {
-            type = ExpeditionType.ARIANT2;
+        switch (map.getId()) {
+        case MapId.ARPQ_ARENA_1:
+            return ExpeditionType.ARIANT;
+        case MapId.ARPQ_ARENA_2:
+            return ExpeditionType.ARIANT1;
+        default:
+            return ExpeditionType.ARIANT2;
         }
-
-        return type;
     }
 
     private void enterKingsRoom() {

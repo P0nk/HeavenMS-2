@@ -86,13 +86,17 @@ public final class CreateCharHandler extends AbstractPacketHandler {
         }
 
         int status;
-        if (job == 0) { // Knights of Cygnus
+        switch (job) {
+        case 0: // Knights of Cygnus
             status = NoblesseCreator.createCharacter(c, name, face, hair + haircolor, skincolor, top, bottom, shoes, weapon, gender);
-        } else if (job == 1) { // Adventurer
+            break;
+        case 1: // Adventurer
             status = BeginnerCreator.createCharacter(c, name, face, hair + haircolor, skincolor, top, bottom, shoes, weapon, gender);
-        } else if (job == 2) { // Aran
+            break;
+        case 2: // Aran
             status = LegendCreator.createCharacter(c, name, face, hair + haircolor, skincolor, top, bottom, shoes, weapon, gender);
-        } else {
+            break;
+        default:
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }

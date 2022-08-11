@@ -32,8 +32,7 @@ import tools.PacketCreator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.OffsetDateTime;
 
 /*
  *
@@ -82,11 +81,9 @@ public final class ReportHandler extends AbstractPacketHandler {
     }
 
     public void addReport(int reporterid, int victimid, int reason, String description, String chatlog) {
-        Calendar calendar = Calendar.getInstance();
-        Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO reports (`reporttime`, `reporterid`, `victimid`, `reason`, `chatlog`, `description`) VALUES (?, ?, ?, ?, ?, ?)")) {
-            ps.setString(1, currentTimestamp.toGMTString());
+            ps.setString(1, OffsetDateTime.now().toString());
             ps.setInt(2, reporterid);
             ps.setInt(3, victimid);
             ps.setInt(4, reason);

@@ -26,8 +26,6 @@ import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -42,6 +40,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
@@ -104,16 +103,20 @@ public class CashShop {
 
             if (ItemConstants.EXPIRING_ITEMS) {
                 if (period == 1) {
-                    if (itemId == ItemId.EXP_COUPON_2X_4H || itemId == ItemId.DROP_COUPON_2X_4H) { // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
+                    switch (itemId) {
+                    case ItemId.DROP_COUPON_2X_4H, ItemId.EXP_COUPON_2X_4H: // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
                         item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
                             /*
                             } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
                                     item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(3));
                             */
-                    } else if (itemId == ItemId.EXP_COUPON_3X_2H) { // 2 Hour 3X coupons.
+                        break;
+                    case ItemId.EXP_COUPON_3X_2H:
                         item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
-                    } else {
+                        break;
+                    default:
                         item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
+                        break;
                     }
                 } else {
                     item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(period));
@@ -257,19 +260,23 @@ public class CashShop {
     private final List<Item> inventory = new ArrayList<>();
     private final List<Integer> wishList = new ArrayList<>();
     private int notes = 0;
-    private final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CASHSHOP);
+    private final Lock lock = new ReentrantLock();
 
     public CashShop(int accountId, int characterId, int jobType) throws SQLException {
         this.accountId = accountId;
         this.characterId = characterId;
 
         if (!YamlConfig.config.server.USE_JOINT_CASHSHOP_INVENTORY) {
-            if (jobType == 0) {
+            switch (jobType) {
+            case 0:
                 factory = ItemFactory.CASH_EXPLORER;
-            } else if (jobType == 1) {
+                break;
+            case 1:
                 factory = ItemFactory.CASH_CYGNUS;
-            } else if (jobType == 2) {
+                break;
+            case 2:
                 factory = ItemFactory.CASH_ARAN;
+                break;
             }
         } else {
             factory = ItemFactory.CASH_OVERALL;

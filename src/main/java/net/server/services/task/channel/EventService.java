@@ -20,7 +20,6 @@
 package net.server.services.task.channel;
 
 import config.YamlConfig;
-import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
@@ -52,10 +51,6 @@ public class EventService extends BaseService {
     }
 
     private class EventScheduler extends BaseScheduler {
-
-        public EventScheduler() {
-            super(MonitoredLockType.CHANNEL_EVENTS);
-        }
 
         public void registerDelayedAction(Runnable runAction, long delay) {
             registerEntry(runAction, runAction, delay);

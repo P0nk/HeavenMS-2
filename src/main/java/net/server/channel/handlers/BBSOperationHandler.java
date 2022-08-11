@@ -303,28 +303,21 @@ public final class BBSOperationHandler extends AbstractPacketHandler {
 
         try (Connection con = DatabaseConnection.getConnection()) {
             // TODO clean up this block and use try-with-resources
-            PreparedStatement ps2;
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM bbs_threads WHERE guildid = ? AND " + (bIsThreadIdLocal ? "local" : "") + "threadid = ?")) {
                 ps.setInt(1, mc.getGuildId());
                 ps.setInt(2, threadid);
                 ResultSet threadRS = ps.executeQuery();
                 if (!threadRS.next()) {
-                    threadRS.close();
-                    ps.close();
                     return;
                 }
                 ResultSet repliesRS = null;
-                ps2 = null;
-                if (threadRS.getInt("replycount") >= 0) {
-                    ps2 = con.prepareStatement("SELECT * FROM bbs_replies WHERE threadid = ?");
-                    ps2.setInt(1, !bIsThreadIdLocal ? threadid : threadRS.getInt("threadid"));
-                    repliesRS = ps2.executeQuery();
+                try (PreparedStatement ps2 = con.prepareStatement("SELECT * FROM bbs_replies WHERE threadid = ?")) {
+                    if (threadRS.getInt("replycount") >= 0) {
+                        ps2.setInt(1, !bIsThreadIdLocal ? threadid : threadRS.getInt("threadid"));
+                        repliesRS = ps2.executeQuery();
+                    }
+                    client.sendPacket(GuildPackets.showThread(bIsThreadIdLocal ? threadid : threadRS.getInt("localthreadid"), threadRS, repliesRS));
                 }
-                client.sendPacket(GuildPackets.showThread(bIsThreadIdLocal ? threadid : threadRS.getInt("localthreadid"), threadRS, repliesRS));
-                repliesRS.close();
-            }
-            if (ps2 != null) {
-                ps2.close();
             }
         } catch (SQLException se) {
             log.error("Error displaying thread", se);

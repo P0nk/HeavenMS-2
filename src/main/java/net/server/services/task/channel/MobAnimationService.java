@@ -20,15 +20,13 @@
 package net.server.services.task.channel;
 
 import config.YamlConfig;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Ronan
@@ -63,11 +61,9 @@ public class MobAnimationService extends BaseService {
 
     private class MobAnimationScheduler extends BaseScheduler {
         Set<Integer> onAnimationMobs = new HashSet<>(1000);
-        private MonitoredReentrantLock animationLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHANNEL_MOBANIMAT, true);
+        private final Lock animationLock = new ReentrantLock(true);
 
         public MobAnimationScheduler() {
-            super(MonitoredLockType.CHANNEL_MOBACTION);
-
             super.addListener((toRemove, update) -> {
                 animationLock.lock();
                 try {
@@ -98,16 +94,7 @@ public class MobAnimationService extends BaseService {
 
         @Override
         public void dispose() {
-            disposeLocks();
             super.dispose();
-        }
-
-        private void disposeLocks() {
-            LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-        }
-
-        private void emptyLocks() {
-            animationLock = animationLock.dispose();
         }
 
     }

@@ -21,10 +21,6 @@ package net.server.services.task.channel;
 
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
@@ -32,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Ronan
@@ -71,7 +69,7 @@ public class MobStatusService extends BaseService {
     private class MobStatusScheduler extends BaseScheduler {
 
         private final Map<MonsterStatusEffect, MobStatusOvertimeEntry> registeredMobStatusOvertime = new HashMap<>();
-        private MonitoredReentrantLock overtimeStatusLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHANNEL_OVTSTATUS, true);
+        private final Lock overtimeStatusLock = new ReentrantLock(true);
 
         private class MobStatusOvertimeEntry {
             private int procCount;
@@ -94,8 +92,6 @@ public class MobStatusService extends BaseService {
         }
 
         public MobStatusScheduler() {
-            super(MonitoredLockType.CHANNEL_MOBSTATUS);
-
             super.addListener((toRemove, update) -> {
                 List<Runnable> toRun = new ArrayList<>();
 
@@ -144,16 +140,7 @@ public class MobStatusService extends BaseService {
 
         @Override
         public void dispose() {
-            disposeLocks();
             super.dispose();
-        }
-
-        private void disposeLocks() {
-            LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-        }
-
-        private void emptyLocks() {
-            overtimeStatusLock = overtimeStatusLock.dispose();
         }
 
     }

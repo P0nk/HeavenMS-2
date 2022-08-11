@@ -22,8 +22,6 @@
 package net.server;
 
 import client.Disease;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.life.MobSkill;
 import tools.Pair;
 
@@ -31,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Danny//changed to map :3
@@ -38,7 +37,7 @@ import java.util.concurrent.locks.Lock;
  */
 public class PlayerBuffStorage {
     private final int id = (int) (Math.random() * 100);
-    private final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.BUFF_STORAGE, true);
+    private final Lock lock = new ReentrantLock(true);
     private final Map<Integer, List<PlayerBuffValueHolder>> buffs = new HashMap<>();
     private final Map<Integer, Map<Disease, Pair<Long, MobSkill>>> diseases = new HashMap<>();
 

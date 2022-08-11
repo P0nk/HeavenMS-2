@@ -19,19 +19,18 @@
         <mainClass>net.server.Server</mainClass>
 
         <!-- Maven plugins -->
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version> <!-- For running unit tests -->
-        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version> <!-- Disabled. (for building thin jar) -->
-        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version> <!-- For packaging the executable fat jar -->
+        <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version> <!-- For running unit tests -->
+        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version> <!-- Disabled. (for building thin jar) -->
+        <maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version> <!-- For packaging the executable fat jar -->
 
         <!-- Dependencies -->
         <slf4j-api.version>1.7.36</slf4j-api.version> <!-- Logging facade -->
         <log4j.version>2.18.0</log4j.version> <!-- Slf4j implementation -->
         <graalvm.version>22.2.0</graalvm.version> <!-- ScriptEngine implementation -->
         <netty.version>4.1.79.Final</netty.version> <!-- Networking -->
-        <junit.version>5.8.2</junit.version> <!-- Unit test -->
+        <junit.version>5.9.0</junit.version> <!-- Unit test -->
         <yamlbeans.version>1.15</yamlbeans.version> <!-- Config file -->
         <jcip-annotations.version>1.0</jcip-annotations.version> <!-- Annotations for concurrency documentation -->
-        <commons-io.version>2.11.0</commons-io.version> <!-- Util library used by some of our tools -->
         <HikariCP.version>5.0.1</HikariCP.version> <!-- Database connection pool -->
         <mysql-connector-java.version>8.0.30</mysql-connector-java.version> <!-- MySQL JDBC driver -->
     </properties>
@@ -46,11 +45,6 @@
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
             <version>${jcip-annotations.version}</version>
-        </dependency>
-        <dependency> <!-- only used for some tools -->
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
         </dependency>
 
         <!-- Database -->
@@ -169,6 +163,9 @@
                         <manifest>
                             <mainClass>${mainClass}</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Multi-Release>true</Multi-Release>
+                        </manifestEntries>
                     </archive>
                     <finalName>${project.artifactId}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>

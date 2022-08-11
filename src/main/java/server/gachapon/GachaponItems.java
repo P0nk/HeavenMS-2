@@ -43,14 +43,16 @@ public abstract class GachaponItems {
     }
 
     public final int[] getItems(int tier) {
-        if (tier == 0) {
+        switch (tier) {
+        case 0:
             return commonItems;
-        } else if (tier == 1) {
+        case 1:
             return uncommonItems;
-        } else if (tier == 2) {
+        case 2:
             return rareItems;
+        default:
+            return null;
         }
-        return null;
     }
 }
 

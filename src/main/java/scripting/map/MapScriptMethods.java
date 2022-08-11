@@ -72,21 +72,22 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
     }
 
     public void startExplorerExperience() {
-        if (c.getPlayer().getMapId() == 1020100) //Swordman
-        {
+        switch (c.getPlayer().getMapId()) {
+        case 1020100: //Swordman
             c.sendPacket(PacketCreator.showIntro("Effect/Direction3.img/swordman/Scene" + c.getPlayer().getGender()));
-        } else if (c.getPlayer().getMapId() == 1020200) //Magician
-        {
+            break;
+        case 1020200: //Magician
             c.sendPacket(PacketCreator.showIntro("Effect/Direction3.img/magician/Scene" + c.getPlayer().getGender()));
-        } else if (c.getPlayer().getMapId() == 1020300) //Archer
-        {
+            break;
+        case 1020300: //Archer
             c.sendPacket(PacketCreator.showIntro("Effect/Direction3.img/archer/Scene" + c.getPlayer().getGender()));
-        } else if (c.getPlayer().getMapId() == 1020400) //Rogue
-        {
+            break;
+        case 1020400: //Rogue
             c.sendPacket(PacketCreator.showIntro("Effect/Direction3.img/rogue/Scene" + c.getPlayer().getGender()));
-        } else if (c.getPlayer().getMapId() == 1020500) //Pirate
-        {
+            break;
+        case 1020500: //Pirate
             c.sendPacket(PacketCreator.showIntro("Effect/Direction3.img/pirate/Scene" + c.getPlayer().getGender()));
+            break;
         }
     }
 

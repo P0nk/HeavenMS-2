@@ -26,11 +26,6 @@ import client.Skill;
 import client.SkillFactory;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.*;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.coordinator.world.EventRecallCoordinator;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
@@ -58,6 +53,10 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -82,12 +81,11 @@ public class EventInstanceManager {
     private Expedition expedition = null;
     private final List<Integer> mapIds = new LinkedList<>();
 
-    private final MonitoredReentrantReadWriteLock lock = new MonitoredReentrantReadWriteLock(MonitoredLockType.EIM, true);
-    private final MonitoredReadLock rL = MonitoredReadLockFactory.createLock(lock);
-    private final MonitoredWriteLock wL = MonitoredWriteLockFactory.createLock(lock);
+    private final Lock readLock;
+    private final Lock writeLock;
 
-    private MonitoredReentrantLock pL = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EIM_PARTY, true);
-    private MonitoredReentrantLock sL = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EIM_SCRIPT, true);
+    private final Lock propertyLock = new ReentrantLock(true);
+    private final Lock scriptLock = new ReentrantLock(true);
 
     private ScheduledFuture<?> event_schedule = null;
     private boolean disposed = false;
@@ -117,6 +115,10 @@ public class EventInstanceManager {
         this.name = name;
         this.ess = new EventScriptScheduler();
         this.mapManager = new MapManager(this, em.getWorldServer().getId(), em.getChannelServer().getId());
+
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+        this.readLock = readWriteLock.readLock();
+        this.writeLock = readWriteLock.writeLock();
     }
 
     public void setName(String name) {
@@ -124,11 +126,11 @@ public class EventInstanceManager {
     }
 
     public EventManager getEm() {
-        sL.lock();
+        scriptLock.lock();
         try {
             return em;
         } finally {
-            sL.unlock();
+            scriptLock.unlock();
         }
     }
 
@@ -239,7 +241,7 @@ public class EventInstanceManager {
             return;
         }
 
-        wL.lock();
+        writeLock.lock();
         try {
             if (chars.containsKey(chr.getId())) {
                 return;
@@ -248,7 +250,7 @@ public class EventInstanceManager {
             chars.put(chr.getId(), chr);
             chr.setEventInstance(this);
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
 
         if (runEntryScript) {
@@ -391,12 +393,12 @@ public class EventInstanceManager {
             log.error("Event script {} does not implement the playerUnregistered function", em.getName(), ex);
         }
 
-        wL.lock();
+        writeLock.lock();
         try {
             chars.remove(chr.getId());
             chr.setEventInstance(null);
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
 
         gridRemove(chr);
@@ -404,38 +406,38 @@ public class EventInstanceManager {
     }
 
     public int getPlayerCount() {
-        rL.lock();
+        readLock.lock();
         try {
             return chars.size();
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
     public Character getPlayerById(int id) {
-        rL.lock();
+        readLock.lock();
         try {
             return chars.get(id);
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
     public List<Character> getPlayers() {
-        rL.lock();
+        readLock.lock();
         try {
             return new ArrayList<>(chars.values());
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
     private List<Character> getPlayerList() {
-        rL.lock();
+        readLock.lock();
         try {
             return new LinkedList<>(chars.values());
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
@@ -480,7 +482,7 @@ public class EventInstanceManager {
     public void monsterKilled(final Monster mob, final boolean hasKiller) {
         int scriptResult = 0;
 
-        sL.lock();
+        scriptLock.lock();
         try {
             mobs.remove(mob);
 
@@ -492,7 +494,7 @@ public class EventInstanceManager {
                 }
             }
         } finally {
-            sL.unlock();
+            scriptLock.unlock();
         }
 
         if (scriptResult > 0) {
@@ -598,13 +600,13 @@ public class EventInstanceManager {
     }
 
     public void dispose() {
-        rL.lock();
+        readLock.lock();
         try {
             for (Character chr : chars.values()) {
                 chr.setEventInstance(null);
             }
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
 
         dispose(false);
@@ -624,7 +626,7 @@ public class EventInstanceManager {
 
         ess.dispose();
 
-        wL.lock();
+        writeLock.lock();
         try {
             for (Character chr : chars.values()) {
                 chr.setEventInstance(null);
@@ -633,7 +635,7 @@ public class EventInstanceManager {
             mobs.clear();
             ess = null;
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
 
         if (event_schedule != null) {
@@ -648,36 +650,25 @@ public class EventInstanceManager {
 
         disposeExpedition();
 
-        sL.lock();
+        scriptLock.lock();
         try {
             if (!eventCleared) {
                 em.disposeInstance(name);
             }
         } finally {
-            sL.unlock();
+            scriptLock.unlock();
         }
 
         TimerManager.getInstance().schedule(() -> {
             mapManager.dispose();   // issues from instantly disposing some event objects found thanks to MedicOP
-            wL.lock();
+            writeLock.lock();
             try {
                 mapManager = null;
                 em = null;
             } finally {
-                wL.unlock();
+                writeLock.unlock();
             }
-
-            disposeLocks();
         }, MINUTES.toMillis(1));
-    }
-
-    private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-    }
-
-    private void emptyLocks() {
-        pL = pL.dispose();
-        sL = sL.dispose();
     }
 
     public MapManager getMapFactory() {
@@ -685,7 +676,7 @@ public class EventInstanceManager {
     }
 
     public void schedule(final String methodName, long delay) {
-        rL.lock();
+        readLock.lock();
         try {
             if (ess != null) {
                 Runnable r = () -> {
@@ -699,7 +690,7 @@ public class EventInstanceManager {
                 ess.registerEntry(r, delay);
             }
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
@@ -712,13 +703,13 @@ public class EventInstanceManager {
         map.setEventInstance(this);
 
         if (!mapManager.isMapLoaded(mapId)) {
-            sL.lock();
+            scriptLock.lock();
             try {
                 if (em.getProperty("shuffleReactors") != null && em.getProperty("shuffleReactors").equals("true")) {
                     map.shuffleReactors();
                 }
             } finally {
-                sL.unlock();
+                scriptLock.unlock();
             }
         }
         return map;
@@ -733,56 +724,56 @@ public class EventInstanceManager {
     }
 
     public void setProperty(String key, String value) {
-        pL.lock();
+        propertyLock.lock();
         try {
             props.setProperty(key, value);
         } finally {
-            pL.unlock();
+            propertyLock.unlock();
         }
     }
 
     public Object setProperty(String key, String value, boolean prev) {
-        pL.lock();
+        propertyLock.lock();
         try {
             return props.setProperty(key, value);
         } finally {
-            pL.unlock();
+            propertyLock.unlock();
         }
     }
 
     public void setObjectProperty(String key, Object obj) {
-        pL.lock();
+        propertyLock.lock();
         try {
             objectProps.put(key, obj);
         } finally {
-            pL.unlock();
+            propertyLock.unlock();
         }
     }
 
     public String getProperty(String key) {
-        pL.lock();
+        propertyLock.lock();
         try {
             return props.getProperty(key);
         } finally {
-            pL.unlock();
+            propertyLock.unlock();
         }
     }
 
     public int getIntProperty(String key) {
-        pL.lock();
+        propertyLock.lock();
         try {
             return Integer.parseInt(props.getProperty(key));
         } finally {
-            pL.unlock();
+            propertyLock.unlock();
         }
     }
 
     public Object getObjectProperty(String key) {
-        pL.lock();
+        propertyLock.lock();
         try {
             return objectProps.get(key);
         } finally {
-            pL.unlock();
+            propertyLock.unlock();
         }
     }
 
@@ -957,11 +948,11 @@ public class EventInstanceManager {
     public final void setExclusiveItems(List<Object> items) {
         List<Integer> exclusive = convertToIntegerList(items);
 
-        wL.lock();
+        writeLock.lock();
         try {
             exclusiveItems.addAll(exclusive);
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
     }
 
@@ -989,13 +980,13 @@ public class EventInstanceManager {
         List<Integer> rewardQtys = convertToIntegerList(qtys);
 
         //rewardsSet and rewardsQty hold temporary values
-        wL.lock();
+        writeLock.lock();
         try {
             collectionSet.put(eventLevel, rewardIds);
             collectionQty.put(eventLevel, rewardQtys);
             collectionExp.put(eventLevel, expGiven);
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
     }
 
@@ -1036,7 +1027,7 @@ public class EventInstanceManager {
         List<Integer> rewardsSet, rewardsQty;
         Integer rewardExp;
 
-        rL.lock();
+        readLock.lock();
         try {
             eventLevel--;       //event level starts counting from 1
             if (eventLevel >= collectionSet.size()) {
@@ -1048,7 +1039,7 @@ public class EventInstanceManager {
 
             rewardExp = collectionExp.get(eventLevel);
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
 
         if (rewardExp == null) {
@@ -1080,11 +1071,11 @@ public class EventInstanceManager {
         if (expedition != null) {
             expedition.dispose(eventCleared);
 
-            sL.lock();
+            scriptLock.lock();
             try {
                 expedition.removeChannelExpedition(em.getChannelServer());
             } finally {
-                sL.unlock();
+                scriptLock.unlock();
             }
 
             expedition = null;
@@ -1108,11 +1099,11 @@ public class EventInstanceManager {
             chr.awardQuestPoint(YamlConfig.config.server.QUEST_POINT_PER_EVENT_CLEAR);
         }
 
-        sL.lock();
+        scriptLock.lock();
         try {
             em.disposeInstance(name);
         } finally {
-            sL.unlock();
+            scriptLock.unlock();
         }
 
         disposeExpedition();
@@ -1168,7 +1159,7 @@ public class EventInstanceManager {
     }
 
     public final boolean isEventTeamTogether() {
-        rL.lock();
+        readLock.lock();
         try {
             if (chars.size() <= 1) {
                 return true;
@@ -1187,7 +1178,7 @@ public class EventInstanceManager {
 
             return true;
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
@@ -1228,29 +1219,29 @@ public class EventInstanceManager {
     }
 
     public final int getLeaderId() {
-        rL.lock();
+        readLock.lock();
         try {
             return leaderId;
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
     public Character getLeader() {
-        rL.lock();
+        readLock.lock();
         try {
             return chars.get(leaderId);
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
     public final void setLeader(Character chr) {
-        wL.lock();
+        writeLock.lock();
         try {
             leaderId = chr.getId();
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
     }
 
@@ -1293,11 +1284,11 @@ public class EventInstanceManager {
         map.broadcastMessage(PacketCreator.playSound("Party1/Clear"));
         if (hasGate) {
             map.broadcastMessage(PacketCreator.environmentChange(mapObj, newState));
-            wL.lock();
+            writeLock.lock();
             try {
                 openedGates.put(map.getId(), new Pair<>(mapObj, newState));
             } finally {
-                wL.unlock();
+                writeLock.unlock();
             }
         }
     }
@@ -1305,13 +1296,13 @@ public class EventInstanceManager {
     public final void recoverOpenedGate(Character chr, int thisMapId) {
         Pair<String, Integer> gateData = null;
 
-        rL.lock();
+        readLock.lock();
         try {
             if (openedGates.containsKey(thisMapId)) {
                 gateData = openedGates.get(thisMapId);
             }
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
 
         if (gateData != null) {
@@ -1349,50 +1340,50 @@ public class EventInstanceManager {
 
     // registers a player status in an event
     public final void gridInsert(Character chr, int newStatus) {
-        wL.lock();
+        writeLock.lock();
         try {
             playerGrid.put(chr.getId(), newStatus);
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
     }
 
     // unregisters a player status in an event
     public final void gridRemove(Character chr) {
-        wL.lock();
+        writeLock.lock();
         try {
             playerGrid.remove(chr.getId());
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
     }
 
     // checks a player status
     public final int gridCheck(Character chr) {
-        rL.lock();
+        readLock.lock();
         try {
             Integer i = playerGrid.get(chr.getId());
             return (i != null) ? i : -1;
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
     public final int gridSize() {
-        rL.lock();
+        readLock.lock();
         try {
             return playerGrid.size();
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
     }
 
     public final void gridClear() {
-        wL.lock();
+        writeLock.lock();
         try {
             playerGrid.clear();
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
     }
 

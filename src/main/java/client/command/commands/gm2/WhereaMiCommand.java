@@ -48,19 +48,15 @@ public class WhereaMiCommand extends Command {
         HashSet<Monster> mobs = new HashSet<>();
 
         for (MapObject mmo : player.getMap().getMapObjects()) {
-            if (mmo instanceof NPC) {
-                NPC npc = (NPC) mmo;
+            if (mmo instanceof NPC npc) {
                 npcs.add(npc);
-            } else if (mmo instanceof Character) {
-                Character mc = (Character) mmo;
+            } else if (mmo instanceof Character mc) {
                 chars.add(mc);
-            } else if (mmo instanceof Monster) {
-                Monster mob = (Monster) mmo;
+            } else if (mmo instanceof Monster mob) {
                 if (mob.isAlive()) {
                     mobs.add(mob);
                 }
-            } else if (mmo instanceof PlayerNPC) {
-                PlayerNPC npc = (PlayerNPC) mmo;
+            } else if (mmo instanceof PlayerNPC npc) {
                 playernpcs.add(npc);
             }
         }

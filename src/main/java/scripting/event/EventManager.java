@@ -25,10 +25,6 @@ import client.Character;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.server.Server;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.guild.Guild;
 import net.server.world.Party;
@@ -50,6 +46,8 @@ import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -75,9 +73,9 @@ public class EventManager {
     private Integer readyId = 0, onLoadInstances = 0;
     private final Properties props = new Properties();
     private final String name;
-    private MonitoredReentrantLock lobbyLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EM_LOBBY);
-    private MonitoredReentrantLock queueLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EM_QUEUE);
-    private MonitoredReentrantLock startLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EM_START);
+    private final Lock lobbyLock = new ReentrantLock();
+    private final Lock queueLock = new ReentrantLock();
+    private final Lock startLock = new ReentrantLock();
 
     private final Set<Integer> playerPermit = new HashSet<>();
     private final Semaphore startSemaphore = new Semaphore(7);
@@ -139,18 +137,6 @@ public class EventManager {
         wserv = null;
         server = null;
         iv = null;
-
-        disposeLocks();
-    }
-
-    private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-    }
-
-    private void emptyLocks() {
-        lobbyLock = lobbyLock.dispose();
-        queueLock = queueLock.dispose();
-        startLock = startLock.dispose();
     }
 
     private List<Integer> convertToIntegerList(List<Object> objects) {

@@ -62,57 +62,58 @@ public enum QuestRequirementType {
     }
 
     public static QuestRequirementType getByWZName(String name) {
-        if (name.equals("job")) {
+        switch (name) {
+        case "job":
             return JOB;
-        } else if (name.equals("quest")) {
+        case "quest":
             return QUEST;
-        } else if (name.equals("item")) {
+        case "item":
             return ITEM;
-        } else if (name.equals("lvmin")) {
+        case "lvmin":
             return MIN_LEVEL;
-        } else if (name.equals("lvmax")) {
+        case "lvmax":
             return MAX_LEVEL;
-        } else if (name.equals("end")) {
+        case "end":
             return END_DATE;
-        } else if (name.equals("mob")) {
+        case "mob":
             return MOB;
-        } else if (name.equals("npc")) {
+        case "npc":
             return NPC;
-        } else if (name.equals("fieldEnter")) {
+        case "fieldEnter":
             return FIELD_ENTER;
-        } else if (name.equals("interval")) {
+        case "interval":
             return INTERVAL;
-        } else if (name.equals("startscript")) {
+        case "startscript":
             return SCRIPT;
-        } else if (name.equals("endscript")) {
+        case "endscript":
             return SCRIPT;
-        } else if (name.equals("pet")) {
+        case "pet":
             return PET;
-        } else if (name.equals("pettamenessmin")) {
+        case "pettamenessmin":
             return MIN_PET_TAMENESS;
-        } else if (name.equals("mbmin")) {
+        case "mbmin":
             return MONSTER_BOOK;
-        } else if (name.equals("normalAutoStart")) {
+        case "normalAutoStart":
             return NORMAL_AUTO_START;
-        } else if (name.equals("infoNumber")) {
+        case "infoNumber":
             return INFO_NUMBER;
-        } else if (name.equals("infoex")) {
+        case "infoex":
             return INFO_EX;
-        } else if (name.equals("questComplete")) {
+        case "questComplete":
             return COMPLETED_QUEST;
-        } else if (name.equals("start")) {
+        case "start":
             return START;
-	/*} else if(name.equals("end")) {   already coded
+	/* case "end":already coded
             return END;*/
-        } else if (name.equals("daybyday")) {
+        case "daybyday":
             return DAY_BY_DAY;
-        } else if (name.equals("money")) {
+        case "money":
             return MESO;
-        } else if (name.equals("buff")) {
+        case "buff":
             return BUFF;
-        } else if (name.equals("exceptbuff")) {
+        case "exceptbuff":
             return EXCEPT_BUFF;
-        } else {
+        default:
             return UNDEFINED;
         }
     }

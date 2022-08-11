@@ -61,7 +61,7 @@ public class FaceCommand extends Command {
                 }
 
                 Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
-                if (victim == null) {
+                if (victim != null) {
                     victim.setFace(itemId);
                     victim.updateSingleStat(Stat.FACE, itemId);
                     victim.equipChanged();

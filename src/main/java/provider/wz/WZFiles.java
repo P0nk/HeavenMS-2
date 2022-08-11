@@ -1,6 +1,6 @@
 package provider.wz;
 
-import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -38,7 +38,7 @@ public enum WZFiles {
     private static String getWzDirectory() {
         // Either provide a custom directory path through the "wz-path" property when launching the .jar, or don't provide one to use the default "wz" directory
         String propertyPath = System.getProperty("wz-path");
-        if (propertyPath != null && new File(propertyPath).isDirectory()) {
+        if (propertyPath != null && Files.isDirectory(Paths.get(propertyPath))) {
             return propertyPath;
         }
 

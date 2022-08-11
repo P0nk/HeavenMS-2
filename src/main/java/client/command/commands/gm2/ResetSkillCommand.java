@@ -26,6 +26,9 @@ package client.command.commands.gm2;
 import client.Character;
 import client.*;
 import client.command.Command;
+import constants.skills.Brawler;
+import constants.skills.Magician;
+import constants.skills.Warrior;
 import provider.Data;
 import provider.DataProviderFactory;
 import provider.wz.WZFiles;
@@ -41,6 +44,23 @@ public class ResetSkillCommand extends Command {
         for (Data skill_ : DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
             try {
                 Skill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));
+                int curLevel = player.getSkillLevel(skill);
+                // Handle HP/MP increase per level skills
+                if (skill.getId() == Warrior.IMPROVED_MAXHP || skill.getId() == Brawler.IMPROVE_MAX_HP)
+                {
+                    if(curLevel > 0){
+                        int currentIncrease = skill.getEffect(curLevel).getX() * player.getLevel();
+                        player.addMaxHP(-currentIncrease);
+                    }
+                }
+                else if(skill.getId() == Magician.IMPROVED_MAX_MP_INCREASE)
+                {
+                    if(curLevel > 0){
+                        int currentIncrease = skill.getEffect(curLevel).getX() * player.getLevel();
+                        player.addMaxMP(-currentIncrease);
+                    }
+                }
+                
                 player.changeSkillLevel(skill, (byte) 0, skill.getMaxLevel(), -1);
             } catch (NumberFormatException nfe) {
                 nfe.printStackTrace();

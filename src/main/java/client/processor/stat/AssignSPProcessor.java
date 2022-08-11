@@ -30,6 +30,9 @@ import client.SkillFactory;
 import client.autoban.AutobanFactory;
 import constants.game.GameConstants;
 import constants.skills.Aran;
+import constants.skills.Warrior;
+import constants.skills.Magician;
+import constants.skills.Brawler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
@@ -96,6 +99,33 @@ public class AssignSPProcessor {
                 } else {
                     player.changeSkillLevel(skill, (byte) (curLevel + 1), player.getMasterLevel(skill), player.getSkillExpiration(skill));
                 }
+                
+                // Handle HP/MP increase per level skills
+                if (skill.getId() == Warrior.IMPROVED_MAXHP || skill.getId() == Brawler.IMPROVE_MAX_HP)
+                {
+                    int addMaxHP = 0;
+                    int currentIncrease = 0;
+                    if(curLevel > 0)
+                        currentIncrease = skill.getEffect(curLevel).getX() * player.getLevel();
+                    
+                    addMaxHP = (skill.getEffect(curLevel + 1).getX() * player.getLevel());
+                    addMaxHP -= currentIncrease;
+                    
+                    player.addMaxHP(addMaxHP);
+                }
+                else if(skill.getId() == Magician.IMPROVED_MAX_MP_INCREASE)
+                {
+                    int addMaxMP = 0;
+                    int currentIncrease = 0;
+                    if(curLevel > 0)
+                        currentIncrease = skill.getEffect(curLevel).getX() * player.getLevel();
+                    
+                    addMaxMP = (skill.getEffect(curLevel + 1).getX() * player.getLevel());
+                    addMaxMP -= currentIncrease;
+                    
+                    player.addMaxMP(addMaxMP);
+                }
+                
             }
         } finally {
             c.unlockClient();

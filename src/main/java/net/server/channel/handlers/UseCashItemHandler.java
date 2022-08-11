@@ -155,7 +155,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 if (!AssignSPProcessor.canSPAssign(c, SPTo)) {  // exploit found thanks to Arnah
                     return;
                 }
-
+ 
                 int SPFrom = p.readInt();
                 Skill skillSPTo = SkillFactory.getSkill(SPTo);
                 Skill skillSPFrom = SkillFactory.getSkill(SPFrom);

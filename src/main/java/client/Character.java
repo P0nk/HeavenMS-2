@@ -6331,6 +6331,34 @@ public class Character extends AbstractCharacterObject {
             addmp += Randomizer.rand(CharacterConstants.BEGINNER_MP_GAIN_MINIMUM, CharacterConstants.BEGINNER_MP_GAIN_MAXIMUM);
         }
 
+        if(job.isA(Job.WARRIOR))
+        {
+            int maxHPBoostLevel = this.getSkillLevel(Warrior.IMPROVED_MAXHP);
+            if(maxHPBoostLevel > 0)
+            {
+                Skill maxHPBoost = SkillFactory.getSkill(Warrior.IMPROVED_MAXHP);
+                addhp += maxHPBoost.getEffect(maxHPBoostLevel).getX();
+            }
+        }
+        else if(job.getId() >= Job.BRAWLER.jobid && job.getId() <= Job.BUCCANEER.jobid)
+        {
+            int maxHPBoostLevel = this.getSkillLevel(Brawler.IMPROVE_MAX_HP);
+            if(maxHPBoostLevel > 0)
+            {
+                Skill maxHPBoost = SkillFactory.getSkill(Brawler.IMPROVE_MAX_HP);
+                addhp += maxHPBoost.getEffect(maxHPBoostLevel).getX();
+            }
+        }
+        else if(job.isA(Job.MAGICIAN))
+        {
+            int maxMPBoostLevel = this.getSkillLevel(Magician.IMPROVED_MAX_MP_INCREASE);
+            if(maxMPBoostLevel > 0)
+            {
+                Skill maxMPBoost = SkillFactory.getSkill(Magician.IMPROVED_MAX_MP_INCREASE);
+                addmp += maxMPBoost.getEffect(maxMPBoostLevel).getX();
+            }
+        }
+        
         addMaxMPMaxHP(addhp, addmp, true);
 
         if (takeexp) {

@@ -24,10 +24,6 @@ package net.server.world;
 import client.Character;
 import client.Client;
 import config.YamlConfig;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import scripting.event.EventInstanceManager;
@@ -38,6 +34,8 @@ import tools.PacketCreator;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Party {
 
@@ -52,7 +50,7 @@ public class Party {
 
     private final Map<Integer, Door> doors = new HashMap<>();
 
-    private MonitoredReentrantLock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.PARTY, true);
+    private final Lock lock = new ReentrantLock(true);
 
     public Party(int id, PartyCharacter chrfor) {
         this.leaderId = chrfor.getId();
@@ -279,14 +277,6 @@ public class Party {
         if (newLeadr != null) {
             world.updateParty(this.getId(), PartyOperation.CHANGE_LEADER, newLeadr);
         }
-    }
-
-    public void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-    }
-
-    private void emptyLocks() {
-        lock = lock.dispose();
     }
 
     @Override

@@ -20,8 +20,6 @@
 package server.maps;
 
 import client.Character;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.TimerManager;
 import tools.PacketCreator;
 
@@ -29,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -38,7 +37,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class MiniDungeon {
     List<Character> players = new ArrayList<>();
     ScheduledFuture<?> timeoutTask = null;
-    Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MINIDUNGEON, true);
+    private final Lock lock = new ReentrantLock(true);
 
     int baseMap;
     long expireTime;

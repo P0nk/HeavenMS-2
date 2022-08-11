@@ -23,12 +23,11 @@ package server.maps;
 import client.Character;
 import client.Client;
 import client.inventory.Item;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import tools.PacketCreator;
 
 import java.awt.*;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -40,7 +39,7 @@ public class MapItem extends AbstractMapObject {
     protected byte type;
     protected boolean pickedUp = false, playerDrop, partyDrop;
     protected long dropTime;
-    private final Lock itemLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MAP_ITEM);
+    private final Lock itemLock = new ReentrantLock();
 
     public MapItem(Item item, Point position, MapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
         setPosition(position);

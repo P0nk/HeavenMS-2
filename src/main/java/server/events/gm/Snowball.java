@@ -128,12 +128,16 @@ public class Snowball {
 
         if (this.hits == 0) {
             this.position += 1;
-            if (this.position == 45) {
+            switch (this.position) {
+            case 45:
                 map.getSnowball(team == 0 ? 1 : 0).message(1);
-            } else if (this.position == 290) {
+                break;
+            case 290:
                 map.getSnowball(team == 0 ? 1 : 0).message(2);
-            } else if (this.position == 560) {
+                break;
+            case 560:
                 map.getSnowball(team == 0 ? 1 : 0).message(3);
+                break;
             }
 
             this.hits = 3;

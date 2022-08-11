@@ -126,7 +126,7 @@ public class CommandsExecutor {
 
     private void addCommandInfo(String name, Class<? extends Command> commandClass) {
         try {
-            levelCommandsCursor.getRight().add(commandClass.newInstance().getDescription());
+            levelCommandsCursor.getRight().add(commandClass.getDeclaredConstructor().newInstance().getDescription());
             levelCommandsCursor.getLeft().add(name);
         } catch (Exception e) {
             e.printStackTrace();
@@ -161,14 +161,12 @@ public class CommandsExecutor {
         addCommandInfo(commandName, commandClass);
 
         try {
-            Command commandInstance = commandClass.newInstance();     // thanks Halcyon for noticing commands getting reinstanced every call
+            Command commandInstance = commandClass.getDeclaredConstructor().newInstance();     // thanks Halcyon for noticing commands getting reinstanced every call
             commandInstance.setRank(rank);
 
             registeredCommands.put(commandName, commandInstance);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.warn("Failed to create command instance", e);
         }
     }
 

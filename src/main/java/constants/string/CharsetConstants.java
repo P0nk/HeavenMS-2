@@ -19,10 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ public class CharsetConstants {
 
     private static String loadCharsetFromConfig() {
         try {
-            YamlReader reader = new YamlReader(new FileReader(YamlConfig.CONFIG_FILE_NAME, StandardCharsets.US_ASCII));
+            YamlReader reader = new YamlReader(Files.newBufferedReader(Paths.get(YamlConfig.CONFIG_FILE_NAME), StandardCharsets.US_ASCII));
             reader.getConfig().readConfig.setIgnoreUnknownProperties(true);
             StrippedYamlConfig charsetConfig = reader.read(StrippedYamlConfig.class);
             reader.close();

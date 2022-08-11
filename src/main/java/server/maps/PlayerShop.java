@@ -29,8 +29,6 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.KarmaManipulator;
 import net.packet.Packet;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.Trade;
 import tools.PacketCreator;
 import tools.Pair;
@@ -38,6 +36,7 @@ import tools.Pair;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Matze
@@ -56,7 +55,7 @@ public class PlayerShop extends AbstractMapObject {
     private final List<String> bannedList = new ArrayList<>();
     private final List<Pair<Character, String>> chatLog = new LinkedList<>();
     private final Map<Integer, Byte> chatSlot = new LinkedHashMap<>();
-    private final Lock visitorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.VISITOR_PSHOP, true);
+    private final Lock visitorLock = new ReentrantLock(true);
 
     public PlayerShop(Character owner, String description, int itemid) {
         this.setPosition(owner.getPosition());

@@ -24,8 +24,6 @@ package server.maps;
 import client.Client;
 import config.YamlConfig;
 import net.packet.Packet;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
 import scripting.reactor.ReactorScriptManager;
@@ -38,6 +36,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Lerk
@@ -58,8 +57,8 @@ public class Reactor extends AbstractMapObject {
     private Runnable delayedRespawnRun = null;
     private GuardianSpawnPoint guardian = null;
     private byte facingDirection = 0;
-    private final Lock reactorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR, true);
-    private final Lock hitLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR_HIT, true);
+    private final Lock reactorLock = new ReentrantLock(true);
+    private final Lock hitLock = new ReentrantLock(true);
 
     public Reactor(ReactorStats stats, int rid) {
         this.evstate = (byte) 0;

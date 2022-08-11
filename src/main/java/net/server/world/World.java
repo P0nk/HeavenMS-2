@@ -32,11 +32,6 @@ import constants.game.GameConstants;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.*;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
@@ -69,6 +64,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.concurrent.TimeUnit.*;
 
@@ -103,13 +102,12 @@ public class World {
     private final MatchCheckerCoordinator matchChecker = new MatchCheckerCoordinator();
     private final PartySearchCoordinator partySearch = new PartySearchCoordinator();
 
-    private final MonitoredReentrantReadWriteLock chnLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_CHANNELS, true);
-    private final MonitoredReadLock chnRLock = MonitoredReadLockFactory.createLock(chnLock);
-    private final MonitoredWriteLock chnWLock = MonitoredWriteLockFactory.createLock(chnLock);
+    private final Lock chnRLock;
+    private final Lock chnWLock;
 
     private final Map<Integer, SortedMap<Integer, Character>> accountChars = new HashMap<>();
     private final Map<Integer, Storage> accountStorages = new HashMap<>();
-    private MonitoredReentrantLock accountCharsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_CHARS, true);
+    private final Lock accountCharsLock = new ReentrantLock(true);
 
     private final Set<Integer> queuedGuilds = new HashSet<>();
     private final Map<Integer, Pair<Pair<Boolean, Boolean>, Pair<Integer, Integer>>> queuedMarriages = new HashMap<>();
@@ -118,39 +116,39 @@ public class World {
     private final Map<Integer, Integer> partyChars = new HashMap<>();
     private final Map<Integer, Party> parties = new HashMap<>();
     private final AtomicInteger runningPartyId = new AtomicInteger();
-    private MonitoredReentrantLock partyLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_PARTY, true);
+    private final Lock partyLock = new ReentrantLock(true);
 
     private final Map<Integer, Integer> owlSearched = new LinkedHashMap<>();
     private final List<Map<Integer, Integer>> cashItemBought = new ArrayList<>(9);
-    private final MonitoredReentrantReadWriteLock suggestLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_SUGGEST, true);
-    private final MonitoredReadLock suggestRLock = MonitoredReadLockFactory.createLock(suggestLock);
-    private final MonitoredWriteLock suggestWLock = MonitoredWriteLockFactory.createLock(suggestLock);
+
+    private final Lock suggestRLock;
+    private final Lock suggestWLock;
 
     private final Map<Integer, Integer> disabledServerMessages = new HashMap<>();    // reuse owl lock
-    private MonitoredReentrantLock srvMessagesLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_SRVMESSAGES);
+    private final Lock srvMessagesLock = new ReentrantLock();
     private ScheduledFuture<?> srvMessagesSchedule;
 
-    private MonitoredReentrantLock activePetsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_PETS, true);
+    private Lock activePetsLock = new ReentrantLock(true);
     private final Map<Integer, Integer> activePets = new LinkedHashMap<>();
     private ScheduledFuture<?> petsSchedule;
     private long petUpdate;
 
-    private MonitoredReentrantLock activeMountsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MOUNTS, true);
+    private Lock activeMountsLock = new ReentrantLock(true);
     private final Map<Integer, Integer> activeMounts = new LinkedHashMap<>();
     private ScheduledFuture<?> mountsSchedule;
     private long mountUpdate;
 
-    private MonitoredReentrantLock activePlayerShopsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_PSHOPS, true);
+    private Lock activePlayerShopsLock = new ReentrantLock(true);
     private final Map<Integer, PlayerShop> activePlayerShops = new LinkedHashMap<>();
 
-    private MonitoredReentrantLock activeMerchantsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MERCHS, true);
+    private Lock activeMerchantsLock = new ReentrantLock(true);
     private final Map<Integer, Pair<HiredMerchant, Integer>> activeMerchants = new LinkedHashMap<>();
     private ScheduledFuture<?> merchantSchedule;
     private long merchantUpdate;
 
     private final Map<Runnable, Long> registeredTimedMapObjects = new LinkedHashMap<>();
     private ScheduledFuture<?> timedMapObjectsSchedule;
-    private MonitoredReentrantLock timedMapObjectLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MAPOBJS, true);
+    private Lock timedMapObjectLock = new ReentrantLock(true);
 
     private final Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
     private Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
@@ -176,6 +174,14 @@ public class World {
         this.fishingrate = fishingrate;
         runningPartyId.set(1000000001); // partyid must not clash with charid to solve update item looting issues, found thanks to Vcoc
         runningMessengerId.set(1);
+
+        ReadWriteLock channelLock = new ReentrantReadWriteLock(true);
+        this.chnRLock = channelLock.readLock();
+        this.chnWLock = channelLock.writeLock();
+
+        ReadWriteLock suggestLock = new ReentrantReadWriteLock(true);
+        this.suggestRLock = suggestLock.readLock();
+        this.suggestWLock = suggestLock.writeLock();
 
         petUpdate = Server.getInstance().getCurrentTime();
         mountUpdate = petUpdate;
@@ -2097,27 +2103,7 @@ public class World {
             partyLock.unlock();
         }
 
-        for (Party p : pList) {
-            p.disposeLocks();
-        }
-
         closeWorldServices();
-        disposeLocks();
-    }
-
-    private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-    }
-
-    private void emptyLocks() {
-        accountCharsLock = accountCharsLock.dispose();
-        partyLock = partyLock.dispose();
-        srvMessagesLock = srvMessagesLock.dispose();
-        activePetsLock = activePetsLock.dispose();
-        activeMountsLock = activeMountsLock.dispose();
-        activePlayerShopsLock = activePlayerShopsLock.dispose();
-        activeMerchantsLock = activeMerchantsLock.dispose();
-        timedMapObjectLock = timedMapObjectLock.dispose();
     }
 
     public final void shutdown() {

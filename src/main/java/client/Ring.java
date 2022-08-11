@@ -174,8 +174,8 @@ public class Ring implements Comparable<Ring> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Ring) {
-            return ((Ring) o).getRingId() == getRingId();
+        if (o instanceof Ring ring) {
+            return ring.getRingId() == getRingId();
         }
         return false;
     }

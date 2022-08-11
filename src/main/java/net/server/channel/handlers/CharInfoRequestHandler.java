@@ -36,8 +36,7 @@ public final class CharInfoRequestHandler extends AbstractPacketHandler {
         int cid = p.readInt();
         MapObject target = c.getPlayer().getMap().getMapObject(cid);
         if (target != null) {
-            if (target instanceof Character) {
-                Character player = (Character) target;
+            if (target instanceof Character player) {
 
                 if (c.getPlayer().getId() != player.getId()) {
                     player.exportExcludedItems(c);

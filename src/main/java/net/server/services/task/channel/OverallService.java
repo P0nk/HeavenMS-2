@@ -20,7 +20,6 @@
 package net.server.services.task.channel;
 
 import config.YamlConfig;
-import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
@@ -57,10 +56,6 @@ public class OverallService extends BaseService {   // thanks Alex for suggestin
 
 
     public class OverallScheduler extends BaseScheduler {
-
-        public OverallScheduler() {
-            super(MonitoredLockType.CHANNEL_OVERALL);
-        }
 
         public void registerDelayedAction(Runnable runAction, long delay) {
             registerEntry(runAction, runAction, delay);

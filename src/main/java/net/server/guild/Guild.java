@@ -27,8 +27,6 @@ import config.YamlConfig;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.world.InviteCoordinator;
@@ -45,6 +43,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Guild {
     private static final Logger log = LoggerFactory.getLogger(Guild.class);
@@ -54,7 +53,7 @@ public class Guild {
     }
 
     private final List<GuildCharacter> members;
-    private final Lock membersLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.GUILD, true);
+    private final Lock membersLock = new ReentrantLock(true);
 
     private final String[] rankTitles = new String[5]; // 1 = master, 2 = jr, 5 = lowest member
     private String name, notice;
@@ -604,11 +603,10 @@ public class Guild {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof GuildCharacter)) {
-            return false;
+        if (other instanceof GuildCharacter o) {
+            return (o.getId() == id && o.getName().equals(name));
         }
-        GuildCharacter o = (GuildCharacter) other;
-        return (o.getId() == id && o.getName().equals(name));
+        return false;
     }
 
     @Override

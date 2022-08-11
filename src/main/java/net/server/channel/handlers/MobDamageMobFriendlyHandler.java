@@ -52,22 +52,30 @@ public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
         int damage = Randomizer.nextInt(((monster.getMaxHp() / 13 + monster.getPADamage() * 10)) * 2 + 500) / 10; // Formula planned by Beng.
 
         if (monster.getHp() - damage < 1) {     // friendly dies
-            if (monster.getId() == MobId.WATCH_HOG) {
+            switch (monster.getId()) {
+            case MobId.WATCH_HOG:
                 map.broadcastMessage(PacketCreator.serverNotice(6, "The Watch Hog has been injured by the aliens. Better luck next time..."));
-            } else if (monster.getId() == MobId.MOON_BUNNY) {  //moon bunny
+                break;
+            case MobId.MOON_BUNNY: //moon bunny
                 map.broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny went home because he was sick."));
-            } else if (monster.getId() == MobId.TYLUS) {   //tylus
+                break;
+            case MobId.TYLUS: //tylus
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Tylus has fallen by the overwhelming forces of the ambush."));
-            } else if (monster.getId() == MobId.JULIET) {   //juliet
+                break;
+            case MobId.JULIET: //juliet
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Juliet has fainted in the middle of the combat."));
-            } else if (monster.getId() == MobId.ROMEO) {   //romeo
+                break;
+            case MobId.ROMEO: //romeo
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Romeo has fainted in the middle of the combat."));
-            } else if (monster.getId() == MobId.GIANT_SNOWMAN_LV1_EASY || monster.getId() == MobId.GIANT_SNOWMAN_LV1_MEDIUM || monster.getId() == MobId.GIANT_SNOWMAN_LV1_HARD) {
+                break;
+            case MobId.GIANT_SNOWMAN_LV1_EASY, MobId.GIANT_SNOWMAN_LV1_MEDIUM, MobId.GIANT_SNOWMAN_LV1_HARD:
                 map.broadcastMessage(PacketCreator.serverNotice(6, "The Snowman has melted on the heat of the battle."));
-            } else if (monster.getId() == MobId.DELLI) {   //delli
+                break;
+            case MobId.DELLI: //delli
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Delli vanished after the ambush, sheets still laying on the ground..."));
+                break;
             }
-
+            
             map.killFriendlies(monster);
         } else {
             EventInstanceManager eim = map.getEventInstance();

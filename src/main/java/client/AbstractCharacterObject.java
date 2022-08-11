@@ -21,13 +21,6 @@ package client;
 
 import config.YamlConfig;
 import constants.game.GameConstants;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import server.maps.AbstractAnimatedMapObject;
 import server.maps.MapleMap;
 
@@ -35,6 +28,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author RonanLana
@@ -50,14 +46,14 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     private AbstractCharacterListener listener = null;
     protected Map<Stat, Integer> statUpdates = new HashMap<>();
 
-    protected Lock effLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHARACTER_EFF, true);
-    protected MonitoredReadLock statRlock;
-    protected MonitoredWriteLock statWlock;
+    protected final Lock effLock = new ReentrantLock(true);
+    protected final Lock statRlock;
+    protected final Lock statWlock;
 
     protected AbstractCharacterObject() {
-        MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.CHARACTER_STA, true);
-        statRlock = MonitoredReadLockFactory.createLock(locks);
-        statWlock = MonitoredWriteLockFactory.createLock(locks);
+        ReadWriteLock statLock = new ReentrantReadWriteLock(true);
+        this.statRlock = statLock.readLock();
+        this.statWlock = statLock.writeLock();
 
         for (int i = 0; i < remainingSp.length; i++) {
             remainingSp[i] = 0;

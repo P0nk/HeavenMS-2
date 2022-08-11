@@ -25,13 +25,12 @@ import client.Character;
 import client.Client;
 import constants.game.GameConstants;
 import constants.id.MapId;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import scripting.portal.PortalScriptManager;
 import tools.PacketCreator;
 
 import java.awt.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class GenericPortal implements Portal {
     private String name;
@@ -43,7 +42,7 @@ public class GenericPortal implements Portal {
     private int id;
     private String scriptName;
     private boolean portalState;
-    private MonitoredReentrantLock scriptLock = null;
+    private Lock scriptLock = null;
 
     public GenericPortal(int type) {
         this.type = type;
@@ -120,7 +119,7 @@ public class GenericPortal implements Portal {
 
         if (scriptName != null) {
             if (scriptLock == null) {
-                scriptLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.PORTAL, true);
+                scriptLock = new ReentrantLock(true);
             }
         } else {
             scriptLock = null;

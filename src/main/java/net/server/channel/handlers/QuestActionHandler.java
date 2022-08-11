@@ -73,25 +73,27 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         Character player = c.getPlayer();
         Quest quest = Quest.getInstance(questid);
 
-        if (action == 0) { // Restore lost item, Credits Darter ( Rajan )
+        switch (action) {
+        case 0: // Restore lost item, Credits Darter ( Rajan )
             p.readInt();
             int itemid = p.readInt();
             quest.restoreLostItem(player, itemid);
-        } else if (action == 1) { //Start Quest
+            break;
+        case 1: { // Start Quest
             int npc = p.readInt();
             if (!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
-
             if (quest.canStart(player, npc)) {
                 quest.start(player, npc);
             }
-        } else if (action == 2) { // Complete Quest
+            break;
+        }
+        case 2: { // Complete Quest
             int npc = p.readInt();
             if (!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
-
             if (quest.canComplete(player, npc)) {
                 if (p.available() >= 2) {
                     int selection = p.readShort();
@@ -100,26 +102,31 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                     quest.complete(player, npc);
                 }
             }
-        } else if (action == 3) {// forfeit quest
+            break;
+        }
+        case 3: // forfeit quest
             quest.forfeit(player);
-        } else if (action == 4) { // scripted start quest
+            break;
+        case 4: { // scripted start quest
             int npc = p.readInt();
             if (!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
-
             if (quest.canStart(player, npc)) {
                 QuestScriptManager.getInstance().start(c, questid, npc);
             }
-        } else if (action == 5) { // scripted end quests
+            break;
+        }
+        case 5: { // scripted end quests
             int npc = p.readInt();
             if (!isNpcNearby(p, player, quest, npc)) {
                 return;
             }
-
             if (quest.canComplete(player, npc)) {
                 QuestScriptManager.getInstance().end(c, questid, npc);
             }
+            break;
+        }
         }
     }
 }

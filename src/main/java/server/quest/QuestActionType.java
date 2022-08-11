@@ -52,41 +52,42 @@ public enum QuestActionType {
     }
 
     public static QuestActionType getByWZName(String name) {
-        if (name.equals("exp")) {
+        switch (name) {
+        case "exp":
             return EXP;
-        } else if (name.equals("money")) {
+        case "money":
             return MESO;
-        } else if (name.equals("item")) {
+        case "item":
             return ITEM;
-        } else if (name.equals("skill")) {
+        case "skill":
             return SKILL;
-        } else if (name.equals("nextQuest")) {
+        case "nextQuest":
             return NEXTQUEST;
-        } else if (name.equals("pop")) {
+        case "pop":
             return FAME;
-        } else if (name.equals("buffItemID")) {
+        case "buffItemID":
             return BUFF;
-        } else if (name.equals("petskill")) {
+        case "petskill":
             return PETSKILL;
-        } else if (name.equals("no")) {
+        case "no":
             return NO;
-        } else if (name.equals("yes")) {
+        case "yes":
             return YES;
-        } else if (name.equals("npc")) {
+        case "npc":
             return NPC;
-        } else if (name.equals("lvmin")) {
+        case "lvmin":
             return MIN_LEVEL;
-        } else if (name.equals("normalAutoStart")) {
+        case "normalAutoStart":
             return NORMAL_AUTO_START;
-        } else if (name.equals("pettameness")) {
+        case "pettameness":
             return PETTAMENESS;
-        } else if (name.equals("petspeed")) {
+        case "petspeed":
             return PETSPEED;
-        } else if (name.equals("info")) {
+        case "info":
             return INFO;
-        } else if (name.equals("0")) {
+        case "0":
             return ZERO;
-        } else {
+        default:
             return UNDEFINED;
         }
     }

@@ -158,9 +158,6 @@ worlds:
 
 
 server:
-    #Thread Tracker Configuration
-    USE_THREAD_TRACKER: false        #[SEVERE] This deadlock auditing thing will bloat the memory as fast as the time frame one takes to lose track of a raindrop on a tempesting day. Only for debugging purposes.
-
     #Database Configuration
     DB_URL_FORMAT: "jdbc:mysql://%s:3306/cosmic"
     DB_HOST: "localhost"

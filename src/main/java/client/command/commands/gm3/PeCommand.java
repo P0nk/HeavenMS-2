@@ -35,9 +35,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.HexTool;
 
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class PeCommand extends Command {
@@ -51,11 +52,9 @@ public class PeCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         String packet = "";
-        try {
-            InputStreamReader is = new FileReader("pe.txt");
+        try (BufferedReader br = Files.newBufferedReader(Paths.get("pe.txt"))) {
             Properties packetProps = new Properties();
-            packetProps.load(is);
-            is.close();
+            packetProps.load(br);
             packet = packetProps.getProperty("pe");
         } catch (IOException ex) {
             ex.printStackTrace();

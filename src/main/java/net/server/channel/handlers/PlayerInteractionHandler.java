@@ -291,11 +291,10 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     MapObject ob = chr.getMap().getMapObject(oid);
                     if (ob instanceof PlayerShop shop) {
                         shop.visitShop(chr);
-                    } else if (ob instanceof MiniGame) {
+                    } else if (ob instanceof MiniGame game) {
                         p.skip(1);
                         String pw = p.available() > 1 ? p.readString() : "";
 
-                        MiniGame game = (MiniGame) ob;
                         if (game.checkPassword(pw)) {
                             if (game.hasFreeSlot() && !game.isVisitor(chr)) {
                                 game.addVisitor(chr);
@@ -849,8 +848,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
     private static boolean canPlaceStore(Character chr) {
         try {
             for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapObjectType.HIRED_MERCHANT, MapObjectType.PLAYER))) {
-                if (mmo instanceof Character) {
-                    Character mc = (Character) mmo;
+                if (mmo instanceof Character mc) {
                     if (mc.getId() == chr.getId()) {
                         continue;
                     }

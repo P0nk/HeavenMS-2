@@ -1,11 +1,10 @@
 package tools.mapletools;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,14 +19,28 @@ import java.util.regex.Pattern;
  * Estimated parse time: 10 seconds
  */
 public class EventMethodFiller {
+    private static final Collection<String> RELEVANT_FILE_EXTENSIONS = Set.of("sql", "js", "txt", "java");
+
     private static boolean foundMatchingDataOnFile(String fileContent, Pattern pattern) {
         Matcher matcher = pattern.matcher(fileContent);
         return matcher.find();
     }
 
-    private static void fileSearchMatchingData(File file, Map<Pattern, String> functions) {
+    private static void filterDirectorySearchMatchingData(String directoryPath, Map<Pattern, String> functions)
+            throws IOException {
+        Files.walk(Path.of(directoryPath))
+                .filter(EventMethodFiller::isRelevantFile)
+                .forEach(path -> fileSearchMatchingData(path, functions));
+    }
+
+    private static boolean isRelevantFile(Path path) {
+        String fileName = path.getFileName().toString();
+        return RELEVANT_FILE_EXTENSIONS.stream().anyMatch(fileName::endsWith);
+    }
+
+    private static void fileSearchMatchingData(Path file, Map<Pattern, String> functions) {
         try {
-            String fileContent = FileUtils.readFileToString(file, "UTF-8");
+            String fileContent = Files.readString(file);
             List<String> fillFunctions = new LinkedList<>();
 
             for (Map.Entry<Pattern, String> f : functions.entrySet()) {
@@ -37,34 +50,22 @@ public class EventMethodFiller {
             }
 
             if (!fillFunctions.isEmpty()) {
-                System.out.println("Filling out " + file.getName() + "...");
+                System.out.println("Filling out " + file.getFileName().toString() + "...");
 
-                FileWriter fileWriter = new FileWriter(file, true);
-                PrintWriter printWriter = new PrintWriter(fileWriter);
-
-                printWriter.println();
-                printWriter.println();
-                printWriter.println("// ---------- FILLER FUNCTIONS ----------");
-                printWriter.println();
-
-                for (String s : fillFunctions) {
-                    printWriter.println(s);
+                try (PrintWriter printWriter = new PrintWriter(Files.newBufferedWriter(file, StandardOpenOption.APPEND))) {
                     printWriter.println();
-                }
+                    printWriter.println();
+                    printWriter.println("// ---------- FILLER FUNCTIONS ----------");
+                    printWriter.println();
 
-                printWriter.close();
+                    for (String s : fillFunctions) {
+                        printWriter.println(s);
+                        printWriter.println();
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static void filterDirectorySearchMatchingData(String directoryPath, Map<Pattern, String> functions) {
-        Iterator iter = FileUtils.iterateFiles(new File(directoryPath), new String[]{"sql", "js", "txt", "java"}, true);
-
-        while (iter.hasNext()) {
-            File file = (File) iter.next();
-            fileSearchMatchingData(file, functions);
         }
     }
 
@@ -95,7 +96,7 @@ public class EventMethodFiller {
         return functions;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         filterDirectorySearchMatchingData(ToolConstants.SCRIPTS_PATH + "/event", getFunctions());
     }
 

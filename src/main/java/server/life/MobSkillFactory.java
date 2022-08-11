@@ -21,12 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.life;
 
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -38,6 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -49,22 +46,22 @@ public class MobSkillFactory {
     private static final Map<String, MobSkill> mobSkills = new HashMap<>();
     private final static DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
     private static final Data skillRoot = dataSource.getData("MobSkill.img");
-    private final static MonitoredReentrantReadWriteLock dataLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MOBSKILL_FACTORY);
-    private final static MonitoredReadLock rL = MonitoredReadLockFactory.createLock(dataLock);
-    private final static MonitoredWriteLock wL = MonitoredWriteLockFactory.createLock(dataLock);
+    private final static ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    private final static Lock readLock = readWriteLock.readLock();
+    private final static Lock writeLock = readWriteLock.writeLock();
 
     public static MobSkill getMobSkill(final int skillId, final int level) {
         final String key = skillId + "" + level;
-        rL.lock();
+        readLock.lock();
         try {
             MobSkill ret = mobSkills.get(key);
             if (ret != null) {
                 return ret;
             }
         } finally {
-            rL.unlock();
+            readLock.unlock();
         }
-        wL.lock();
+        writeLock.lock();
         try {
             MobSkill ret;
             ret = mobSkills.get(key);
@@ -114,7 +111,7 @@ public class MobSkillFactory {
             }
             return ret;
         } finally {
-            wL.unlock();
+            writeLock.unlock();
         }
     }
 }

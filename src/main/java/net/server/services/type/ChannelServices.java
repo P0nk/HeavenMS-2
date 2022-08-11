@@ -33,7 +33,6 @@ public enum ChannelServices implements ServiceType {
     MOB_ANIMATION(MobAnimationService.class),
     MOB_CLEAR_SKILL(MobClearSkillService.class),
     MOB_MIST(MobMistService.class),
-    FACE_EXPRESSION(FaceExpressionService.class),
     EVENT(EventService.class),
     OVERALL(OverallService.class);
 

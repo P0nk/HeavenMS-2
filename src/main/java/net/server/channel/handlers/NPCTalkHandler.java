@@ -87,8 +87,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     }
                 }
             }
-        } else if (obj instanceof PlayerNPC) {
-            PlayerNPC pnpc = (PlayerNPC) obj;
+        } else if (obj instanceof PlayerNPC pnpc) {
             NPCScriptManager nsm = NPCScriptManager.getInstance();
 
             if (pnpc.getScriptId() < NpcId.CUSTOM_DEV && !nsm.isNpcScriptAvailable(c, "" + pnpc.getScriptId())) {

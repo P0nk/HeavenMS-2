@@ -38,16 +38,8 @@ import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import net.packet.Packet;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.world.MonsterAggroCoordinator;
-import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.channel.MobMistService;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
@@ -78,6 +70,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -163,15 +158,15 @@ public class MapleMap {
     private int timeExpand;
 
     //locks
-    private final MonitoredReadLock chrRLock;
-    private final MonitoredWriteLock chrWLock;
-    private final MonitoredReadLock objectRLock;
-    private final MonitoredWriteLock objectWLock;
+    private final Lock chrRLock;
+    private final Lock chrWLock;
+    private final Lock objectRLock;
+    private final Lock objectWLock;
 
-    private final Lock lootLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MAP_LOOT, true);
+    private final Lock lootLock = new ReentrantLock(true);
 
     // due to the nature of loadMapFromWz (synchronized), sole function that calls 'generateMapDropRangeCache', this lock remains optional.
-    private static final Lock bndLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MAP_BOUNDS, true);
+    private static final Lock bndLock = new ReentrantLock(true);
 
     public MapleMap(int mapid, int world, int channel, int returnMapId, float monsterRate) {
         this.mapid = mapid;
@@ -182,13 +177,14 @@ public class MapleMap {
         if (this.monsterRate == 0) {
             this.monsterRate = 1;
         }
-        final MonitoredReentrantReadWriteLock chrLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MAP_CHRS, true);
-        chrRLock = MonitoredReadLockFactory.createLock(chrLock);
-        chrWLock = MonitoredWriteLockFactory.createLock(chrLock);
 
-        final MonitoredReentrantReadWriteLock objectLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MAP_OBJS, true);
-        objectRLock = MonitoredReadLockFactory.createLock(objectLock);
-        objectWLock = MonitoredWriteLockFactory.createLock(objectLock);
+        final ReadWriteLock chrLock = new ReentrantReadWriteLock(true);
+        chrRLock = chrLock.readLock();
+        chrWLock = chrLock.writeLock();
+
+        final ReadWriteLock objectLock = new ReentrantReadWriteLock(true);
+        objectRLock = objectLock.readLock();
+        objectWLock = objectLock.writeLock();
 
         aggroMonitor = new MonsterAggroCoordinator();
     }
@@ -1650,8 +1646,7 @@ public class MapleMap {
         objectRLock.lock();
         try {
             for (Object ob : list) {
-                if (ob instanceof MapObject) {
-                    MapObject mmo = (MapObject) ob;
+                if (ob instanceof MapObject mmo) {
 
                     if (mapobjects.containsValue(mmo) && mmo.getType() == MapObjectType.REACTOR) {
                         listObjects.add(mmo);
@@ -2678,9 +2673,6 @@ public class MapleMap {
 
     public void removePlayer(Character chr) {
         Channel cserv = chr.getClient().getChannelServer();
-
-        FaceExpressionService service = (FaceExpressionService) this.getChannelServer().getServiceAccess(ChannelServices.FACE_EXPRESSION);
-        service.unregisterFaceExpression(mapid, chr);
         chr.unregisterChairBuff();
 
         Party party = chr.getParty();

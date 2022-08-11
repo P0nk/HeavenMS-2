@@ -23,21 +23,23 @@ package net.server;
 
 import client.Character;
 import client.Client;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class PlayerStorage {
-    private final MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.PLAYER_STORAGE, true);
     private final Map<Integer, Character> storage = new LinkedHashMap<>();
     private final Map<String, Character> nameStorage = new LinkedHashMap<>();
-    private final MonitoredReadLock rlock = MonitoredReadLockFactory.createLock(locks);
-    private final MonitoredWriteLock wlock = MonitoredWriteLockFactory.createLock(locks);
+    private final Lock rlock;
+    private final Lock wlock;
+
+    public PlayerStorage() {
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+        this.rlock = readWriteLock.readLock();
+        this.wlock = readWriteLock.writeLock();
+    }
 
     public void addPlayer(Character chr) {
         wlock.lock();

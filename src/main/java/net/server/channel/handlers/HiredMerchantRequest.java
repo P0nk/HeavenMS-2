@@ -47,8 +47,7 @@ public final class HiredMerchantRequest extends AbstractPacketHandler {
 
         try {
             for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapObjectType.HIRED_MERCHANT, MapObjectType.PLAYER))) {
-                if (mmo instanceof Character) {
-                    Character mc = (Character) mmo;
+                if (mmo instanceof Character mc) {
 
                     PlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {

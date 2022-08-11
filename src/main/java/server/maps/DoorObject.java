@@ -22,16 +22,13 @@ package server.maps;
 import client.Character;
 import client.Client;
 import constants.id.MapId;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.world.Party;
 import tools.PacketCreator;
 
 import java.awt.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Ronan
@@ -45,9 +42,8 @@ public class DoorObject extends AbstractMapObject {
     private int linkedPortalId;
     private Point linkedPos;
 
-    private final MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.PLAYER_DOOR, true);
-    private final MonitoredReadLock rlock = MonitoredReadLockFactory.createLock(locks);
-    private final MonitoredWriteLock wlock = MonitoredWriteLockFactory.createLock(locks);
+    private final Lock rlock;
+    private final Lock wlock;
 
     public DoorObject(int owner, MapleMap destination, MapleMap origin, int townPortalId, Point targetPosition, Point toPosition) {
         super();
@@ -58,6 +54,10 @@ public class DoorObject extends AbstractMapObject {
         from = origin;
         to = destination;
         linkedPos = toPosition;
+
+        ReadWriteLock lock = new ReentrantReadWriteLock(true);
+        this.rlock = lock.readLock();
+        this.wlock = lock.writeLock();
     }
 
     public void update(int townPortalId, Point toPosition) {

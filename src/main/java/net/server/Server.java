@@ -37,14 +37,6 @@ import constants.net.OpcodeConstants;
 import constants.net.ServerConstants;
 import net.netty.LoginServer;
 import net.packet.Packet;
-import net.server.audit.ThreadTracker;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
@@ -79,6 +71,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.concurrent.TimeUnit.*;
 
@@ -117,16 +112,14 @@ public class Server {
 
     private final List<List<Pair<String, Integer>>> playerRanking = new LinkedList<>();
 
-    private final Lock srvLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.SERVER);
-    private final Lock disLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.SERVER_DISEASES);
+    private final Lock srvLock = new ReentrantLock();
+    private final Lock disLock = new ReentrantLock();
 
-    private final MonitoredReentrantReadWriteLock wldLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.SERVER_WORLDS, true);
-    private final MonitoredReadLock wldRLock = MonitoredReadLockFactory.createLock(wldLock);
-    private final MonitoredWriteLock wldWLock = MonitoredWriteLockFactory.createLock(wldLock);
+    private final Lock wldRLock;
+    private final Lock wldWLock;
 
-    private final MonitoredReentrantReadWriteLock lgnLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.SERVER_LOGIN, true);
-    private final MonitoredReadLock lgnRLock = MonitoredReadLockFactory.createLock(lgnLock);
-    private final MonitoredWriteLock lgnWLock = MonitoredWriteLockFactory.createLock(lgnLock);
+    private final Lock lgnRLock;
+    private final Lock lgnWLock;
 
     private final AtomicLong currentTime = new AtomicLong(0);
     private long serverCurrentTime = 0;
@@ -134,6 +127,16 @@ public class Server {
     private volatile boolean availableDeveloperRoom = false;
     private boolean online = false;
     public static long uptime = System.currentTimeMillis();
+
+    private Server() {
+        ReadWriteLock worldLock = new ReentrantReadWriteLock(true);
+        this.wldRLock = worldLock.readLock();
+        this.wldWLock = worldLock.writeLock();
+
+        ReadWriteLock loginLock = new ReentrantReadWriteLock(true);
+        this.lgnRLock = loginLock.readLock();
+        this.lgnWLock = loginLock.writeLock();
+    }
 
     public int getCurrentTimestamp() {
         return (int) (Server.getInstance().getCurrentTime() - Server.uptime);
@@ -865,10 +868,6 @@ public class Server {
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
 
-        if (YamlConfig.config.server.USE_THREAD_TRACKER) {
-            ThreadTracker.getInstance().registerThreadTrackerTask();
-        }
-
         try {
             int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
 
@@ -941,7 +940,6 @@ public class Server {
 
         long timeLeft = getTimeLeftForNextHour();
         tMan.register(new CharacterDiseaseTask(), YamlConfig.config.server.UPDATE_INTERVAL, YamlConfig.config.server.UPDATE_INTERVAL);
-        tMan.register(new ReleaseLockTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));
         tMan.register(new CouponTask(), YamlConfig.config.server.COUPON_INTERVAL, timeLeft);
         tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
         tMan.register(new RankingLoginTask(), YamlConfig.config.server.RANKING_INTERVAL, timeLeft);
@@ -1904,10 +1902,6 @@ public class Server {
 
         List<Channel> allChannels = getAllChannels();
 
-        if (YamlConfig.config.server.USE_THREAD_TRACKER) {
-            ThreadTracker.getInstance().cancelThreadTrackerTask();
-        }
-
         for (Channel ch : allChannels) {
             while (!ch.finishedShutdown()) {
                 try {
@@ -1934,13 +1928,7 @@ public class Server {
             new Thread(() -> System.exit(0)).start();
         } else {
             log.info("Restarting the server...");
-            try {
-                instance.finalize();//FUU I CAN AND IT'S FREE
-            } catch (Throwable ex) {
-                ex.printStackTrace();
-            }
             instance = null;
-            System.gc();
             getInstance().init();//DID I DO EVERYTHING?! D:
         }
     }

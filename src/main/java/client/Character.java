@@ -6190,7 +6190,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private int getChangedJobSp(Job newJob) {
-        int curSp = getUsedSp(newJob) + getJobRemainingSp(newJob);
+        int curSp = getUsedSp(newJob.getId()) + getJobRemainingSp(newJob);
         int spGain = 0;
         int expectedSp = getJobLevelSp(level - 10, newJob, GameConstants.getJobBranch(newJob));
         if (curSp < expectedSp) {
@@ -6200,8 +6200,7 @@ public class Character extends AbstractCharacterObject {
         return getSpGain(spGain, curSp, newJob);
     }
 
-    private int getUsedSp(Job job) {
-        int jobId = job.getId();
+    public int getUsedSp(int jobId) {
         int spUsed = 0;
 
         for (Entry<Skill, SkillEntry> s : this.getSkills().entrySet()) {
@@ -6240,7 +6239,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private int getSpGain(int spGain, Job job) {
-        int curSp = getUsedSp(job) + getJobRemainingSp(job);
+        int curSp = getUsedSp(job.getId()) + getJobRemainingSp(job);
         return getSpGain(spGain, curSp, job);
     }
 

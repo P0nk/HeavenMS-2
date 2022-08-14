@@ -23,6 +23,7 @@ package scripting.npc;
 
 import client.Character;
 import client.*;
+import client.command.commands.gm2.ResetSkillCommand;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.Pet;
@@ -368,6 +369,18 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return GameConstants.getJobName(id);
     }
 
+    public boolean isJobType(int job) {
+        return switch (job) {
+            case 0 -> getPlayer().getJob().isA(Job.BEGINNER);
+            case 1 -> getPlayer().getJob().isA(Job.WARRIOR);
+            case 2 -> getPlayer().getJob().isA(Job.MAGICIAN);
+            case 3 -> getPlayer().getJob().isA(Job.BOWMAN);
+            case 4 -> getPlayer().getJob().isA(Job.THIEF);
+            case 5 -> getPlayer().getJob().isA(Job.PIRATE);
+            default -> false;
+        };
+    }
+    
     public StatEffect getItemEffect(int itemId) {
         return ItemInformationProvider.getInstance().getItemEffect(itemId);
     }
@@ -387,6 +400,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    public void resetSkills()
+    {
+        ResetSkillCommand c = new ResetSkillCommand();
+        c.execute(getClient(), null);       
+    }
+    
     public void maxMastery() {
         for (Data skill_ : DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
             try {

@@ -60,7 +60,7 @@ public class AssignSPProcessor {
 
         return true;
     }
-
+    
     public static void SPAssignAction(Client c, int skillid) {
         c.lockClient();
         try {
@@ -81,6 +81,24 @@ public class AssignSPProcessor {
                 isBeginnerSkill = true;
             }
             Skill skill = SkillFactory.getSkill(skillid);
+            
+            // check and see if player has used enough skill points in previous jobs to assign points
+            // this can happen if using a full SP reset
+            int totalSpUsed = player.getUsedSp(player.getJob().getId());
+            if(skill.isFourthJob() && totalSpUsed < 333){
+                player.yellowMessage("You must spend " + (333 - totalSpUsed) + " more skill points before assigning 4th Job Skills.");
+                return;
+            }
+            else if(skill.isThirdJob() && totalSpUsed < 182){
+                player.yellowMessage("You must spend " + (182 - totalSpUsed) + " more skill points before assigning 3th Job Skills.");
+                return;
+            }
+            else if(skill.isSecondJob() && totalSpUsed < 61){
+                player.yellowMessage("You must spend " + (61 - totalSpUsed) + " more skill points before assigning 2nd Job Skills.");
+                return;
+            }
+            
+            
             int curLevel = player.getSkillLevel(skill);
             if ((remainingSp > 0 && curLevel + 1 <= (skill.isFourthJob() ? player.getMasterLevel(skill) : skill.getMaxLevel()))) {
                 if (!isBeginnerSkill) {

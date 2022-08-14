@@ -61,6 +61,14 @@ public class Skill {
         }
         return job % 10 == 2;
     }
+    
+    public boolean isThirdJob(){
+        return job % 10 == 1;
+    }
+    
+    public boolean isSecondJob(){
+        return job % 100 == 10;
+    }
 
     public void setElement(Element elem) {
         element = elem;

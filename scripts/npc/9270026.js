@@ -106,7 +106,7 @@ function action(mode, type, selection) {
                     cm.sendOk("I'm sorry, but I don't think you have our cosmetic lens coupon with you right now. Without the coupon, I'm afraid I can't do it for you..");
                 }
             } else if (beauty == 3) {
-                var color = (colors[selection] / 100) % 100 | 0;
+                var color = (colors[selection] / 100) % 10 | 0;
 
                 if (cm.haveItem(5152100 + color)) {
                     cm.gainItem(5152100 + color, -1);

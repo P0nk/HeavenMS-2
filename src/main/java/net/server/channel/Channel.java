@@ -49,7 +49,6 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
@@ -437,7 +436,7 @@ public final class Channel {
 
     private static String[] getEvents() {
         List<String> events = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("scripts/event"))) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of("scripts/event"))) {
             for (Path path : stream) {
                 String fileName = path.getFileName().toString();
                 events.add(fileName.substring(0, fileName.length() - 3));

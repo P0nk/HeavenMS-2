@@ -129,7 +129,7 @@ function action(mode, type, selection) {
                     cm.dispose();
                 }
             } else if (beauty == 3) {
-                var color = (colors[selection] / 100) % 100 | 0;
+                var color = (colors[selection] / 100) % 10 | 0;
 
                 if (cm.haveItem(5152100 + color)) {
                     cm.gainItem(5152100 + color, -1);

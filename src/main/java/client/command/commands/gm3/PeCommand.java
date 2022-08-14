@@ -38,7 +38,7 @@ import tools.HexTool;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public class PeCommand extends Command {
@@ -52,7 +52,7 @@ public class PeCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         String packet = "";
-        try (BufferedReader br = Files.newBufferedReader(Paths.get("pe.txt"))) {
+        try (BufferedReader br = Files.newBufferedReader(Path.of("pe.txt"))) {
             Properties packetProps = new Properties();
             packetProps.load(br);
             packet = packetProps.getProperty("pe");

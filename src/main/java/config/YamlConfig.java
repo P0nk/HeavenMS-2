@@ -6,7 +6,7 @@ import constants.string.CharsetConstants;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.List;
 
 
@@ -19,7 +19,7 @@ public class YamlConfig {
 
     private static YamlConfig loadConfig() {
         try {
-            YamlReader reader = new YamlReader(Files.newBufferedReader(Paths.get(CONFIG_FILE_NAME), CharsetConstants.CHARSET));
+            YamlReader reader = new YamlReader(Files.newBufferedReader(Path.of(CONFIG_FILE_NAME), CharsetConstants.CHARSET));
             YamlConfig config = reader.read(YamlConfig.class);
             reader.close();
             return config;

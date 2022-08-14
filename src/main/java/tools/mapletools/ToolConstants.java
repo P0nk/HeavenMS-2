@@ -1,11 +1,10 @@
 package tools.mapletools;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 class ToolConstants {
-    static final Path INPUT_DIRECTORY = Paths.get("tools/input");
-    static final Path OUTPUT_DIRECTORY = Paths.get("tools/output");
+    static final Path INPUT_DIRECTORY = Path.of("tools/input");
+    static final Path OUTPUT_DIRECTORY = Path.of("tools/output");
     static final String SCRIPTS_PATH = "scripts";
     static final String HANDBOOK_PATH = "handbook";
 

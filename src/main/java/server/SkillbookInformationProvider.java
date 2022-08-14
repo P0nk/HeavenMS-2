@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -189,7 +188,7 @@ public class SkillbookInformationProvider {
     }
 
     private static void listFiles(String directoryName, ArrayList<Path> files) {
-        Path directory = Paths.get(directoryName);
+        Path directory = Path.of(directoryName);
 
         // get all the files from a directory
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {

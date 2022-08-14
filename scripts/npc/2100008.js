@@ -125,7 +125,7 @@ function action(mode, type, selection) {
                     cm.sendOk("Hmm ... it looks like you don't have the coupon specifically for this place. Sorry to say this, but without the coupon, there's no plastic surgery for you...");
                 }
             } else if (beauty == 3) {
-                var color = (colors[selection] / 100) % 100 | 0;
+                var color = (colors[selection] / 100) % 10 | 0;
 
                 if (cm.haveItem(5152100 + color)) {
                     cm.gainItem(5152100 + color, -1);

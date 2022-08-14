@@ -1603,50 +1603,43 @@
     </imgdir>
     <imgdir name="1101003">
         <string name="name" value="Mihile"/>
-        <string name="func" value="The Chief Knight of Light"/>
-        <string name="n0" value="My loyalty is to the Empress."/>
+        <string name="func" value="Warrior Skill Expert"/>
+        <string name="n0" value="The path of the Warrior is not for the weak of heart."/>
         <string name="n1" value="Never let your guard down!"/>
-        <string name="d0"
-            value="Are you interested in becoming a Dawn Warrior, the Knight of Light?"/>
-        <string name="d1" value="My loyalty to the Empress will never waver."/>
+        <string name="d0" value="Do you require assistance with your skills?"/>
+        <string name="d1" value="My loyalty will never waver."/>
     </imgdir>
     <imgdir name="1101004">
         <string name="name" value="Oz"/>
-        <string name="func" value="The Chief Knight of Fire"/>
+        <string name="func" value="Magician Skill Expert"/>
         <string name="n0" value="I hope the world stays peaceful."/>
-        <string name="n1" value="I wish I had more comrades..."/>
-        <string name="d0" value="Are you interested in becoming a Blaze Wizard, the Knight of Fire?"/>
-        <string name="d1"
-            value="I would like nothing more than to protect this peaceful land under the guidance of the Empress."
-        />
+        <string name="n1" value="Being a Magician is so much fun!"/>
+        <string name="d0" value="Do you need help with your skills?"/>
+        <string name="d1" value="I would like nothing more than to protect this peaceful land."/>
     </imgdir>
     <imgdir name="1101005">
         <string name="name" value="Irena"/>
-        <string name="func" value="The Chief Knight of the Wind"/>
+        <string name="func" value="Archer Skill Expert"/>
         <string name="n0" value="The wind of change... and the beginning."/>
-        <string name="n1"
-            value="May you become the green wind of luck that blows away all things evil."/>
-        <string name="d0" value="Are you interested in becoming a Wind Archer, the Knight of Wind?"/>
+        <string name="n1" value="The wind guides our arrows."/>
+        <string name="d0" value="Do you require assistance with your skills?"/>
         <string name="d1" value="I feel a good breeze coming from you."/>
     </imgdir>
     <imgdir name="1101006">
         <string name="name" value="Eckhart"/>
-        <string name="func" value="Chief Knight of Darkness"/>
-        <string name="n0" value="It&apos;s too loud in here."/>
+        <string name="func" value="Thief Skill Expert"/>
+        <string name="n0" value="It&apos;s too loud out here."/>
         <string name="n1" value="...it&apos;s your job. You take care of it."/>
-        <string name="d0"
-            value="Are you interested in becoming a Night Walker, the Knight of Darkness?"/>
-        <string name="d1" value="Sigh... The Black Mage."/>
+        <string name="d0" value="...Need help with your skills?"/>
+        <string name="d1" value="Sigh..."/>
     </imgdir>
     <imgdir name="1101007">
         <string name="name" value="Hawkeye"/>
-        <string name="func" value="Chief Knight of Lightning"/>
+        <string name="func" value="Pirate Skill Expert"/>
         <string name="n0" value="Hey, this is fun!!"/>
         <string name="n1" value="Bring it on!!"/>
-        <string name="d0"
-            value="Are you interested in becoming a Thunder Breaker, the Knight of Lightning?"/>
-        <string name="d1"
-            value="Ahhh... I can&apos;t wait to face the Black Mage and emerge victorious!"/>
+        <string name="d0" value="Need some pointers on your skills?"/>
+        <string name="d1" value="Ahhh... It&apos;s good to be a pirate."/>
     </imgdir>
     <imgdir name="1101008">
         <string name="name" value="Mimo"/>
@@ -7770,11 +7763,11 @@
     </imgdir>
     <imgdir name="9201121">
         <string name="name" value="Lucci"/>
-        <string name="func" value="Dream Interpreter"/>
+        <string name="func" value="Skill Expert"/>
         <string name="d0" value="What did you dream?"/>
         <string name="d1" value="I see that you didn&apos;t sleep too well last night."/>
         <string name="n0" value="Dreams reveal the truth..."/>
-        <string name="n1" value="You don&apos;t look too good, did you have a nightmare?"/>
+        <string name="n1" value="Do you need help with your skills?"/>
     </imgdir>
     <imgdir name="9201122">
         <string name="name" value="Old Bow"/>

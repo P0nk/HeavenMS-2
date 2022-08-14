@@ -26,7 +26,6 @@ package client.command.commands.gm2;
 import client.Character;
 import client.*;
 import client.command.Command;
-import constants.game.GameConstants;
 import constants.skills.Brawler;
 import constants.skills.Magician;
 import constants.skills.Warrior;
@@ -82,6 +81,6 @@ public class ResetSkillCommand extends Command {
         }
         
         player.updateRemainingSp(refundedSP + player.getRemainingSp());
-        player.yellowMessage("Skills reseted.");
+        player.yellowMessage("Skills reset.");
     }
 }

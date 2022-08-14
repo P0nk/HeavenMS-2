@@ -21,6 +21,8 @@
 */
 package provider.wz;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataDirectoryEntry;
 import provider.DataProvider;
@@ -31,9 +33,6 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class XMLWZFile implements DataProvider {
 	private static final Logger log = LoggerFactory.getLogger(DataProvider.class);
@@ -60,7 +59,7 @@ public class XMLWZFile implements DataProvider {
                 }
             }
         } catch (IOException e) {
-            log.warn("Can not open file/directory at " + lroot);
+            log.warn("Can not open file/directory at " + lroot.toAbsolutePath().toString());
         }
     }
 
@@ -69,7 +68,7 @@ public class XMLWZFile implements DataProvider {
         Path dataFile = root.resolve(path + ".xml");
         Path imageDataDir = root.resolve(path);
         if (!Files.exists(dataFile)) {
-            return null;// bitches
+            return null;
         }
         final XMLDomMapleData domMapleData;
         try (FileInputStream fis = new FileInputStream(dataFile.toString())) {

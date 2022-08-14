@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +40,7 @@ public class ReactorDropFetcher {
     }
 
     private static void removeScriptedReactorids(String directoryName) {
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(directoryName))) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of(directoryName))) {
             for (Path path : stream) {
                 if (Files.isRegularFile(path)) {
                     reactors.remove(getReactorIdFromFilename(path.getFileName().toString()));

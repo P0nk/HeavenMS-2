@@ -2,11 +2,13 @@ package tools.mapletools;
 
 import provider.wz.WZFiles;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -23,7 +25,7 @@ import java.time.Instant;
 public class DojoUpdate {
 	private static final Path INPUT_DIRECTORY = WZFiles.MAP.getFile().resolve("Map").resolve("Map9");
     private static final Path OUTPUT_DIRECTORY = ToolConstants.getOutputFile("dojo-maps");
-    private static final Path WORKING_DIRECTORY = Paths.get("").toAbsolutePath();
+    private static final Path WORKING_DIRECTORY = Path.of("").toAbsolutePath();
     private static final int DOJO_MIN_MAP_ID = 925_020_100;
     private static final int DOJO_MAX_MAP_ID = 925_033_804;
     private static final int INITIAL_STRING_LENGTH = 250;

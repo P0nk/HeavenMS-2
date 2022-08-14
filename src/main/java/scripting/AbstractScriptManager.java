@@ -28,12 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.script.*;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * @author Matze
@@ -47,7 +45,7 @@ public abstract class AbstractScriptManager {
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path) {
-        Path scriptFile = Paths.get("scripts").resolve(path);
+        Path scriptFile = Path.of("scripts", path);
         if (!Files.exists(scriptFile)) {
             return null;
         }

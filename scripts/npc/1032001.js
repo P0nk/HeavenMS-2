@@ -48,7 +48,7 @@ function start() {
     } else {
         if (cm.getJobId() == 0) {
             actionx["1stJob"] = true;
-            cm.sendNext("Want to be a #rmagician#k? There are some standards to meet. because we can't just accept EVERYONE in... #bYour level should be at least 8#k, with getting " + cm.getFirstJobStatRequirement(jobType) + " as your top priority. Let's see.");   // thanks Vcoc for noticing a need to state and check requirements on first job adv starting message
+            cm.sendNext("Want to be a #rmagician#k? There are some standards to meet. because we can't just accept EVERYONE in... #bYour level should be at least 10#k, with getting " + cm.getFirstJobStatRequirement(jobType) + " as your top priority. Let's see.");   // thanks Vcoc for noticing a need to state and check requirements on first job adv starting message
         } else if (cm.getLevel() >= 30 && cm.getJobId() == 200) {
             actionx["2ndJob"] = true;
             if (cm.haveItem(4031012)) {
@@ -123,7 +123,7 @@ function action(mode, type, selection) {
 
     if (actionx["1stJob"]) {
         if (status == 0) {
-            if (cm.getLevel() >= 8 && cm.canGetFirstJob(jobType)) {
+            if (cm.getLevel() >= 10 && cm.canGetFirstJob(jobType)) {
                 cm.sendYesNo("Oh...! You look like someone that can definitely be a part of us... all you need is a little sinister mind, and... yeah... so, what do you think? Wanna be the Magician?");
             } else {
                 cm.sendOk("Train a bit more until you reach the base requirements and I can show you the way of the #rMagician#k.");

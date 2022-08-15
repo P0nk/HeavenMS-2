@@ -5,7 +5,7 @@
             <vector name="origin" x="128" y="128"/>
             <int name="z" value="0"/>
         </canvas>
-        <canvas name="1" width="1024" height="579">
+        <canvas name="1" width="2048" height="788">
             <vector name="origin" x="512" y="289"/>
             <int name="z" value="0"/>
         </canvas>

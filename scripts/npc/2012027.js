@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /* Harp String C
-	Hidden Street - Eliza’s Garden (200010303)
+	Hidden Street - Eliza's Garden (200010303)
  */
 
 var status;

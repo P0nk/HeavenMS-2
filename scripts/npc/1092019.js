@@ -60,7 +60,7 @@ function action(mode, type, selection) {
             status--;
         }
 
-        if (status == 0) {    // missing script for skill test found thanks to Jade™
+        if (status == 0) {    // missing script for skill test found thanks to Jade(TM)
             if (!cm.isQuestStarted(6400)) {
                 cm.sendOk("Who are you talking to me? If you're just bored, go bother somebody else.");
                 cm.dispose();

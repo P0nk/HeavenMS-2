@@ -20,7 +20,7 @@
 
 var status = -1;
 
-function start(mode, type, selection) { // missing script for questid found thanks to Jade™
+function start(mode, type, selection) { // missing script for questid found thanks to Jade(TM)
     if (mode == -1) {
         qm.dispose();
     } else {

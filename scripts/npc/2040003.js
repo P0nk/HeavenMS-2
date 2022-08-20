@@ -12,6 +12,7 @@ function start() {
         status++;
     } else {
         cm.sendOk("Access to #bToy Factory<Sector 4>#k is restricted to the public.");
+        cm.dispose();
     }
 }
 

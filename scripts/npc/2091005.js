@@ -43,7 +43,7 @@ function start() {
     }
 
     const YamlConfig = Java.type('config.YamlConfig');
-    belt_points = YamlConfig.config.server.USE_FAST_DOJO_UPGRADE ? Array(10, 90, 200, 460, 850) : Array(200, 1800, 4000, 9200, 17000);
+    belt_points = YamlConfig.config.server.USE_FAST_DOJO_UPGRADE ? Array(200, 500, 900, 1400, 2000) : Array(200, 1800, 4000, 9200, 17000);
 
     belt_on_inventory = [];
     for (var i = 0; i < belts.length; i++) {

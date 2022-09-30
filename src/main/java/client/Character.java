@@ -1108,8 +1108,18 @@ public class Character extends AbstractCharacterObject {
         } else if (job_ < 300) {                // 2nd~4th mage
             addmp += Randomizer.rand(450, 500);
         } else if (job_ > 0) {                  // 2nd~4th others
-            addhp += Randomizer.rand(300, 350);
-            addmp += Randomizer.rand(150, 200);
+        	if(job_ %10 == 0) {
+        		addhp += Randomizer.rand(800, 850);
+                addmp += Randomizer.rand(150, 200);
+        	}
+        	else if(job_ %10==1) {
+        		addhp += Randomizer.rand(1300, 1350);
+                addmp += Randomizer.rand(150, 200);
+        	}
+        	else {
+        		addhp += Randomizer.rand(1600, 1650);
+                addmp += Randomizer.rand(150, 200);
+        	}
         }
         
         /*

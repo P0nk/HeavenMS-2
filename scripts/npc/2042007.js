@@ -39,11 +39,11 @@ function action(mode, type, selection) {
             if (status == 0) {
                 if (cm.getChar().getParty() != null) {
                     var shiu = "";
-                    if (cm.getPlayer().getFestivalPoints() >= 300) {
+                    if (cm.getPlayer().getFestivalPoints() >= 500) {
                         shiu += "#rA#k";
                         cm.sendOk("Unfortunately, you either drew or lost the battle despite your excellent performance. Victory can be yours next time! \r\n\r\n#bYour result: " + shiu);
                         rnk = 10;
-                    } else if (cm.getPlayer().getFestivalPoints() >= 100) {
+                    } else if (cm.getPlayer().getFestivalPoints() >= 250) {
                         shiu += "#rB#k";
                         rnk = 20;
                         cm.sendOk("Unfortunately, you either drew or lost the battle, even with your ultimate performance. Just a little bit, and the victory could have been yours! \r\n\r\n#bYour result: " + shiu);
@@ -64,22 +64,22 @@ function action(mode, type, selection) {
                 switch (rnk) {
                     case 10:
                         cm.warp(980030000, 0);
-                        cm.gainExp(35000);
+                        cm.gainExp(14000);
                         cm.dispose();
                         break;
                     case 20:
                         cm.warp(980030000, 0);
-                        cm.gainExp(25000);
+                        cm.gainExp(10000);
                         cm.dispose();
                         break;
                     case 30:
                         cm.warp(980030000, 0);
-                        cm.gainExp(12500);
+                        cm.gainExp(5000);
                         cm.dispose();
                         break;
                     case 40:
                         cm.warp(980030000, 0);
-                        cm.gainExp(3500);
+                        cm.gainExp(1750);
                         cm.dispose();
                         break;
                     default:
@@ -92,11 +92,11 @@ function action(mode, type, selection) {
             if (status == 0) {
                 if (cm.getChar().getParty() != null) {
                     var shi = "";
-                    if (cm.getPlayer().getFestivalPoints() >= 300) {
+                    if (cm.getPlayer().getFestivalPoints() >= 500) {
                         shi += "#rA#k";
                         rnk = 1;
                         cm.sendOk("Congratulations on your victory!!! What a performance! The opposite group could not do anything! I hope the same good work next time! \r\n\r\n#bYour result: " + shi);
-                    } else if (cm.getPlayer().getFestivalPoints() >= 100) {
+                    } else if (cm.getPlayer().getFestivalPoints() >= 250) {
                         shi += "#rB#k";
                         rnk = 2;
                         cm.sendOk("Congratulations on your victory! That was awesome! You did a good job against the opposing group! Just a little longer, and you'll definitely get an A next time! \r\n\r\n#bYour result: " + shi);
@@ -117,22 +117,22 @@ function action(mode, type, selection) {
                 switch (rnk) {
                     case 1:
                         cm.warp(980030000, 0);
-                        cm.gainExp(875000);
+                        cm.gainExp(262500);
                         cm.dispose();
                         break;
                     case 2:
                         cm.warp(980030000, 0);
-                        cm.gainExp(700000);
+                        cm.gainExp(210000);
                         cm.dispose();
                         break;
                     case 3:
                         cm.warp(980030000, 0);
-                        cm.gainExp(555000);
+                        cm.gainExp(165000);
                         cm.dispose();
                         break;
                     case 4:
                         cm.warp(980030000, 0);
-                        cm.gainExp(100000);
+                        cm.gainExp(30000);
                         cm.dispose();
                         break;
                     default:

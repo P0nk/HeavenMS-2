@@ -25,6 +25,34 @@
  * @func: Cafe PQ Rewarder
  */
 
+
+function start() {
+    status = -1;
+    action(1, 0, 0);
+}
+
+function action(mode, type, selection) {
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0 && type > 0) {
+            cm.dispose();
+            return;
+        }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        if (status == 0) {
+	    cm.sendOk("The vending machine of the Internet Cafe is currently being re-coded, will be updated on discord when it works as intended.");
+        } else {
+	    cm.dispose();
+        }
+    }
+}
+/*
 var status;
 
 var itemSet_lv6 = [1442046, 1432018, 1102146, 1102145, 2022094, 2022544, 2022123, 2022310, 2040727, 2041058, 2040817, 4000030, 4003005, 4003000, 4011007, 4021009, 4011008, 3010098];
@@ -259,4 +287,4 @@ function hasRewardSlot(lvTarget, lvQty) {
     }
 
     return true;
-}
+}*/

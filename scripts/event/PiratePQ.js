@@ -339,7 +339,7 @@ function clearPQ(eim) {
     eim.setEventCleared();
 
     var chests = parseInt(eim.getProperty("openedChests"));
-    var expGain = (chests == 0 ? 28000 : (chests == 1 ? 35000 : 42000));
+    var expGain = (chests == 0 ? 63000 : (chests == 1 ? 78750 : 94500));
     eim.giveEventPlayersExp(expGain);
 
     eim.warpEventTeam(925100600);

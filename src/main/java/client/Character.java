@@ -10084,11 +10084,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getLinkedLevel() {
-        return linkedLevel;
+        return this.linkedLevel;
     }
 
     public String getLinkedName() {
-        return linkedName;
+        return this.name;
     }
 
     public CashShop getCashShop() {

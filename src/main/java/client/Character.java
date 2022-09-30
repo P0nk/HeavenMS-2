@@ -5777,6 +5777,14 @@ public class Character extends AbstractCharacterObject {
 
         return m;
     }
+    
+    public int getSavedPortal(String type) {
+    	SavedLocation sl = savedLocations[SavedLocationType.fromString(type).ordinal()];
+    	if (sl == null) {
+            return -1;
+        }
+        return sl.getPortal();
+    }
 
     public String getSearch() {
         return search;

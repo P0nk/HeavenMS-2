@@ -27,15 +27,18 @@ import client.inventory.Equip;
 import client.inventory.Item;
 import client.processor.action.BuybackProcessor;
 import config.YamlConfig;
+import constants.id.MapId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
+import scripting.npc.NPCScriptManager;
+import scripting.quest.QuestScriptManager;
 import server.MTSItemInfo;
 import server.maps.FieldLimit;
+import server.maps.MapleMap;
 import server.maps.MiniDungeonInfo;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,12 +50,29 @@ import java.util.List;
 public final class EnterMTSHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        Character chr = c.getPlayer();
+    	Character chr = c.getPlayer();
+        int currmap = chr.getMapId();
+        boolean warptofm = true;
 
         if (!chr.isAlive() && YamlConfig.config.server.USE_BUYBACK_SYSTEM) {
             BuybackProcessor.processBuyback(c);
             c.sendPacket(PacketCreator.enableActions());
         } else {
+        	if(warptofm && currmap / 100 != 9100000) {
+        		if (!MapId.isMapleIsland(currmap)) {
+        			chr.saveLocation("FREE_MARKET");
+        			c.sendPacket(PacketCreator.playPortalSound());
+        			chr.changeMap(910000000, "out00");
+        		}
+        		else {
+        			chr.message("You can't warp to fm from this map");
+        	        NPCScriptManager.getInstance().dispose(c);
+        	        QuestScriptManager.getInstance().dispose(c);
+        	        c.sendPacket(PacketCreator.enableActions());
+        	        c.removeClickedNPC();
+        		}
+        		return;
+        	}
             if (!YamlConfig.config.server.USE_MTS) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;

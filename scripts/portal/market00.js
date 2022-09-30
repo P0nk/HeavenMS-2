@@ -21,9 +21,10 @@
 */
 function enter(pi) {
     try {
+	var portal = pi.getPlayer().getSavedPortal("FREE_MARKET");
         var toMap = pi.getPlayer().getSavedLocation("FREE_MARKET");
         pi.playPortalSound();
-        pi.warp(toMap, pi.getMarketPortalId(toMap));
+        pi.warp(toMap, portal);
     } catch (err) {
         pi.playPortalSound();
         pi.warp(100000000, 0);

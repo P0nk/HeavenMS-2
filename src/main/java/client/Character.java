@@ -3202,6 +3202,50 @@ public class Character extends AbstractCharacterObject {
     public int getAccountID() {
         return accountid;
     }
+    public static boolean codeExists(String code) {
+    	try (Connection con = DatabaseConnection.getConnection()){
+    		PreparedStatement ps = con.prepareStatement("SELECT value FROM cosmic.code_nx where used = 0 and code = ?");
+    		ps.setString(1, code);
+    		try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return false;
+                }
+                else {
+                	return true;
+                } 
+    		}
+    	}
+    	catch (Exception e) {
+            e.printStackTrace();
+        }      	
+    	return false;
+    }
+    public void redeemCode(String code, int acctid) {
+    	try (Connection con = DatabaseConnection.getConnection()){
+    		PreparedStatement ps = con.prepareStatement("SELECT value FROM cosmic.code_nx where used = 0 and code = ?");
+    		ps.setString(1, code);
+    		ResultSet rs = ps.executeQuery();
+    		rs.next();
+    		int amt = rs.getInt("value");
+    		this.getCashShop().gainCash(4, amt);
+    		ps = con.prepareStatement("Update cosmic.code_nx SET used = 1 WHERE code = ?");
+    		ps.setString(1, code);
+    		ps.executeUpdate();
+    	}
+    	catch (Exception e) {
+            e.printStackTrace();
+        } 
+    }
+    
+    public boolean gainNX(String code) {
+    	if(codeExists(code)) {
+        	String character_name = this.name;
+        	int player_id = getIdByName(character_name);
+            redeemCode(code, player_id);
+            return true;
+        }
+    	return false;
+    }
 
     public List<PlayerCoolDownValueHolder> getAllCooldowns() {
         List<PlayerCoolDownValueHolder> ret = new ArrayList<>();

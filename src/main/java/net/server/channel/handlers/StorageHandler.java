@@ -21,10 +21,14 @@
  */
 package net.server.channel.handlers;
 
+import client.Character;
 import client.Client;
 import client.processor.npc.StorageProcessor;
 import net.AbstractPacketHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.packet.InPacket;
+import tools.HexTool;
 
 /**
  * @author Matze
@@ -32,6 +36,9 @@ import net.packet.InPacket;
 public final class StorageHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
+    	final Logger log = LoggerFactory.getLogger("Storage");
+    	log.warn(c.getPlayer().getName() + " " + HexTool.toHexString(p.getBytes()));
         StorageProcessor.storageAction(p, c);
+        
     }
 }

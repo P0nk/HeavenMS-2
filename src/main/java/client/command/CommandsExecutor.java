@@ -230,17 +230,12 @@ public class CommandsExecutor {
         addCommand("buffmap", 2, BuffMapCommand.class);
         addCommand("buff", 2, BuffCommand.class);
         addCommand("bomb", 2, BombCommand.class);
-        addCommand("dc", 2, DcCommand.class);
         addCommand("cleardrops", 2, ClearDropsCommand.class);
         addCommand("clearslot", 2, ClearSlotCommand.class);
         addCommand("clearsavelocs", 2, ClearSavedLocationsCommand.class);
         addCommand("warp", 2, WarpCommand.class);
-        addCommand(new String[]{"warphere", "summon"}, 2, SummonCommand.class);
-        addCommand(new String[]{"warpto", "reach", "follow"}, 2, ReachCommand.class);
-        addCommand("gmshop", 2, GmShopCommand.class);
+        addCommand(new String[]{"warpto", "reach", "follow"}, 2, ReachCommand.class);        
         addCommand("heal", 2, HealCommand.class);
-        addCommand("item", 2, ItemCommand.class);
-        addCommand("drop", 2, ItemDropCommand.class);
         addCommand("level", 2, LevelCommand.class);
         addCommand("levelpro", 2, LevelProCommand.class);
         addCommand("setslot", 2, SetSlotCommand.class);
@@ -249,21 +244,27 @@ public class CommandsExecutor {
         addCommand("maxskill", 2, MaxSkillCommand.class);
         addCommand("resetskill", 2, ResetSkillCommand.class);
         addCommand("search", 2, SearchCommand.class);
-        addCommand("jail", 2, JailCommand.class);
-        addCommand("unjail", 2, UnJailCommand.class);
         addCommand("job", 2, JobCommand.class);
         addCommand("unbug", 2, UnBugCommand.class);
         addCommand("id", 2, IdCommand.class);
-        addCommand("gachalist", GachaListCommand.class);
-        addCommand("loot", LootCommand.class);
-        addCommand("mobskill", MobSkillCommand.class);
+        
+        
 
         commandsNameDesc.add(levelCommandsCursor);
     }
 
     private void registerLv3Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
+        addCommand("dc", 3, DcCommand.class);
+        addCommand(new String[]{"warphere", "summon"}, 3, SummonCommand.class);
+        addCommand("gmshop", 3, GmShopCommand.class);
+        addCommand("drop", 3, ItemDropCommand.class);
+        addCommand("item", 3, ItemCommand.class);
+        addCommand("jail", 3, JailCommand.class);
+        addCommand("unjail", 3, UnJailCommand.class);
+        addCommand("gachalist", 3, GachaListCommand.class);
+        addCommand("loot", 3, LootCommand.class);
+        addCommand("mobskill", 3, MobSkillCommand.class);
         addCommand("debuff", 3, DebuffCommand.class);
         addCommand("fly", 3, FlyCommand.class);
         addCommand("spawn", 3, SpawnCommand.class);

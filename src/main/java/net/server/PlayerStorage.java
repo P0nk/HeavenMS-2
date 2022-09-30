@@ -32,6 +32,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerStorage {
     private final Map<Integer, Character> storage = new LinkedHashMap<>();
     private final Map<String, Character> nameStorage = new LinkedHashMap<>();
+    private final Map<Integer, Character> accountidStorage = new LinkedHashMap<>();
     private final Lock rlock;
     private final Lock wlock;
 
@@ -46,6 +47,7 @@ public class PlayerStorage {
         try {
             storage.put(chr.getId(), chr);
             nameStorage.put(chr.getName().toLowerCase(), chr);
+            accountidStorage.put(chr.getAccountID(), chr);
         } finally {
             wlock.unlock();
         }
@@ -57,6 +59,7 @@ public class PlayerStorage {
             Character mc = storage.remove(chr);
             if (mc != null) {
                 nameStorage.remove(mc.getName().toLowerCase());
+                accountidStorage.remove(mc.getAccountID());
             }
 
             return mc;
@@ -78,6 +81,15 @@ public class PlayerStorage {
         rlock.lock();
         try {
             return storage.get(id);
+        } finally {
+            rlock.unlock();
+        }
+    }
+    
+    public Character getCharacterByAccountId(int id) {
+        rlock.lock();
+        try {
+            return accountidStorage.get(id);
         } finally {
             rlock.unlock();
         }

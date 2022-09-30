@@ -136,8 +136,6 @@ public class Character extends AbstractCharacterObject {
     private boolean equippedMesoMagnet = false, equippedItemPouch = false, equippedPetItemIgnore = false;
     private boolean usedSafetyCharm = false;
     private float autopotHpAlert, autopotMpAlert;
-    private int linkedLevel = 0;
-    private String linkedName = null;
     private boolean finishedDojoTutorial;
     private boolean usedStorage = false;
     private String name;
@@ -6446,38 +6444,48 @@ public class Character extends AbstractCharacterObject {
 
         level++;
         if(level == 50) {
-        	log.info(this.name + " has reached lvl 50");
+        	log.info(this.name + " has reached lvl 50" + " (acct id: " + accountid + ")");
         	try (Connection con = DatabaseConnection.getConnection()) {
         		try (PreparedStatement ps = con.prepareStatement("SELECT refferral FROM accounts where id = ?")) {
-        			ps.setInt(1, id);
+        			ps.setInt(1, accountid);
         			try (ResultSet rs = ps.executeQuery()) {
         				if (rs.next()) {
-        					Integer ref_id = rs.getInt("refferral");
-        					log.info(id + " referer is " + ref_id);
-        					this.getCashShop().gainCash(1, 5000);
-        					log.info("Added 5,000 cash to: " + this.name);
-        					try (PreparedStatement ps2 = con.prepareStatement("SELECT loggedin FROM accounts WHERE id = ?")) {
-        						ps2.setInt(1, ref_id);
-        						try (ResultSet rs2 = ps2.executeQuery()) {
-        							if (rs2.next()) {
-        								boolean offline = rs2.getInt("loggedin") == 0;
-        								if (!rs2.wasNull() && offline) {
-        									try (PreparedStatement ps3 = con.prepareStatement("Update accounts SET nxCredit = nxCredit + 5000 WHERE id = ?")){
-        										ps3.setInt(1, ref_id);
-        										ps3.executeUpdate();
+        					int ref_id = rs.getInt("refferral");
+        					if(ref_id > 0) {
+        						log.info(accountid + " referer is " + ref_id);
+        						this.getCashShop().gainCash(1, 5000);
+        						log.info("Added 5,000 cash to: " + this.name);
+        						try (PreparedStatement ps2 = con.prepareStatement("SELECT loggedin FROM accounts WHERE id = ?")) {
+        							ps2.setInt(1, ref_id);
+        							try (ResultSet rs2 = ps2.executeQuery()) {
+        								if (rs2.next()) {
+        									boolean offline = rs2.getInt("loggedin") == 0;
+        									if (!rs2.wasNull() && offline) {
+        										try (PreparedStatement ps3 = con.prepareStatement("Update accounts SET nxCredit = nxCredit + 5000 WHERE id = ?")){
+        											ps3.setInt(1, ref_id);
+        											ps3.executeUpdate();
+        											log.info("Added 5,000 cash to: " + ref_id);
+        										}
         									}
-        								}
-        								else {
-        									log.info("Account " + ref_id + " needs to be compensated 5k nx for referrer.");
+        									else {
+        										Character victim = client.getWorldServer().getPlayerStorage().getCharacterByAccountId(ref_id);
+        								        if (victim != null) {
+        								            victim.getCashShop().gainCash(1, 5000);
+        								            log.info("Added 5,000 cash to: " + victim.name);
+        								        }
+        								        else {
+        										log.info("Account " + ref_id + " needs to be compensated 5k nx for referrer.");
+        								        }
+        									}
         								}
         							}
         						}
+        						try (PreparedStatement ps4 = con.prepareStatement("Update accounts SET refferral = null WHERE id = ?")) {
+        							ps4.setInt(1, accountid);
+        							ps4.executeUpdate();
+        							log.info("Set refferral to null for id: " + accountid);
+        						}
         					}
-							try (PreparedStatement ps4 = con.prepareStatement("Update accounts SET refferral = null WHERE id = ?")) {
-								ps4.setInt(1, id);
-								ps4.executeUpdate();
-								log.info("Set refferral to null for id: " + id);
-							}
         				}
         			}
         		}
@@ -7305,7 +7313,7 @@ public class Character extends AbstractCharacterObject {
             ret.autoban = new AutobanManager(ret);
 
             // Blessing of the Fairy
-            try (PreparedStatement ps = con.prepareStatement("SELECT name, level FROM characters WHERE accountid = ? AND id != ? ORDER BY level DESC limit 1")) {
+            /*try (PreparedStatement ps = con.prepareStatement("SELECT name, level FROM characters WHERE accountid = ? AND id != ? ORDER BY level DESC limit 1")) {
                 ps.setInt(1, ret.accountid);
                 ps.setInt(2, charid);
 
@@ -7315,7 +7323,7 @@ public class Character extends AbstractCharacterObject {
                         ret.linkedLevel = rs.getInt("level");
                     }
                 }
-            }
+            }*/
 
             if (channelserver) {
                 final Map<Integer, QuestStatus> loadedQuestStatus = new LinkedHashMap<>();
@@ -10186,7 +10194,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getLinkedLevel() {
-        return this.linkedLevel;
+        return this.level;
     }
 
     public String getLinkedName() {

@@ -62,8 +62,9 @@ public class WhatDropsFromCommand extends Command {
                         if (name == null || name.equals("null") || drop.chance == 0) {
                             continue;
                         }
-                        float chance = Math.max(1000000 / drop.chance / (!MonsterInformationProvider.getInstance().isBoss(mobId) ? player.getDropRate() : player.getBossDropRate()), 1);
-                        output += "- " + name + " (1/" + (int) chance + ")\r\n";
+                        //float chance = Math.max(1000000 / drop.chance / (!MonsterInformationProvider.getInstance().isBoss(mobId) ? player.getDropRate() : player.getBossDropRate()), 1);
+                        //output += "- " + name + " (1/" + (int) chance + ")\r\n";
+                        output += "- " + name + "\r\n";
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         continue;

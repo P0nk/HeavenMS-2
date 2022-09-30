@@ -6485,7 +6485,7 @@ public class Character extends AbstractCharacterObject {
             ThreadManager.getInstance().newTask(r);
         }
 
-        levelUpMessages();
+        //levelUpMessages();
         guildUpdate();
 
         FamilyEntry familyEntry = getFamilyEntry();

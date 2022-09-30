@@ -527,7 +527,7 @@ public class Monster extends AbstractLoadedLife {
 
     private void distributePartyExperience(Map<Character, Long> partyParticipation, float expPerDmg, Set<Character> underleveled, Map<Integer, Float> personalRatio, double sdevRatio) {
         IntervalBuilder leechInterval = new IntervalBuilder();
-        leechInterval.addInterval(this.getLevel() - YamlConfig.config.server.EXP_SPLIT_LEVEL_INTERVAL, this.getLevel() + YamlConfig.config.server.EXP_SPLIT_LEVEL_INTERVAL);
+        leechInterval.addInterval(this.getLevel() - YamlConfig.config.server.EXP_SPLIT_LEVEL_INTERVAL, 199);
 
         long maxDamage = 0, partyDamage = 0;
         Character participationMvp = null;
@@ -541,9 +541,10 @@ public class Monster extends AbstractLoadedLife {
             }
 
             // thanks Thora for pointing out leech level limitation
-            int chrLevel = e.getKey().getLevel();
-            leechInterval.addInterval(chrLevel - YamlConfig.config.server.EXP_SPLIT_LEECH_INTERVAL, chrLevel + YamlConfig.config.server.EXP_SPLIT_LEECH_INTERVAL);
         }
+        int chrLevel = participationMvp.getLevel();
+        leechInterval.addInterval(chrLevel - YamlConfig.config.server.EXP_SPLIT_LEECH_INTERVAL, 199);
+
 
         List<Character> expMembers = new LinkedList<>();
         int totalPartyLevel = 0;
@@ -561,8 +562,9 @@ public class Monster extends AbstractLoadedLife {
             }
         } else {    // thanks Ari for noticing unused server flag after EXP system overhaul
             for (Character member : partyParticipation.keySet().iterator().next().getPartyMembersOnSameMap()) {
-                totalPartyLevel += member.getLevel();
-                expMembers.add(member);
+            	if (leechInterval.inInterval(member.getLevel()))
+            		totalPartyLevel += member.getLevel();
+            		expMembers.add(member);
             }
         }
 

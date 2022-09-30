@@ -118,7 +118,10 @@ public class CashShop {
                         item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
                         break;
                     }
-                } else {
+                } else if(petid == -1 && Server.getInstance().getCurrentTime() + DAYS.toMillis(period) == Server.getInstance().getCurrentTime() + DAYS.toMillis(90)){
+                	item.setExpiration(0);
+                }
+                else {
                     item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(period));
                 }
             }

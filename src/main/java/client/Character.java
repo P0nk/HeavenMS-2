@@ -6401,6 +6401,46 @@ public class Character extends AbstractCharacterObject {
         }
 
         level++;
+        if(level == 50) {
+        	log.info(this.name + " has reached lvl 50");
+        	try (Connection con = DatabaseConnection.getConnection()) {
+        		try (PreparedStatement ps = con.prepareStatement("SELECT refferral FROM accounts where id = ?")) {
+        			ps.setInt(1, id);
+        			try (ResultSet rs = ps.executeQuery()) {
+        				if (rs.next()) {
+        					Integer ref_id = rs.getInt("refferral");
+        					log.info(id + " referer is " + ref_id);
+        					this.getCashShop().gainCash(1, 5000);
+        					log.info("Added 5,000 cash to: " + this.name);
+        					try (PreparedStatement ps2 = con.prepareStatement("SELECT loggedin FROM accounts WHERE id = ?")) {
+        						ps2.setInt(1, ref_id);
+        						try (ResultSet rs2 = ps2.executeQuery()) {
+        							if (rs2.next()) {
+        								boolean offline = rs2.getInt("loggedin") == 0;
+        								if (!rs2.wasNull() && offline) {
+        									try (PreparedStatement ps3 = con.prepareStatement("Update accounts SET nxCredit = nxCredit + 5000 WHERE id = ?")){
+        										ps3.setInt(1, ref_id);
+        										ps3.executeUpdate();
+        									}
+        								}
+        								else {
+        									log.info("Account " + ref_id + " needs to be compensated 5k nx for referrer.");
+        								}
+        							}
+        						}
+        					}
+							try (PreparedStatement ps4 = con.prepareStatement("Update accounts SET refferral = null WHERE id = ?")) {
+								ps4.setInt(1, id);
+								ps4.executeUpdate();
+								log.info("Set refferral to null for id: " + id);
+							}
+        				}
+        			}
+        		}
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        	}
+        }
         if (level >= getMaxClassLevel()) {
             exp.set(0);
 

@@ -42,18 +42,18 @@ public class Gachapon {
     public enum GachaponType {
 
         GLOBAL(-1, -1, -1, -1, new Global()),
-        HENESYS(NpcId.GACHAPON_HENESYS, 90, 8, 2, new Henesys()),
-        ELLINIA(NpcId.GACHAPON_ELLINIA, 90, 8, 2, new Ellinia()),
-        PERION(NpcId.GACHAPON_PERION, 90, 8, 2, new Perion()),
-        KERNING_CITY(NpcId.GACHAPON_KERNING, 90, 8, 2, new KerningCity()),
-        SLEEPYWOOD(NpcId.GACHAPON_SLEEPYWOOD, 90, 8, 2, new Sleepywood()),
-        MUSHROOM_SHRINE(NpcId.GACHAPON_MUSHROOM_SHRINE, 90, 8, 2, new MushroomShrine()),
-        SHOWA_SPA_MALE(NpcId.GACHAPON_SHOWA_MALE, 90, 8, 2, new ShowaSpaMale()),
-        SHOWA_SPA_FEMALE(NpcId.GACHAPON_SHOWA_FEMALE, 90, 8, 2, new ShowaSpaFemale()),
-        LUDIBRIUM(NpcId.GACHAPON_LUDIBRIUM, 90, 8, 2, new Ludibrium()),
-        NEW_LEAF_CITY(NpcId.GACHAPON_NLC, 90, 8, 2, new NewLeafCity()),
-        EL_NATH(NpcId.GACHAPON_EL_NATH, 90, 8, 2, new ElNath()),
-        NAUTILUS_HARBOR(NpcId.GACHAPON_NAUTILUS, 90, 8, 2, new NautilusHarbor());
+        HENESYS(NpcId.GACHAPON_HENESYS, 85, 10, 5, new Henesys()),
+        ELLINIA(NpcId.GACHAPON_ELLINIA, 85, 10, 5, new Ellinia()),
+        PERION(NpcId.GACHAPON_PERION, 85, 10, 5, new Perion()),
+        KERNING_CITY(NpcId.GACHAPON_KERNING, 85, 10, 5, new KerningCity()),
+        SLEEPYWOOD(NpcId.GACHAPON_SLEEPYWOOD, 85, 10, 5, new Sleepywood()),
+        MUSHROOM_SHRINE(NpcId.GACHAPON_MUSHROOM_SHRINE, 85, 10, 5, new MushroomShrine()),
+        SHOWA_SPA_MALE(NpcId.GACHAPON_SHOWA_MALE, 85, 10, 5, new ShowaSpaMale()),
+        SHOWA_SPA_FEMALE(NpcId.GACHAPON_SHOWA_FEMALE, 85, 10, 5, new ShowaSpaFemale()),
+        LUDIBRIUM(NpcId.GACHAPON_LUDIBRIUM, 85, 10, 5, new Ludibrium()),
+        NEW_LEAF_CITY(NpcId.GACHAPON_NLC, 85, 10, 5, new NewLeafCity()),
+        EL_NATH(NpcId.GACHAPON_EL_NATH, 85, 10, 5, new ElNath()),
+        NAUTILUS_HARBOR(NpcId.GACHAPON_NAUTILUS, 85, 10, 5, new NautilusHarbor());
 
         private static final GachaponType[] values = GachaponType.values();
 

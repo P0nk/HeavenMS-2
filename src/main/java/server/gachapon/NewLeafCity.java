@@ -27,7 +27,7 @@ public class NewLeafCity extends GachaponItems {
                 1312002, 1432013, 1060030, 1422008, 1050022, 1050011, 1402013, 1402017, 1302012,
 
                 /* Mage equipment */
-                1002074, 1050029, 1040093, 1050056, 1050039, 1382008,
+                1002074, 1050029, 1040093, 1050056, 1050039, 1382008,1382054, 1382055, 1372017,
 
                 /* Bowman equipment */
                 1002159, 1061051, 1040023,
@@ -43,12 +43,14 @@ public class NewLeafCity extends GachaponItems {
 
     @Override
     public int[] getUncommonItems() {
-        return new int[]{2022284, 2040811, 2040815, 2040811, 1102041, 1102042, 1082149};
+        return new int[]{2022284, 2040811, 2040815, 2040811, 4032015, 4032016, 4032017};
     }
 
     @Override
     public int[] getRareItems() {
-        return new int[]{};
+        return new int[]{
+        		1072344, 1422028, 1322052, 1092049, 1412026, 1312031
+        };
     }
 
 }

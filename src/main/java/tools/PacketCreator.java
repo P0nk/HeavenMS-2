@@ -591,6 +591,9 @@ public class PacketCreator {
      * @return The login failed packet.
      */
     public static Packet getLoginFailed(int reason) {
+    	if(reason == 7) {
+    		Thread.dumpStack();
+    	}
         OutPacket p = OutPacket.create(SendOpcode.LOGIN_STATUS);
         p.writeByte(reason);
         p.writeByte(0);

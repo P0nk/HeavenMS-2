@@ -19,7 +19,7 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1 && current > 0) {
+    if (mode != 1 || status > 8) {
         cm.dispose();
         return;
     } else {
@@ -57,6 +57,7 @@ function action(mode, type, selection) {
             if (cm.haveItem(4030012, 15)) {
                 cm.gainItem(4030012, -15);
                 cm.gainItem(4080100, 1);
+		cm.dispose();
             } else {
                 cm.sendNext("You want #bA set of Match Cards#k? Hmm...to make A set of Match Cards, you'll need some #bMonster Cards#k. Monster Card can be obtained by taking out the monsters all around the island. Collect 15 Monster Cards and you can make a set of A set of Match Cards."); //Lmfao a set of A set xD
                 cm.dispose();
@@ -115,7 +116,8 @@ function action(mode, type, selection) {
         }
     } else if (status == 8) {
         if (current == 2) {
-            cm.sendPrev("When the next game starts, the loser will go first. Also, no one is allowed to leave in the middle of a game. If you do, you may need to request either a #bforfeit or tie#k. (Of course, if you request a forfeit, you'll lose the game.) And if you click on 'Leave' in the middle of the game and call to leave after the game, you'll leave the room right after the game is over. This will be a much more useful way to leave.");
-        }
+            cm.sendPrev("When the next game starts, the loser will go first. Also, no one is allowed to leave in the middle of a game. If you do, you may need to request either a #bforfeit or tie#k. (Of course, if you request a forfeit, you'll lose the game.) And if you click on 'Leave' in the middle of the game and call to leave after the game, you'll leave the room right after the game is over. This will be a much more useful way to leave.");	            
+	}
+	cm.dispose();
     }
 }  

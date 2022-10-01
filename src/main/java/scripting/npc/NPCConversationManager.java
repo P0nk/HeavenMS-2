@@ -420,7 +420,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
         Gachapon.log(getPlayer(), item.getId(), map);
 
-        if (item.getTier() > 0) { //Uncommon and Rare
+        if (item.getTier() > 1) { //Rare only
             Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.gachaponMessage(itemGained, map, getPlayer()));
         }
     }

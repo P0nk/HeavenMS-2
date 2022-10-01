@@ -61,7 +61,7 @@ public class WhoDropsCommand extends Command {
                         Pair<Integer, String> data = listIterator.next();
                         output += "#b" + data.getRight() + "#k is dropped by:\r\n";
                         try (Connection con = DatabaseConnection.getConnection();
-                             PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE itemid = ? LIMIT 50")) {
+                             PreparedStatement ps = con.prepareStatement("SELECT DISTINCT dropperid FROM drop_data WHERE itemid = ? LIMIT 50")) {
                             ps.setInt(1, data.getLeft());
 
                             try (ResultSet rs = ps.executeQuery()) {

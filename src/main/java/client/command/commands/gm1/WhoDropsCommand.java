@@ -57,7 +57,7 @@ public class WhoDropsCommand extends Command {
                 Iterator<Pair<Integer, String>> listIterator = ItemInformationProvider.getInstance().getItemDataByName(searchString).iterator();
                 if (listIterator.hasNext()) {
                     int count = 1;
-                    while (listIterator.hasNext() && count <= 3) {
+                    while (listIterator.hasNext() && count <= 10) {
                         Pair<Integer, String> data = listIterator.next();
                         output += "#b" + data.getRight() + "#k is dropped by:\r\n";
                         try (Connection con = DatabaseConnection.getConnection();

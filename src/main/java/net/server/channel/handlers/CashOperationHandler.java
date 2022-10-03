@@ -95,7 +95,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.enableCSActions();
                             return;
                         }
-
+                        log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(cItem.getItemId()), cItem.getSN(), cItem.getPrice());
                         Item item = cItem.toItem();
                         cs.gainCash(useNX, cItem, chr.getWorld());  // thanks Rohenn for noticing cash operations after item acquisition
                         cs.addToInventory(item);
@@ -119,6 +119,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     }
+                    log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(cItem.getItemId()), cItem.getSN(), cItem.getPrice());
                     if (!checkBirthday(c, birthday)) {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xC4));
                         return;
@@ -181,6 +182,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.enableCSActions();
                             return;
                         }
+                        log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(cItem.getItemId()), cItem.getSN(), cItem.getPrice());
                         int qty = 8;
                         if (!chr.canGainSlots(type, qty)) {
                             c.enableCSActions();
@@ -225,6 +227,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.enableCSActions();
                             return;
                         }
+                        log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(cItem.getItemId()), cItem.getSN(), cItem.getPrice());
                         int qty = 8;
                         if (!chr.getStorage().canGainSlots(qty)) {
                             c.enableCSActions();
@@ -250,6 +253,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     }
+                    log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(cItem.getItemId()), cItem.getSN(), cItem.getPrice());
                     if (!c.canGainCharacterSlot()) {
                         chr.dropMessage(1, "You have already used up all 12 extra character slots.");
                         c.enableCSActions();
@@ -419,6 +423,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         return;
                     }
                     if (cItem.getSN() == 50600000 && YamlConfig.config.server.ALLOW_CASHSHOP_NAME_CHANGE) {
+                    	log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(cItem.getItemId()), cItem.getSN(), cItem.getPrice());
                         p.readString(); //old name
                         String newName = p.readString();
                         if (!Character.canCreateChar(newName) || chr.getLevel() < 10) { //(longest ban duration isn't tracked currently)
@@ -447,6 +452,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     }
+                    log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(cItem.getItemId()), cItem.getSN(), cItem.getPrice());
                     if (cItem.getSN() == 50600001 && YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER) {
                         int newWorldSelection = p.readInt();
 
@@ -493,7 +499,6 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
     private static boolean canBuy(Character chr, CashItem item, int cash) {
         if (item != null && item.isOnSale() && item.getPrice() <= cash) {
-            log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSN(), item.getPrice());
             return true;
         } else {
             return false;

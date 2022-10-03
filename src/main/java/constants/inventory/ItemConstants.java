@@ -47,7 +47,7 @@ public final class ItemConstants {
     public final static short PET_COME = 0x80;
     public final static short ACCOUNT_SHARING = 0x100;
     public final static short MERGE_UNTRADEABLE = 0x200;
-
+    public final static int[] PREMIUM_ITEMS = {5610001, 5610000, 5570000, 5470000};
     public final static boolean EXPIRING_ITEMS = true;
     public final static Set<Integer> permanentItemids = new HashSet<>();
 
@@ -163,6 +163,16 @@ public final class ItemConstants {
     public static boolean isRateCoupon(int itemId) {
         int itemType = itemId / 1000;
         return itemType == 5211 || itemType == 5360;
+    }
+    
+    public static boolean isPremium(int itemId){
+    	if(isRateCoupon(itemId))
+    		return true;
+    	for(int i = 0; i < PREMIUM_ITEMS.length; i++) {
+    		if(PREMIUM_ITEMS[i] == itemId) 
+    			return true;
+    	}
+    	return false;
     }
 
     public static boolean isExpCoupon(int couponId) {

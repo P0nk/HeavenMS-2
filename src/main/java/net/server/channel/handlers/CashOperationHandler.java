@@ -79,6 +79,11 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     }
 
                     if (action == 0x03) { // Item
+                    	if(ItemConstants.isPremium(cItem.getItemId()) && useNX != 4) {
+                    		chr.dropMessage(1, "This item can only be purchased with nxPrepaid");
+                    		c.enableCSActions();
+                    		return;
+                    	}
                         if (ItemConstants.isCashStore(cItem.getItemId()) && chr.getLevel() < 16) {
                             c.enableCSActions();
                             return;

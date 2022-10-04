@@ -862,6 +862,10 @@ public class StatEffect {
 
     // primary: the player caster of the buff
     private boolean applyTo(Character applyfrom, Character applyto, boolean primary, Point pos, boolean useMaxRange, int affectedPlayers) {
+    	if(applyfrom.getMapId() >= 910000000 && applyfrom.getMapId() <= 910000023 && !applyfrom.isGM()) {
+    		applyto.sendPacket(PacketCreator.enableActions());
+    		return false;
+    	}
         if (skill && (sourceid == GM.HIDE || sourceid == SuperGM.HIDE)) {
             applyto.toggleHide(false);
             return true;

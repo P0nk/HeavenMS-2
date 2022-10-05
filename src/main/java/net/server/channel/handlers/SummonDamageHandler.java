@@ -108,7 +108,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             int damage = attackEntry.getDamage();
             Monster target = player.getMap().getMonsterByOid(attackEntry.getMonsterOid());
             if (target != null) {
-                if (damage > maxDmg) {
+                if (damage > maxDmg * 1.5) {
                     AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");
                     final String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(target.getId());
                     log.info("Possible exploit - chr {} used a summon of skillId {} to attack {} with damage {} (max: {})",

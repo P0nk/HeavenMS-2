@@ -862,7 +862,7 @@ public class StatEffect {
 
     // primary: the player caster of the buff
     private boolean applyTo(Character applyfrom, Character applyto, boolean primary, Point pos, boolean useMaxRange, int affectedPlayers) {
-    	if(applyfrom.getMapId() >= 910000000 && applyfrom.getMapId() <= 910000023 && !applyfrom.isGM()) {
+    	if(applyfrom.getMapId() >= 910000000 && applyfrom.getMapId() <= 910000023 && !applyfrom.isGM() && applyfrom.getName() != applyto.getName()) {
     		applyto.sendPacket(PacketCreator.enableActions());
     		return false;
     	}

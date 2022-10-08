@@ -185,7 +185,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
     private static void announceCannotScroll(Client c, boolean legendarySpirit) {
         if (legendarySpirit) {
-            c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), Equip.ScrollResult.FAIL, false, false));
+            c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), Equip.ScrollResult.FAIL, true, false));
         } else {
             c.sendPacket(PacketCreator.getInventoryFull());
         }

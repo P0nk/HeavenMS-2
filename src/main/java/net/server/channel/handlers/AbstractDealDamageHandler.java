@@ -857,7 +857,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 // Warn if the damage is over 1.5x what we calculated above.
-                if (damage > maxWithCrit * 1.5) {
+                if ((damage > maxWithCrit * 1.5 && chr.getJob().getId() != 132) || (damage > maxWithCrit * 1.5 * 2 && chr.getJob().getId() == 132)) { // account for berserk
                     AutobanFactory.DAMAGE_HACK.alert(chr, "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
                 }
 

@@ -8174,7 +8174,7 @@ public class Character extends AbstractCharacterObject {
 
     public void resetBattleshipHp() {
         int bshipLevel = Math.max(getLevel() - 120, 0);  // thanks alex12 for noticing battleship HP issues for low-level players
-        this.battleshipHp = 400 * getSkillLevel(SkillFactory.getSkill(Corsair.BATTLE_SHIP)) + (bshipLevel * 200);
+        this.battleshipHp = 4000 * getSkillLevel(SkillFactory.getSkill(Corsair.BATTLE_SHIP)) + (bshipLevel * 2000);
     }
 
     public void resetEnteredScript() {

@@ -186,6 +186,7 @@ public class CommandsExecutor {
         //addCommand("showrates", ShowRatesCommand.class);
         addCommand("rates", RatesCommand.class);
         addCommand("online", OnlineCommand.class);
+        addCommand("battleshiphp", BattleshiphpCommand.class);
         //addCommand("gm", GmCommand.class);
         //addCommand("reportbug", ReportBugCommand.class);
         //addCommand("points", ReadPointsCommand.class);

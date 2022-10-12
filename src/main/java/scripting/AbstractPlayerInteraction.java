@@ -1207,4 +1207,29 @@ public class AbstractPlayerInteraction {
     private void sendBlueNotice(MapleMap map, String message) {
         map.dropMessage(6, message);
     }
+
+    public void addEquipToInventory(Item item) {
+        Character player = c.getPlayer();
+        Inventory inv = player.getInventory(InventoryType.EQUIP);
+        item.setFlag((short) 0);
+        item.setExpiration((short) -1);
+        c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(0, item))));
+
+        short newSlot = inv.addItem(item);
+        if (newSlot == -1) {
+            c.sendPacket(PacketCreator.getInventoryFull());
+            c.sendPacket(PacketCreator.getShowInventoryFull());
+            return;
+        }
+
+        c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(0, item))));
+        if (InventoryManipulator.isSandboxItem(item)) {
+            player.setHasSandboxItem();
+        }
+    }
+
+    public Equip createEquipWith(int equipId) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        return (Equip) ii.getEquipById(equipId);
+    }
 }

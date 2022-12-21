@@ -11,4 +11,7 @@ while [ ${#pass} -le 1 ]; do
     echo "Enter account password (Warning: will be stored in unencrypted plain text until login)"
     read -r pass
 done
-sudo mysql cosmic -e "INSERT INTO cosmic.accounts (id,name,password,nxCredit,maplePoint,nxPrepaid,characterslots) VALUES (2,""${name}"",""${pass}"",1000000,1000000,1000000,8);"
+
+newid=$(($(sudo mysql -BN -e 'SELECT id FROM cosmic.accounts order by id desc limit 0,1;')+1))
+
+sudo mysql cosmic -e "INSERT INTO accounts (id,name,password,nxCredit,maplePoint,nxPrepaid,characterslots) VALUES (""${newid}"",'""${name}""','""${pass}""',1000000,1000000,1000000,8);"

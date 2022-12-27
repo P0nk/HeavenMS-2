@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - master
+      - fix/version-bump-action
 
 jobs:
   build:
@@ -22,3 +23,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           BRANCH_HISTORY: last
+          DRY_RUN: true

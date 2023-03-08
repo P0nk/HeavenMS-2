@@ -116,6 +116,8 @@ public class ItemInformationProvider {
     protected Map<Integer, Data> skillUpgradeInfoCache = new HashMap<>();
     protected Map<Integer, Pair<Integer, Set<Integer>>> cashPetFoodCache = new HashMap<>();
     protected Map<Integer, QuestConsItem> questItemConsCache = new HashMap<>();
+    protected Map<Integer, Data> itemDataCache = new HashMap<>();
+    protected Map<Integer, Data> getItemDataCache = new HashMap<>();
 
     private ItemInformationProvider() {
         loadCardIdData();
@@ -136,38 +138,33 @@ public class ItemInformationProvider {
 
 
     public List<Pair<Integer, String>> getAllItems() {
-        if (!itemNameCache.isEmpty()) {
-            return itemNameCache;
-        }
-        List<Pair<Integer, String>> itemPairs = new ArrayList<>();
-        Data itemsData;
-        itemsData = stringData.getData("Cash.img");
-        for (Data itemFolder : itemsData.getChildren()) {
-            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
-        }
-        itemsData = stringData.getData("Consume.img");
-        for (Data itemFolder : itemsData.getChildren()) {
-            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
-        }
-        itemsData = stringData.getData("Eqp.img").getChildByPath("Eqp");
-        for (Data eqpType : itemsData.getChildren()) {
-            for (Data itemFolder : eqpType.getChildren()) {
-                itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
-            }
-        }
-        itemsData = stringData.getData("Etc.img").getChildByPath("Etc");
-        for (Data itemFolder : itemsData.getChildren()) {
-            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
-        }
-        itemsData = stringData.getData("Ins.img");
-        for (Data itemFolder : itemsData.getChildren()) {
-            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
-        }
-        itemsData = stringData.getData("Pet.img");
-        for (Data itemFolder : itemsData.getChildren()) {
-            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
-        }
-        return itemPairs;
+    if (!itemNameCache.isEmpty()) {
+        return itemNameCache;
+    }
+
+    List<Pair<Integer, String>> itemPairs = new ArrayList<>();
+
+    try (Data cashData = stringData.getData("Cash.img");
+         Data consumeData = stringData.getData("Consume.img");
+         Data eqpData = stringData.getData("Eqp.img").getChildByPath("Eqp");
+         Data etcData = stringData.getData("Etc.img").getChildByPath("Etc");
+         Data insData = stringData.getData("Ins.img");
+         Data petData = stringData.getData("Pet.img")) {
+
+        Stream.of(cashData, consumeData, eqpData, etcData, insData, petData)
+              .flatMap(data -> data.getChildren().stream())
+              .forEach(itemFolder -> {
+                  int itemId = Integer.parseInt(itemFolder.getName());
+                  String itemName = DataTool.getString("name", itemFolder, "NO-NAME");
+                  itemPairs.add(new Pair<>(itemId, itemName));
+              });
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    itemNameCache = itemPairs;
+    return itemPairs;
     }
 
     public List<Pair<Integer, String>> getAllEtcItems() {
@@ -185,73 +182,94 @@ public class ItemInformationProvider {
         return itemPairs;
     }
 
-    private Data getStringData(int itemId) {
-        String cat = "null";
-        Data theData;
-        if (itemId >= 5010000) {
-            theData = cashStringData;
-        } else if (itemId >= 2000000 && itemId < 3000000) {
+   private Data getStringData(int itemId) {
+    if (itemDataCache.containsKey(itemId)) {
+        return itemDataCache.get(itemId);
+    }
+    String cat = null;
+    Data theData;
+    switch (itemId / 1000000) {
+        case 1: // Eqp
+            theData = eqpStringData;
+            switch (itemId / 1000 % 1000) {
+                case 0:
+                    cat = "Eqp/Cap";
+                    break;
+                case 100:
+                    cat = "Eqp/Accessory";
+                    break;
+                case 101:
+                    cat = "Eqp/Face";
+                    break;
+                case 104:
+                    cat = "Eqp/Coat";
+                    break;
+                case 105:
+                    cat = "Eqp/Longcoat";
+                    break;
+                case 106:
+                    cat = "Eqp/Pants";
+                    break;
+                case 107:
+                    cat = "Eqp/Shoes";
+                    break;
+                case 108:
+                    cat = "Eqp/Glove";
+                    break;
+                case 109:
+                    cat = "Eqp/Shield";
+                    break;
+                case 110:
+                    cat = "Eqp/Cape";
+                    break;
+                case 111:
+                    cat = "Eqp/Ring";
+                    break;
+                case 112:
+                    cat = "Eqp/PetEquip";
+                    break;
+                case 113:
+                    cat = "Eqp/Taming";
+                    break;
+                case 114:
+                    cat = "Eqp/Mechanic";
+                    break;
+                default:
+                    theData = null;
+                    break;
+            }
+            break;
+        case 2: // Consume
             theData = consumeStringData;
-        } else if ((itemId >= 1010000 && itemId < 1040000) || (itemId >= 1122000 && itemId < 1123000) || (itemId >= 1132000 && itemId < 1133000) || (itemId >= 1142000 && itemId < 1143000)) {
-            theData = eqpStringData;
-            cat = "Eqp/Accessory";
-        } else if (itemId >= 1000000 && itemId < 1010000) {
-            theData = eqpStringData;
-            cat = "Eqp/Cap";
-        } else if (itemId >= 1102000 && itemId < 1103000) {
-            theData = eqpStringData;
-            cat = "Eqp/Cape";
-        } else if (itemId >= 1040000 && itemId < 1050000) {
-            theData = eqpStringData;
-            cat = "Eqp/Coat";
-        } else if (itemId >= 20000 && itemId < 22000) {
-            theData = eqpStringData;
-            cat = "Eqp/Face";
-        } else if (itemId >= 1080000 && itemId < 1090000) {
-            theData = eqpStringData;
-            cat = "Eqp/Glove";
-        } else if (itemId >= 30000 && itemId < 35000) {
-            theData = eqpStringData;
-            cat = "Eqp/Hair";
-        } else if (itemId >= 1050000 && itemId < 1060000) {
-            theData = eqpStringData;
-            cat = "Eqp/Longcoat";
-        } else if (itemId >= 1060000 && itemId < 1070000) {
-            theData = eqpStringData;
-            cat = "Eqp/Pants";
-        } else if (itemId >= 1802000 && itemId < 1842000) {
-            theData = eqpStringData;
-            cat = "Eqp/PetEquip";
-        } else if (itemId >= 1112000 && itemId < 1120000) {
-            theData = eqpStringData;
-            cat = "Eqp/Ring";
-        } else if (itemId >= 1092000 && itemId < 1100000) {
-            theData = eqpStringData;
-            cat = "Eqp/Shield";
-        } else if (itemId >= 1070000 && itemId < 1080000) {
-            theData = eqpStringData;
-            cat = "Eqp/Shoes";
-        } else if (itemId >= 1900000 && itemId < 2000000) {
-            theData = eqpStringData;
-            cat = "Eqp/Taming";
-        } else if (itemId >= 1300000 && itemId < 1800000) {
-            theData = eqpStringData;
-            cat = "Eqp/Weapon";
-        } else if (itemId >= 4000000 && itemId < 5000000) {
+            break;
+        case 3: // Etc
             theData = etcStringData;
             cat = "Etc";
-        } else if (itemId >= 3000000 && itemId < 4000000) {
+            break;
+        case 4: // Install
             theData = insStringData;
-        } else if (ItemConstants.isPet(itemId)) {
+            break;
+        case 5: // Cash
+            theData = cashStringData;
+            break;
+        case 6: // Pet
             theData = petStringData;
-        } else {
-            return null;
-        }
-        if (cat.equalsIgnoreCase("null")) {
-            return theData.getChildByPath(String.valueOf(itemId));
-        } else {
-            return theData.getChildByPath(cat + "/" + itemId);
-        }
+            break;
+        default:
+            theData = null;
+            break;
+    }
+    if (theData == null) {
+        return null;
+    }
+    Data itemData;
+    if (cat != null) {
+        itemData = theData.getChildByPath(cat + "/" + itemId);
+    } else {
+        itemData = theData.getChildByPath(String.valueOf(itemId));
+    }
+    itemDataCache.put(itemId, itemData);
+    return itemData;
     }
 
     public boolean noCancelMouse(int itemId) {
@@ -271,32 +289,40 @@ public class ItemInformationProvider {
     }
 
     private Data getItemData(int itemId) {
-        Data ret = null;
-        String idStr = "0" + itemId;
-        DataDirectoryEntry root = itemData.getRoot();
-        for (DataDirectoryEntry topDir : root.getSubdirectories()) {
-            for (DataFileEntry iFile : topDir.getFiles()) {
-                if (iFile.getName().equals(idStr.substring(0, 4) + ".img")) {
-                    ret = itemData.getData(topDir.getName() + "/" + iFile.getName());
-                    if (ret == null) {
-                        return null;
-                    }
-                    ret = ret.getChildByPath(idStr);
-                    return ret;
-                } else if (iFile.getName().equals(idStr.substring(1) + ".img")) {
-                    return itemData.getData(topDir.getName() + "/" + iFile.getName());
+    if (getItemDataCache.containsKey(itemId)) {
+        return getItemDataCache.get(itemId);
+    }
+    Data ret = null;
+    String idStr = "0" + itemId;
+    DataDirectoryEntry root = itemData.getRoot();
+    for (DataDirectoryEntry topDir : root.getSubdirectories()) {
+        for (DataFileEntry iFile : topDir.getFiles()) {
+            if (iFile.getName().equals(idStr.substring(0, 4) + ".img")) {
+                ret = itemData.getData(topDir.getName() + "/" + iFile.getName());
+                if (ret == null) {
+                    return null;
                 }
+                ret = ret.getChildByPath(idStr);
+                getItemDataCache.put(itemId, ret);
+                return ret;
+            } else if (iFile.getName().equals(idStr.substring(1) + ".img")) {
+                ret = itemData.getData(topDir.getName() + "/" + iFile.getName());
+                getItemDataCache.put(itemId, ret);
+                return ret;
             }
         }
-        root = equipData.getRoot();
-        for (DataDirectoryEntry topDir : root.getSubdirectories()) {
-            for (DataFileEntry iFile : topDir.getFiles()) {
-                if (iFile.getName().equals(idStr + ".img")) {
-                    return equipData.getData(topDir.getName() + "/" + iFile.getName());
-                }
+    }
+    root = equipData.getRoot();
+    for (DataDirectoryEntry topDir : root.getSubdirectories()) {
+        for (DataFileEntry iFile : topDir.getFiles()) {
+            if (iFile.getName().equals(idStr + ".img")) {
+                ret = equipData.getData(topDir.getName() + "/" + iFile.getName());
+                getItemDataCache.put(itemId, ret);
+                return ret;
             }
         }
-        return ret;
+    }
+    return ret;
     }
 
     public List<Integer> getItemIdsInRange(int minId, int maxId, boolean ignoreCashItem) {

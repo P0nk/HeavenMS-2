@@ -44,6 +44,8 @@ import java.util.List;
 public class XMLDomMapleData implements Data {
     private final Node node;
     private Path imageDataDir;
+    private Map<String, XMLDomMapleData> childCache = new HashMap<>();
+    private Map<String, Object> dataCache = new HashMap<>();
 
     public XMLDomMapleData(FileInputStream fis, Path imageDataDir) {
         try {
@@ -51,22 +53,14 @@ public class XMLDomMapleData implements Data {
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(fis);
             this.node = document.getFirstChild();
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new RuntimeException(e);
         }
         this.imageDataDir = imageDataDir;
     }
 
-    private XMLDomMapleData(Node node) {
-        this.node = node;
-    }
-
     @Override
-    public synchronized Data getChildByPath(String path) {  // the whole XML reading system seems susceptible to give nulls on strenuous read scenarios
+    public synchronized Data getChildByPath(String path) {
         String[] segments = path.split("/");
         if (segments[0].equals("..")) {
             return ((Data) getParent()).getChildByPath(path.substring(path.indexOf("/") + 1));
@@ -91,9 +85,78 @@ public class XMLDomMapleData implements Data {
             }
         }
 
+        String cacheKey = nodeToString(myNode);
+        if (childCache.containsKey(cacheKey)) {
+            return childCache.get(cacheKey);
+        }
+
         XMLDomMapleData ret = new XMLDomMapleData(myNode);
         ret.imageDataDir = imageDataDir.resolve(getName().trim()).resolve(path).getParent();
+        childCache.put(cacheKey, ret);
         return ret;
+    }
+
+    @Override
+    public synchronized Object getData() {
+        String cacheKey = nodeToString(node);
+        if (dataCache.containsKey(cacheKey)) {
+            return dataCache.get(cacheKey);
+        }
+
+        NamedNodeMap attributes = node.getAttributes();
+        DataType type = getType();
+        switch (type) {
+            case DOUBLE:
+            case FLOAT:
+            case INT:
+            case SHORT: {
+                String value = attributes.getNamedItem("value").getNodeValue();
+                Number nval = GameConstants.parseNumber(value);
+
+                switch (type) {
+                    case DOUBLE:
+                        dataCache.put(cacheKey, nval.doubleValue());
+                        return nval.doubleValue();
+                    case FLOAT:
+                        dataCache.put(cacheKey, nval.floatValue());
+                        return nval.floatValue();
+                    case INT:
+                        dataCache.put(cacheKey, nval.intValue());
+                        return nval.intValue();
+                    case SHORT:
+                        dataCache.put(cacheKey, nval.shortValue());
+                        return nval.shortValue();
+                    default:
+                        return null;
+                }
+            }
+            case STRING:
+            case UOL: {
+                String value = attributes.getNamedItem("value").getNodeValue();
+                dataCache.put(cacheKey, value);
+                return value;
+            }
+            case VECTOR: {
+                String x = attributes.getNamedItem("x").getNodeValue();
+                String y = attributes.getNamedItem("y").getNodeValue();
+                Point point = new Point(Integer.parseInt(x), Integer.parseInt(y));
+                dataCache.put(cacheKey, point);
+                return point;
+            }
+            default:
+                return null;
+        }
+    }
+private String nodeToString(Node node) {
+        String result = node.getNodeName();
+        NamedNodeMap attributes = node.getAttributes();
+        if (attributes != null) {
+            for (int i = 0; i < attributes.getLength(); i++) {
+                Node attribute = attributes.item(i);
+                result += "_" + attribute.getNodeName() + "_" + attribute.getNodeValue();
+            }
+        }
+        return result;
     }
 
     @Override
@@ -111,46 +174,6 @@ public class XMLDomMapleData implements Data {
         }
 
         return ret;
-    }
-
-    @Override
-    public synchronized Object getData() {
-        NamedNodeMap attributes = node.getAttributes();
-        DataType type = getType();
-        switch (type) {
-            case DOUBLE:
-            case FLOAT:
-            case INT:
-            case SHORT: {
-                String value = attributes.getNamedItem("value").getNodeValue();
-                Number nval = GameConstants.parseNumber(value);
-
-                switch (type) {
-                    case DOUBLE:
-                        return nval.doubleValue();
-                    case FLOAT:
-                        return nval.floatValue();
-                    case INT:
-                        return nval.intValue();
-                    case SHORT:
-                        return nval.shortValue();
-                    default:
-                        return null;
-                }
-            }
-            case STRING:
-            case UOL: {
-                String value = attributes.getNamedItem("value").getNodeValue();
-                return value;
-            }
-            case VECTOR: {
-                String x = attributes.getNamedItem("x").getNodeValue();
-                String y = attributes.getNamedItem("y").getNodeValue();
-                return new Point(Integer.parseInt(x), Integer.parseInt(y));
-            }
-            default:
-                return null;
-        }
     }
 
     @Override

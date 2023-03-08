@@ -38,25 +38,26 @@ public class SkillFactory {
         return skills.get(id);
     }
 
-    public static void loadAllSkills() {
-        final Map<Integer, Skill> loadedSkills = new HashMap<>();
-        final DataDirectoryEntry root = datasource.getRoot();
-        for (DataFileEntry topDir : root.getFiles()) { // Loop thru jobs
-            if (topDir.getName().length() <= 8) {
-                for (Data data : datasource.getData(topDir.getName())) { // Loop thru each jobs
-                    if (data.getName().equals("skill")) {
-                        for (Data data2 : data) { // Loop thru each jobs
-                            if (data2 != null) {
-                                int skillId = Integer.parseInt(data2.getName());
-                                loadedSkills.put(skillId, loadFromData(skillId, data2));
-                            }
-                        }
-                    }
+    ppublic static void loadAllSkills() {
+    final Map<Integer, Skill> loadedSkills = new HashMap<>();
+    final DataProvider dataProvider = DataProviderFactory.getDataProvider(WZFiles.SKILL);
+    final DataDirectoryEntry root = dataProvider.getRoot();
+
+    for (DataFileEntry jobDir : root.getFiles()) {
+        if (jobDir.getName().length() > 8) continue; // Skip non-job files
+        for (Data skillData : dataProvider.getData(jobDir.getName())) {
+            if (!skillData.getName().equals("skill")) continue; // Skip non-skill data
+            for (Data skill : skillData) {
+                int skillId = Integer.parseInt(skill.getName());
+                Skill loadedSkill = loadFromData(skillId, skill);
+                if (loadedSkill != null) {
+                    loadedSkills.put(skillId, loadedSkill);
                 }
             }
         }
+    }
 
-        skills = loadedSkills;
+    skills = loadedSkills;
     }
 
     private static Skill loadFromData(int id, Data data) {

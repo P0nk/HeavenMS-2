@@ -219,6 +219,7 @@ public class ServerConfig {
 
     //Quest Configuration
     public boolean USE_QUEST_RATE;
+    public boolean EXP_RATE_PROGRESS;
 
     //Quest Points Configuration
     public int QUEST_POINT_REPEATABLE_INTERVAL;

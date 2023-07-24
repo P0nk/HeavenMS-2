@@ -339,6 +339,7 @@ public class CommandsExecutor {
         addCommand("droprate", 4, DropRateCommand.class);
         addCommand("bossdroprate", 4, BossDropRateCommand.class);
         addCommand("questrate", 4, QuestRateCommand.class);
+        addCommand("progressrate", 4, ProgressRateCommand.class);
         addCommand("travelrate", 4, TravelRateCommand.class);
         addCommand("fishrate", 4, FishingRateCommand.class);
         addCommand("itemvac", 4, ItemVacCommand.class);

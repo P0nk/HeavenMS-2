@@ -85,6 +85,7 @@ public class World {
     private int bossdroprate;
     private int mesorate;
     private int questrate;
+    private int progressrate;
     private int travelrate;
     private int fishingrate;
     private final String eventmsg;
@@ -161,7 +162,7 @@ public class World {
     private ScheduledFuture<?> timeoutSchedule;
     private ScheduledFuture<?> hpDecSchedule;
 
-    public World(int world, int flag, String eventmsg, int exprate, int droprate, int bossdroprate, int mesorate, int questrate, int travelrate, int fishingrate) {
+    public World(int world, int flag, String eventmsg, int exprate, int droprate, int bossdroprate, int mesorate, int questrate, int progressrate, int travelrate, int fishingrate) {
         this.id = world;
         this.flag = flag;
         this.eventmsg = eventmsg;
@@ -170,8 +171,10 @@ public class World {
         this.bossdroprate = bossdroprate;
         this.mesorate = mesorate;
         this.questrate = questrate;
+        this.progressrate = progressrate;
         this.travelrate = travelrate;
         this.fishingrate = fishingrate;
+        
         runningPartyId.set(1000000001); // partyid must not clash with charid to solve update item looting issues, found thanks to Vcoc
         runningMessengerId.set(1);
 
@@ -397,6 +400,14 @@ public class World {
 
     public void setQuestRate(int quest) {
         this.questrate = quest;
+    }
+
+    public int getProgressRate() {
+        return progressrate;
+    }
+
+    public void setProgressRate(int progress) {
+        this.progressrate = progress;
     }
 
     public int getTravelRate() {

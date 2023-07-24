@@ -150,18 +150,23 @@ public class QuestStatus {
         return medalProgress;
     }
 
-    public boolean progress(int id) {
+    public boolean progress(int id, int count) {
         String currentStr = progress.get(id);
         if (currentStr == null) {
             return false;
         }
 
         int current = Integer.parseInt(currentStr);
-        if (current >= this.getQuest().getMobAmountNeeded(id)) {
+        int max = this.getQuest().getMobAmountNeeded(id);
+        if (current >= max) {
             return false;
         }
+        
+        current += count;
+        if (current > max)
+        	current = max;
 
-        String str = StringUtil.getLeftPaddedStr(Integer.toString(++current), '0', 3);
+        String str = StringUtil.getLeftPaddedStr(Integer.toString(current), '0', 3);
         progress.put(id, str);
         //this.setUpdated();
         return true;

@@ -7436,7 +7436,8 @@ public class Character extends AbstractCharacterObject {
                         continue;
                     }
 
-                    if (qs.progress(id)) {
+                    
+                    if (qs.progress(id, getWorldServer().getProgressRate() * (YamlConfig.config.server.EXP_RATE_PROGRESS ? expRate : 1))) {
                         announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
                         if (qs.getInfoNumber() > 0) {
                             announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);

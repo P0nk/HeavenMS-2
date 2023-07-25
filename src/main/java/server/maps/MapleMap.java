@@ -643,36 +643,39 @@ public class MapleMap {
             float cardRate = chr.getCardRate(de.itemId);
             int dropChance = (int) Math.min((float) de.chance * chRate * cardRate, Integer.MAX_VALUE);
 
-            if (Randomizer.nextInt(999999) < dropChance) {
-                if (droptype == 3) {
-                    pos.x = mobpos + ((d % 2 == 0) ? (40 * ((d + 1) / 2)) : -(40 * (d / 2)));
-                } else {
-                    pos.x = mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2)));
-                }
-                if (de.itemId == 0) { // meso
-                    int mesos = Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum;
+            do {
+            	if (Randomizer.nextInt(1000000) < dropChance) {
+            		if (droptype == 3) {
+            			pos.x = mobpos + ((d % 2 == 0) ? (40 * ((d + 1) / 2)) : -(40 * (d / 2)));
+            		} else {
+            			pos.x = mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2)));
+            		}
+            		if (de.itemId == 0) { // meso
+            			int mesos = Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum;
 
-                    if (mesos > 0) {
-                        if (chr.getBuffedValue(BuffStat.MESOUP) != null) {
-                            mesos = (int) (mesos * chr.getBuffedValue(BuffStat.MESOUP).doubleValue() / 100.0);
-                        }
-                        mesos = mesos * chr.getMesoRate();
-                        if (mesos <= 0) {
-                            mesos = Integer.MAX_VALUE;
-                        }
+            			if (mesos > 0) {
+            				if (chr.getBuffedValue(BuffStat.MESOUP) != null) {
+            					mesos = (int) (mesos * chr.getBuffedValue(BuffStat.MESOUP).doubleValue() / 100.0);
+            				}
+            				mesos = mesos * chr.getMesoRate();
+            				if (mesos <= 0) {
+            					mesos = Integer.MAX_VALUE;
+            				}
 
-                        spawnMesoDrop(mesos, calcDropPos(pos, mob.getPosition()), mob, chr, false, droptype);
-                    }
-                } else {
-                    if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                        idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
-                    } else {
-                        idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
-                    }
-                    spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, chr, droptype, de.questid);
-                }
-                d++;
-            }
+            				spawnMesoDrop(mesos, calcDropPos(pos, mob.getPosition()), mob, chr, false, droptype);
+            			}
+            		} else {
+            			if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+            				idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+            			} else {
+            				idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
+            			}
+            			spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, chr, droptype, de.questid);
+            		}
+            		d++;
+            	}
+            	dropChance -= 1000000;
+            } while (YamlConfig.config.server.USE_MULTIDROP && dropChance > 0);
         }
 
         return d;
@@ -714,7 +717,6 @@ public class MapleMap {
         final byte droptype = (byte) (mob.getStats().isExplosiveReward() ? 3 : mob.getStats().isFfaLoot() ? 2 : chr.getParty() != null ? 1 : 0);
         final int mobpos = mob.getPosition().x;
         int chRate = !mob.isBoss() ? chr.getDropRate() : chr.getBossDropRate();
-        byte d = 1;
         Point pos = new Point(0, mob.getPosition().y);
 
         MonsterStatusEffect stati = mob.getStati(MonsterStatus.SHOWDOWN);

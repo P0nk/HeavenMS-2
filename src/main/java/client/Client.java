@@ -39,7 +39,6 @@ import net.server.Server;
 import net.server.channel.Channel;
 import net.server.coordinator.login.LoginBypassCoordinator;
 import net.server.coordinator.session.Hwid;
-import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
 import net.server.coordinator.session.SessionCoordinator.AntiMulticlientResult;
 import net.server.guild.Guild;
@@ -176,10 +175,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     private static String getRemoteAddress(io.netty.channel.Channel channel) {
         String remoteAddress = "null";
         try {
-            String hostAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
-            if (hostAddress != null) {
-                remoteAddress = IpAddresses.evaluateRemoteAddress(hostAddress); // thanks dyz for noticing Local/LAN/WAN connections not interacting properly
-            }
+            remoteAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
         } catch (NullPointerException npe) {
             log.warn("Unable to get remote address for client", npe);
         }

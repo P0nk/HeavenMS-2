@@ -15,7 +15,6 @@ import net.encryption.InitializationVector;
 import net.encryption.PacketCodec;
 import net.packet.logging.InPacketLogger;
 import net.packet.logging.OutPacketLogger;
-import net.server.coordinator.session.IpAddresses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
@@ -35,10 +34,7 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
     String getRemoteAddress(Channel channel) {
         String remoteAddress = "null";
         try {
-            String hostAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
-            if (hostAddress != null) {
-                remoteAddress = IpAddresses.evaluateRemoteAddress(hostAddress); // thanks dyz for noticing Local/LAN/WAN connections not interacting properly
-            }
+            remoteAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
         } catch (NullPointerException npe) {
             log.warn("Unable to get remote address from netty Channel: {}", channel, npe);
         }

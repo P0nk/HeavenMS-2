@@ -29,6 +29,7 @@ import constants.id.ItemId;
 import constants.id.MapId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.Trade;
@@ -181,7 +182,11 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
             c.disconnect(false, false);
             return;
         }
-        String[] socket = c.getChannelServer().getIP().split(":");
+        String[] socket = Server.getInstance().getInetSocket(c, c.getWorld(), c.getChannel());
+        if (socket == null) {
+            c.enableCSActions();
+            return;
+        }
         chr.getCashShop().open(false);
 
         chr.setSessionTransitionState();

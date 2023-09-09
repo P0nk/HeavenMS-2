@@ -80,6 +80,7 @@ import tools.packets.WeddingPackets;
 import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.sql.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
@@ -150,6 +151,7 @@ public class Character extends AbstractCharacterObject {
     private final AtomicInteger gachaexp = new AtomicInteger();
     private final AtomicInteger meso = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
+    private long totalExpGained = 0;
     private int merchantmeso;
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
@@ -3092,6 +3094,7 @@ public class Character extends AbstractCharacterObject {
                 leftover = nextExp - Integer.MAX_VALUE;
             }
             updateSingleStat(Stat.EXP, exp.addAndGet((int) total));
+            totalExpGained += total;
             if (show) {
                 announceExpGain(gain, equip, party, inChat, white);
             }
@@ -3107,9 +3110,30 @@ public class Character extends AbstractCharacterObject {
             if (leftover > 0) {
                 gainExpInternal(leftover, equip, party, false, inChat, white);
             } else {
+                saveExpLogToDB();
                 lastExpGainTime = System.currentTimeMillis();
             }
         }
+    }
+
+    private boolean saveExpLogToDB() {
+        if (YamlConfig.config.server.USE_EXP_GAIN_LOG) {
+            try (Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("INSERT INTO characterexplogs (world_exp_rate, exp_coupon, gained_exp, current_exp, exp_gain_time, charid) VALUES (?, ?, ?, ?, ?, ?)")) {
+                ps.setInt(1, getWorldServer().getExpRate());
+                ps.setInt(2, expCoupon);
+                ps.setLong(3, totalExpGained);
+                ps.setInt(4, exp.get());
+                ps.setInt(6, id);
+                ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+                ps.executeUpdate();
+                totalExpGained = 0;
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+                return false;
+            }
+        }
+        return true;
     }
 
     private Pair<Integer, Integer> applyFame(int delta) {

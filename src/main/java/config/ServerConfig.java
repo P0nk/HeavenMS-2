@@ -217,6 +217,7 @@ public class ServerConfig {
     public boolean USE_ADD_RATES_BY_LEVEL;
     public boolean USE_STACK_COUPON_RATES;
     public boolean USE_PERFECT_PITCH;
+    public boolean USE_LV_UP_PROTECT;
 
     //Quest Configuration
     public boolean USE_QUEST_RATE;

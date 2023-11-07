@@ -3102,6 +3102,7 @@ public class Character extends AbstractCharacterObject {
                     updateSingleStat(Stat.EXP, 0);
                     break;
                 }
+                if (YamlConfig.config.server.USE_LV_UP_PROTECT) break;
             }
 
             if (leftover > 0) {

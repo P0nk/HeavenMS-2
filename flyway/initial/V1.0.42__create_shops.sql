@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS `shops`
+(
+    `shopid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `npcid`  INT(11)          NOT NULL DEFAULT '0',
+    PRIMARY KEY (`shopid`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  AUTO_INCREMENT = 10000000;

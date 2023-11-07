@@ -34,6 +34,7 @@
         <mysql-connector-j.version>8.0.32</mysql-connector-j.version> <!-- MySQL JDBC driver -->
         <jdbi-version>3.37.1</jdbi-version> <!-- Convenience wrapper around JDBC -->
         <junit.version>5.9.2</junit.version> <!-- Unit test -->
+        <flyway.version>9.16.0</flyway.version> <!-- Flyway -->
         <mockito.version>5.1.1</mockito.version> <!-- Unit test -->
     </properties>
 
@@ -121,6 +122,13 @@
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
             <version>${graalvm.version}</version>
+        </dependency>
+
+        <!-- Migrate -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
 
         <!-- Testing -->

@@ -11,6 +11,7 @@ public class ServerConfig {
     public String DB_USER;
     public String DB_PASS;
     public int INIT_CONNECTION_POOL_TIMEOUT;
+    public Boolean INIT_DATABASE_AT_FIRST_START;
 
     //Login Configuration
     public int WORLDS;

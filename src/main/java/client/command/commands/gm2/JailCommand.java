@@ -61,7 +61,7 @@ public class JailCommand extends Command {
             if (victim.getMapId() != MapId.JAIL) {    // those gone to jail won't be changing map anyway
                 MapleMap target = c.getChannelServer().getMapFactory().getMap(MapId.JAIL);
                 Portal targetPortal = target.getPortal(0);
-                victim.saveLocationOnWarp();
+                victim.saveLocation("JAIL");
                 victim.changeMap(target, targetPortal);
                 player.message(victim.getName() + " was jailed for " + minutesJailed + " minutes.");
             } else {

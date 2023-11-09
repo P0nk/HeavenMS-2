@@ -369,7 +369,6 @@ server:
     USE_ADD_RATES_BY_LEVEL: false    #Rates are added each 20 levels.
     USE_STACK_COUPON_RATES: false   #Multiple coupons effects builds up together.
     USE_PERFECT_PITCH: false         #For lvl 30 or above, each lvlup grants player 1 perfect pitch.
-    USE_LV_UP_PROTECT: false         #it will only allow player level up 1 and keep remain exp, when they get large exp which support player level up 2 or more
 
     #Quest Configuration
     USE_QUEST_RATE: false           #Exp/Meso gained by quests uses fixed server exp/meso rate times quest rate as multiplier, instead of player rates.

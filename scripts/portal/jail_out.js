@@ -8,8 +8,7 @@ function enter(pi) {
 
     if (jailedTime <= 0) {
         pi.playPortalSound();
-        // pi.warp(300000010, "in01");
-        pi.warp(pi.getPlayer().getSavedLocation("JAIL"));
+        pi.warp(300000010, "in01");
         return true;
     } else {
         var seconds = Math.floor(jailedTime / 1000) % 60;

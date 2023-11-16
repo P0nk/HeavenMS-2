@@ -164,6 +164,7 @@ server:
     DB_USER: "cosmic_server"
     DB_PASS: "snailshell"
     INIT_CONNECTION_POOL_TIMEOUT: 90    # Seconds
+    INIT_DATABASE_AT_FIRST_START: false #If you already initial database use database files, please keep false
 
     #Login Configuration
     WORLDS: 1                           #Initial number of worlds on the server.

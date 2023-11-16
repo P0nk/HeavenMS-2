@@ -16,3 +16,6 @@
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+/flyway/customize
+!/flyway/customize/README.md

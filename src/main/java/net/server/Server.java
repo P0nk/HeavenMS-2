@@ -61,6 +61,7 @@ import server.life.PlayerNPC;
 import server.quest.Quest;
 import service.NoteService;
 import tools.DatabaseConnection;
+import tools.Migrate;
 import tools.Pair;
 
 import java.sql.Connection;
@@ -843,6 +844,8 @@ public class Server {
         if (!DatabaseConnection.initializeConnectionPool()) {
             throw new IllegalStateException("Failed to initiate a connection to the database");
         }
+
+        Migrate.run();
 
         channelDependencies = registerChannelDependencies();
 

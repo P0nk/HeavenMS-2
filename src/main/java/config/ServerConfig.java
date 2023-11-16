@@ -83,6 +83,7 @@ public class ServerConfig {
     public boolean USE_STARTING_AP_4;
     public boolean USE_AUTOBAN;
     public boolean USE_AUTOBAN_LOG;
+    public boolean USE_EXP_GAIN_LOG;
     public boolean USE_AUTOSAVE;
     public boolean USE_SERVER_AUTOASSIGNER;
     public boolean USE_REFRESH_RANK_MOVE;

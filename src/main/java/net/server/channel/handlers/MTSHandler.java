@@ -45,6 +45,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -122,40 +124,12 @@ public final class MTSHandler extends AbstractPacketHandler {
                                 return;
                             }
                         }
-                        Calendar calendar = Calendar.getInstance();
-                        int year;
-                        int month;
-                        int day;
-                        int oldmax = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-                        int oldday = calendar.get(Calendar.DAY_OF_MONTH) + 7;
-                        if (oldmax < oldday) {
-                            if (calendar.get(Calendar.MONTH) + 2 > 12) {
-                                year = calendar.get(Calendar.YEAR) + 1;
-                                month = 1;
-                                calendar.set(year, month, 1);
-                                day = oldday - oldmax;
-                            } else {
-                                month = calendar.get(Calendar.MONTH) + 2;
-                                year = calendar.get(Calendar.YEAR);
-                                calendar.set(year, month, 1);
-                                day = oldday - oldmax;
-                            }
-                        } else {
-                            day = calendar.get(Calendar.DAY_OF_MONTH) + 7;
-                            month = calendar.get(Calendar.MONTH);
-                            year = calendar.get(Calendar.YEAR);
-                        }
-                        String date = year + "-";
-                        if (month < 10) {
-                            date += "0" + month + "-";
-                        } else {
-                            date += month + "-";
-                        }
-                        if (day < 10) {
-                            date += "0" + day;
-                        } else {
-                            date += day + "";
-                        }
+
+                        LocalDate now = LocalDate.now();
+                        LocalDate sellEnd = now.plusDays(7);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        String date = sellEnd.format(formatter);
+
                         if (!i.getInventoryType().equals(InventoryType.EQUIP)) {
                             Item item = i;
                             try (PreparedStatement pse = con.prepareStatement("INSERT INTO mts_items (tab, type, itemid, quantity, expiration, giftFrom, seller, price, owner, sellername, sell_ends) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
@@ -761,7 +735,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                     }
                 }
             }
-            try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM mts_items WHERE tab = ? " + (type != 0 ? "AND type = ?" : "") + "AND transfer = 0")) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM mts_items WHERE tab = ? " + (type != 0 ? "AND type = ?" : "") + " AND transfer = 0")) {
                 ps.setInt(1, tab);
                 if (type != 0) {
                     ps.setInt(2, type);

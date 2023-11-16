@@ -21484,6 +21484,17 @@ CREATE TABLE IF NOT EXISTS `worldtransfers` (
   INDEX (characterid)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+CREATE TABLE IF NOT EXISTS `characterexplogs` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+  	`world_exp_rate` INT,
+    `exp_coupon` INT,
+    `gained_exp` BIGINT,
+    `current_exp` INT,
+    `exp_gain_time` DATETIME,
+    `charid` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`charid`) REFERENCES `characters`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 ALTER TABLE `dueyitems`
   ADD CONSTRAINT `dueyitems_ibfk_1` FOREIGN KEY (`PackageId`) REFERENCES `dueypackages` (`PackageId`) ON DELETE CASCADE;

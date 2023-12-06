@@ -117,6 +117,8 @@ public class Server {
     private final List<Client> registeredDiseaseAnnouncePlayers = new LinkedList<>();
 
     private final List<List<Pair<String, Integer>>> playerRanking = new LinkedList<>();
+    private Character firstCharacter = null;
+    private Character secondCharacter = null;
 
     private final Lock srvLock = new ReentrantLock();
     private final Lock disLock = new ReentrantLock();
@@ -702,10 +704,16 @@ public class Server {
             wldRLock.unlock();
         }
     }
-
+    public Character getFirstCharacter(){
+        return firstCharacter;
+    }
+    public Character getSecondCharacter(){
+        return secondCharacter;
+    }
     private void installWorldPlayerRanking(int worldid) {
-        List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(worldid);
-        if (!ranking.isEmpty()) {
+        log.info("installing world ranking");
+        Pair<List<Pair<Integer, List<Pair<String, Integer>>>>, Pair<Integer, Integer>> ranking = loadPlayerRankingFromDB(worldid);
+        if (!ranking.getLeft().isEmpty()) {
             wldWLock.lock();
             try {
                 if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
@@ -713,9 +721,17 @@ public class Server {
                         playerRanking.add(new ArrayList<>(0));
                     }
 
-                    playerRanking.add(worldid, ranking.get(0).getRight());
+                    playerRanking.add(worldid, ranking.getLeft().get(0).getRight());
+                    try{
+
+                        firstCharacter = Character.loadCharFromDBForServer(ranking.getRight().getLeft());
+                        secondCharacter = Character.loadCharFromDBForServer(ranking.getRight().getRight());
+                    }
+                    catch(SQLException e){
+                        log.error("failed to load char from DB for rankings");
+                    }
                 } else {
-                    playerRanking.add(0, ranking.get(0).getRight());
+                    playerRanking.add(0, ranking.getLeft().get(0).getRight());
                 }
             } finally {
                 wldWLock.unlock();
@@ -724,6 +740,7 @@ public class Server {
     }
 
     private void removeWorldPlayerRanking() {
+        log.info("removing world ranking");
         if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
             wldWLock.lock();
             try {
@@ -736,11 +753,11 @@ public class Server {
                 wldWLock.unlock();
             }
         } else {
-            List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 2));  // update ranking list
+            Pair<List<Pair<Integer, List<Pair<String, Integer>>>>, Pair<Integer, Integer>> ranking = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 2));  // update ranking list
 
             wldWLock.lock();
             try {
-                playerRanking.add(0, ranking.get(0).getRight());
+                playerRanking.add(0, ranking.getLeft().get(0).getRight());
             } finally {
                 wldWLock.unlock();
             }
@@ -748,23 +765,64 @@ public class Server {
     }
 
     public void updateWorldPlayerRanking() {
-        List<Pair<Integer, List<Pair<String, Integer>>>> rankUpdates = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 1));
-        if (rankUpdates.isEmpty()) {
+        log.info("updating world ranking");
+        Pair<List<Pair<Integer, List<Pair<String, Integer>>>>, Pair<Integer, Integer>> rankUpdates = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 1));
+        if (rankUpdates.getLeft().isEmpty()) {
             return;
         }
 
         wldWLock.lock();
         try {
             if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                for (int i = playerRanking.size(); i <= rankUpdates.get(rankUpdates.size() - 1).getLeft(); i++) {
+                for (int i = playerRanking.size(); i <= rankUpdates.getLeft().get(rankUpdates.getLeft().size() - 1).getLeft(); i++) {
                     playerRanking.add(new ArrayList<>(0));
                 }
 
-                for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates) {
+                for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates.left) {
                     playerRanking.set(wranks.getLeft(), wranks.getRight());
+                    try {
+                        firstCharacter = getWorld(wranks.getLeft()).getPlayerStorage().getCharacterById(rankUpdates.getRight().getLeft());
+                        if (firstCharacter == null) {
+                            log.info("first ranked player was not online");
+                            firstCharacter = Character.loadCharFromDBForServer(rankUpdates.getRight().getLeft());
+                        } else {
+                            log.info("found first ranked player online");
+                        }
+                        secondCharacter = getWorld(wranks.getLeft()).getPlayerStorage().getCharacterById(rankUpdates.getRight().getRight());
+                        if (secondCharacter == null) {
+                            log.info("first ranked player was not online");
+                            secondCharacter = Character.loadCharFromDBForServer(rankUpdates.getRight().getRight());
+                        } else {
+                            log.info("found first ranked player online");
+                        }
+                    }
+                    catch(SQLException e){
+                        log.error("failed to update leaderboard players from DB");
+                    }
                 }
+
+
             } else {
-                playerRanking.set(0, rankUpdates.get(0).getRight());
+                playerRanking.set(0, rankUpdates.getLeft().get(0).getRight());
+                try {
+                    firstCharacter = getWorld(0).getPlayerStorage().getCharacterById(rankUpdates.getRight().getLeft());
+                    if (firstCharacter == null) {
+                        log.info("first ranked player was not online");
+                        firstCharacter = Character.loadCharFromDBForServer(rankUpdates.getRight().getLeft());
+                    } else {
+                        log.info("found first ranked player online");
+                    }
+                    secondCharacter = getWorld(0).getPlayerStorage().getCharacterById(rankUpdates.getRight().getRight());
+                    if (secondCharacter == null) {
+                        log.info("first ranked player was not online");
+                        secondCharacter = Character.loadCharFromDBForServer(rankUpdates.getRight().getRight());
+                    } else {
+                        log.info("found first ranked player online");
+                    }
+                }
+                catch(SQLException e){
+                    log.error("failed to update leaderboard players from DB");
+                }
             }
         } finally {
             wldWLock.unlock();
@@ -785,9 +843,9 @@ public class Server {
         updateWorldPlayerRanking();
     }
 
-    private static List<Pair<Integer, List<Pair<String, Integer>>>> loadPlayerRankingFromDB(int worldid) {
+    private static Pair<List<Pair<Integer, List<Pair<String, Integer>>>>, Pair<Integer, Integer>> loadPlayerRankingFromDB(int worldid) {
         List<Pair<Integer, List<Pair<String, Integer>>>> rankSystem = new ArrayList<>();
-
+        Pair<Integer, Integer> rankedCIDs = new Pair<>(0,0);
         try (Connection con = DatabaseConnection.getConnection()) {
             String worldQuery;
             if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
@@ -801,7 +859,10 @@ public class Server {
             }
 
             List<Pair<String, Integer>> rankUpdate = new ArrayList<>(0);
-            try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`name`, `characters`.`level`, `characters`.`world` FROM `characters` LEFT JOIN accounts ON accounts.id = characters.accountid WHERE `characters`.`gm` < 2 AND `accounts`.`banned` = '0'" + worldQuery + " ORDER BY " + (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING ? "world, " : "") + "level DESC, exp DESC, lastExpGainTime ASC LIMIT 50");
+            boolean foundFirst = false;
+            boolean foundSecond = false;
+
+            try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`name`, `characters`.`level`, `characters`.`world`, `characters`.`id` FROM `characters` LEFT JOIN accounts ON accounts.id = characters.accountid WHERE `characters`.`gm` < 2 AND `accounts`.`banned` = '0'" + worldQuery + " ORDER BY " + (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING ? "world, " : "") + "level DESC, exp DESC, lastExpGainTime ASC LIMIT 50");
                  ResultSet rs = ps.executeQuery()) {
 
                 if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
@@ -815,6 +876,17 @@ public class Server {
                         }
 
                         rankUpdate.add(new Pair<>(rs.getString("name"), rs.getInt("level")));
+                        if(!foundFirst) {
+                            rankedCIDs.left = rs.getInt("id");
+                            foundFirst = true;
+
+                        }
+                        else{
+                            if(!foundSecond){
+                                rankedCIDs.right = rs.getInt("id");
+                                foundSecond = true;
+                            }
+                        }
                     }
                 } else {
                     rankUpdate = new ArrayList<>(50);
@@ -828,8 +900,7 @@ public class Server {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
-        return rankSystem;
+        return new Pair<>(rankSystem, rankedCIDs);
     }
 
     public void init() {

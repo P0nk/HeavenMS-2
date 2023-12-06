@@ -65,6 +65,93 @@ public enum Job {
     final int jobid;
     final static int maxId = 22;    // maxId = (EVAN / 100);
 
+    public static String getJobAsString(Job job){
+        return switch (job) {
+            case BEGINNER -> "Beginner";
+            case WARRIOR -> "Warrior";
+                case PAGE -> "Page";
+                case WHITEKNIGHT -> "White Knight";
+                case PALADIN -> "Paladin";
+
+                case SPEARMAN -> "Spearman";
+                case DRAGONKNIGHT -> "Dragon Knight";
+                case DARKKNIGHT -> "Dark Knight";
+
+                case FIGHTER -> "Fighter";
+                case CRUSADER -> "Crusader";
+                case HERO -> "Hero";
+            case BOWMAN -> "Archer";
+                case HUNTER -> "Hunter";
+                case RANGER -> "Ranger";
+                case BOWMASTER -> "Bowmaster";
+
+                case CROSSBOWMAN -> "Crossbowman";
+                case SNIPER -> "Sniper";
+                case MARKSMAN -> "Marksman";
+            case MAGICIAN -> "Magician";
+                case FP_MAGE -> "Fire Poison Mage";
+                case FP_WIZARD -> "Fire Poison Wizzy";
+                case FP_ARCHMAGE -> "Fire Poison Arch Mage";
+
+                case IL_MAGE -> "Ice Lightning Mage";
+                case IL_WIZARD -> "Ice Lightning Wizzy";
+                case IL_ARCHMAGE -> "Ice LIghtning Arch Mage";
+
+                case CLERIC -> "Cleric";
+                case PRIEST -> "Priest";
+                case BISHOP -> "Bishop";
+            case PIRATE -> "Pirate";
+                case BRAWLER -> "Brawler";
+                case MARAUDER -> "Marauder";
+                case BUCCANEER -> "Buccaneer";
+
+                case GUNSLINGER -> "Gunslinger";
+                case OUTLAW -> "Outlaw";
+                case CORSAIR -> "Corsair";
+            case THIEF -> "Thief";
+                case BANDIT -> "Bandit";
+                case CHIEFBANDIT -> "Chief Bandit";
+                case SHADOWER -> "Shadower";
+
+                case ASSASSIN -> "Assassin";
+                case HERMIT -> "Hermit";
+                case NIGHTLORD -> "Night Lord";
+            case NOBLESSE -> "Noblesse";
+
+            case DAWNWARRIOR1 -> "Dawn Warrior (1st)";
+            case DAWNWARRIOR2 -> "Dawn Warrior (2nd)";
+            case DAWNWARRIOR3 -> "Dawn Warrior (3rd)";
+            case DAWNWARRIOR4 -> "Dawn Warrior (4th)";
+
+            case BLAZEWIZARD1 -> "Blaze Wizard (1st)";
+            case BLAZEWIZARD2 -> "Blaze Wizard (2nd)";
+            case BLAZEWIZARD3 -> "Blaze Wizard (3rd)";
+            case BLAZEWIZARD4 -> "Blaze Wizard (4th)";
+
+            case THUNDERBREAKER1 -> "Thunder Breaker (1st)";
+            case THUNDERBREAKER2 -> "Thunder Breaker (2nd)";
+            case THUNDERBREAKER3 -> "Thunder Breaker (3rd)";
+            case THUNDERBREAKER4 -> "Thunder Breaker (4th)";
+
+            case WINDARCHER1 -> "Wind Archer(1st)";
+            case WINDARCHER2 -> "Wind Archer(1st)";
+            case WINDARCHER3 -> "Wind Archer(1st)";
+            case WINDARCHER4 -> "Wind Archer(4th)";
+
+            case NIGHTWALKER1 -> "Night Walker(1st)";
+            case NIGHTWALKER2 -> "Night Walker(2nd)";
+            case NIGHTWALKER3 -> "Night Walker(3rd)";
+            case NIGHTWALKER4 -> "Night Walker(4th)";
+
+            case LEGEND -> "Legend";
+            case ARAN1, ARAN2, ARAN3, ARAN4 -> "Aran";
+            case EVAN1, EVAN2, EVAN3, EVAN4, EVAN5, EVAN6, EVAN7, EVAN8, EVAN9, EVAN10 -> "Evan";
+            case GM -> "Game Master";
+            case SUPERGM -> "Game Overlord";
+            default -> "default?";
+        };
+    }
+
     Job(int id) {
         jobid = id;
     }
@@ -114,6 +201,7 @@ public enum Job {
                 return BEGINNER;
         }
     }
+
 
     public boolean isA(Job basejob) {  // thanks Steve (kaito1410) for pointing out an improvement here
         int basebranch = basejob.getId() / 10;

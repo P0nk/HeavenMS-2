@@ -46,7 +46,7 @@ public class WhoDropsCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.dropMessage(5, "Please do @whodrops <item name>");
+            player.dropMessage(5, "@whodrops <item name>");
             return;
         }
 
@@ -59,7 +59,7 @@ public class WhoDropsCommand extends Command {
                     int count = 1;
                     while (listIterator.hasNext() && count <= 3) {
                         Pair<Integer, String> data = listIterator.next();
-                        output += "#b" + data.getRight() + "#k is dropped by:\r\n";
+                        output += "#v"+data.getLeft() + ":##b" + data.getRight() + "#k is dropped by:\r\n";
                         try (Connection con = DatabaseConnection.getConnection();
                              PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE itemid = ? LIMIT 50")) {
                             ps.setInt(1, data.getLeft());

@@ -1043,7 +1043,18 @@ public class Character extends AbstractCharacterObject {
             }
         }, 777);
     }
-
+    public String getEquipInspectString(short itemId){
+        String ret = "";
+        final Equip item = (Equip) this.getInventory(InventoryType.EQUIPPED).getItem(itemId);
+        if (item != null){
+            ret += "#v" + item.getItemId() + ":#\r\n";
+            ret += item.getInspectString() + "\r\n\r\n";
+        }
+        else{
+            this.dropMessage(5, "item["+ itemId + "+] was null");
+        }
+        return ret;
+    }
     public synchronized void changeJob(Job newJob) {
         if (newJob == null) {
             return;//the fuck you doing idiot!
@@ -6869,7 +6880,96 @@ public class Character extends AbstractCharacterObject {
     public void updateRemainingSp(int remainingSp) {
         updateRemainingSp(remainingSp, GameConstants.getSkillBook(job.getId()));
     }
+    public static Character loadCharFromDBForServer(final int charid) throws SQLException {
+        Character ret = new Character();
+        ret.id = charid;
 
+        try (Connection con = DatabaseConnection.getConnection()) {
+
+            // Character info
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM characters WHERE id = ?")) {
+                ps.setInt(1, charid);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        throw new RuntimeException("Loading char failed (not found)");
+                    }
+
+                    ret.name = rs.getString("name");
+                    ret.level = rs.getInt("level");
+                    ret.fame = rs.getInt("fame");
+                    ret.quest_fame = rs.getInt("fquest");
+                    ret.str = rs.getInt("str");
+                    ret.dex = rs.getInt("dex");
+                    ret.int_ = rs.getInt("int");
+                    ret.luk = rs.getInt("luk");
+                    ret.exp.set(rs.getInt("exp"));
+                    ret.gachaexp.set(rs.getInt("gachaexp"));
+                    ret.hp = rs.getInt("hp");
+                    ret.setMaxHp(rs.getInt("maxhp"));
+                    ret.mp = rs.getInt("mp");
+                    ret.setMaxMp(rs.getInt("maxmp"));
+                    ret.hpMpApUsed = rs.getInt("hpMpUsed");
+                    ret.hasMerchant = rs.getInt("HasMerchant") == 1;
+                    ret.remainingAp = rs.getInt("ap");
+                    ret.loadCharSkillPoints(rs.getString("sp").split(","));
+                    ret.meso.set(rs.getInt("meso"));
+                    ret.merchantmeso = rs.getInt("MerchantMesos");
+                    ret.setGMLevel(rs.getInt("gm"));
+                    ret.skinColor = SkinColor.getById(rs.getInt("skincolor"));
+                    ret.gender = rs.getInt("gender");
+                    ret.job = Job.getById(rs.getInt("job"));
+                    ret.finishedDojoTutorial = rs.getInt("finishedDojoTutorial") == 1;
+                    ret.vanquisherKills = rs.getInt("vanquisherKills");
+                    ret.hair = rs.getInt("hair");
+                    ret.face = rs.getInt("face");
+                    ret.accountid = rs.getInt("accountid");
+                    ret.mapid = rs.getInt("map");
+                    ret.jailExpiration = rs.getLong("jailexpire");
+                    ret.initialSpawnPoint = rs.getInt("spawnpoint");
+                    ret.world = rs.getByte("world");
+                    ret.rank = rs.getInt("rank");
+                    ret.rankMove = rs.getInt("rankMove");
+                    ret.jobRank = rs.getInt("jobRank");
+                    ret.jobRankMove = rs.getInt("jobRankMove");
+                    ret.lastExpGainTime = rs.getTimestamp("lastExpGainTime").getTime();
+
+                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(rs.getByte("equipslots"));
+
+                    short sandboxCheck = 0x0;
+                    for (Pair<Item, InventoryType> item : ItemFactory.INVENTORY.loadItems(ret.id, true)) {
+                        sandboxCheck |= item.getLeft().getFlag();
+
+                        ret.getInventory(item.getRight()).addItemFromDB(item.getLeft());
+
+                        InventoryType mit = item.getRight();
+                        if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
+                            Equip equip = (Equip) item.getLeft();
+                            if (equip.getRingId() > -1) {
+                                Ring ring = Ring.loadFromDb(equip.getRingId());
+                                if (item.getRight().equals(InventoryType.EQUIPPED)) {
+                                    ring.equip();
+                                }
+
+                                ret.addPlayerRing(ring);
+                            }
+                        }
+                    }
+
+                    if ((sandboxCheck & ItemConstants.SANDBOX) == ItemConstants.SANDBOX) {
+                        ret.setHasSandboxItem();
+                    }
+
+
+                    ret.commitExcludedItems();
+                    return ret;
+                }
+            }
+        } catch (SQLException | RuntimeException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public static Character loadCharFromDB(final int charid, Client client, boolean channelserver) throws SQLException {
         Character ret = new Character();
         ret.client = client;

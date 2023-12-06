@@ -442,6 +442,18 @@ public class Equip extends Item {
 
         return stats;
     }
+    public String getInspectString(){
+        String ret = "";
+        if(watk > 0){ret += "WATK: " + watk + "\r\n";}
+        if(str > 0){ret += "STR: " + str + "\r\n";}
+        if(dex > 0){ret += "DEX: " + dex + "\r\n";}
+        if(_int > 0){ret += "INT: " + _int + "\r\n";}
+        if(luk > 0){ret += "LUK: " + luk + "\r\n";}
+        if(speed > 0){ret += "Speed: " + speed + "\r\n";}
+        if(jump > 0){ret += "Jump: " + jump + "\r\n";}
+        if(acc > 0){ret += "Acc: " + acc + "\r\n";}
+        return ret;
+    }
 
     public Pair<String, Pair<Boolean, Boolean>> gainStats(List<Pair<StatUpgrade, Integer>> stats) {
         boolean gotSlot = false, gotVicious = false;

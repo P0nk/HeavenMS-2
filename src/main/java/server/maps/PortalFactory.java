@@ -23,6 +23,7 @@ package server.maps;
 
 import provider.Data;
 import provider.DataTool;
+import scripting.portal.PortalScriptManager;
 
 import java.awt.*;
 

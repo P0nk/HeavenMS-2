@@ -45,8 +45,9 @@ function start() {
     cm.getPlayer().setCS(true);
     var selStr = "Hello. I am Vicious, retired Sniper. However, I used to be the top student of Athena Pierce. Though I no longer hunt, I can make some archer items that will be useful for you...#b"
     var options = ["Create a bow","Create a crossbow","Make a glove","Upgrade a glove","Create materials","Create Arrows"];
-    for (var i = 0; i < options.length; i++)
+    for (var i = 0; i < options.length; i++) {
         selStr += "\r\n#L" + i + "# " + options[i] + "#l";
+    }
     cm.sendSimple(selStr);
 }
 
@@ -60,38 +61,45 @@ function action(mode, type, selection) {
         if (selection == 0) { //bow refine
             var selStr = "I may have been a Sniper, but bows and crossbows aren't too much different. Anyway, which would you like to make?#b";
             items = [1452002,1452003,1452001,1452000,1452005,1452006,1452007];
-            for (var i = 0; i < items.length; i++)
+            for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "##t" + items[i] + "##k - Bowman Lv. " + (10 + (i * 5)) + "#l#b";
+            }
         }else if (selection == 1) { //xbow refine
             var selStr = "I was a Sniper. Crossbows are my specialty. Which would you like me to make for you?#b";
             items = [1462001,1462002,1462003,1462000,1462004,1462005,1462006,1462007];
-            for (var i = 0; i < items.length; i++)
+            for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "##t" + items[i] + "##k - Bowman Lv. " + (10 + (i * 5)) + "#l#b";
+            }
         }else if (selection == 2) { //glove refine
             var selStr = "Okay, so which glove do you want me to make?#b";
             items = [1082012,1082013,1082016,1082048,1082068,1082071,1082084,1082089];
-            for (var i = 0; i < items.length; i++)
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - Bowman Lv. " + (15 + (i * 5) > 40 ? ((i-1) * 10) : 15 + (i * 5)) + "#l#b";
+            for (var i = 0; i < items.length; i++) {
+                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - Bowman Lv. " + (15 + (i * 5) > 40 ? ((i - 1) * 10) : 15 + (i * 5)) + "#l#b";
+            }
         }else if (selection == 3) { //glove upgrade
             var selStr = "Upgrade a glove? That shouldn't be too difficult. Which did you have in mind?#b";
             items = [1082015,1082014,1082017,1082018,1082049,1082050,1082069,1082070,1082072,1082073,1082085,1082083,1082090,1082091];
-            for (var i = 0, x = 0; i < items.length; i++, x += (i+1) % 2 == 0 ? 1 : 0)
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k" + "##k - Bowman Lv. " + (20 + (x * 5) > 40 ? ((x-1) * 10) : 20 + (x * 5)) + "#l#b";
+            for (var i = 0,x = 0; i < items.length; i++,x += (i + 1) % 2 == 0 ? 1 : 0) {
+                selStr += "\r\n#L" + i + "##t" + items[i] + "##k" + "##k - Bowman Lv. " + (20 + (x * 5) > 40 ? ((x - 1) * 10) : 20 + (x * 5)) + "#l#b";
+            }
         }else if (selection == 4) { //material refine
             var selStr = "Materials? I know of a few materials that I can make for you...#b";
             var materials = ["Make Processed Wood with Tree Branch","Make Processed Wood with Firewood","Make Screws (packs of 15)"];
-            for (var i = 0; i < materials.length; i++)
+            for (var i = 0; i < materials.length; i++) {
                 selStr += "\r\n#L" + i + "# " + materials[i] + "#l";
+            }
         }else if (selection == 5) { //arrow refine
             var selStr = "Arrows? Not a problem at all.#b";
             items = [2060000,2061000,2060001,2061001,2060002,2061002];
-            for (var i = 0; i < items.length; i++)
+            for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "##t" + items[i] + "##l";
+            }
         }
         selectedType = selection;
         cm.sendSimple(selStr);
-        if (selection != 4)
+        if (selection != 4) {
             status++;
+        }
     }else if (status == 1) {
         selectedItem = selection;
         items = [4003001,4003001,4003000];
@@ -103,10 +111,11 @@ function action(mode, type, selection) {
         cost = 0;
         cm.sendGetNumber("So, you want me to make some #t" + item + "#s? In that case, how many do you want me to make?",1,1,100)
     }else if (status == 2) {
-        if (selectedType != 4)
+        if (selectedType != 4){
             selectedItem = selection;
-        else
-            qty = (selection > 0) ? selection : (selection < 0 ? -selection : 1);   // thanks br1337 for showing such a simple exploit with quantity on NPC crafters
+        } else {
+            qty = (selection > 0) ? selection : (selection < 0 ? -selection : 1);
+        }
         if (selectedType == 0) { //bow refine
             var matSet = [[4003001,4000000],[4011001,4003000],[4003001,4000016],[4011001,4021006,4003000],[4011001,4011006,4021003,4021006,4003000],[4011004,4021000,4021004,4003000],[4021008,4011001,4011006,4003000,4000014]];
             var matQtySet = [[5,30],[1,3],[30,50],[2,2,8],[5,5,3,3,30],[7,6,3,35],[1,10,3,40,50]];
@@ -128,64 +137,75 @@ function action(mode, type, selection) {
             var matQtySet = [[1,1],[1,1],[1,3,10],[1,3,10],[1,5,15],[1,5,15]];
             var costSet = [0,0,0,0,0,0]
         }
-        if(selectedType != 4){
+        if (selectedType != 4){
             item = items[selectedItem];
             mats = matSet[selectedItem];
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
         }
         var prompt = "You want me to make ";
-        if (qty == 1)
+        if (qty == 1) {
             prompt += "a #t" + item + "#?";
-        else
+        } else {
             prompt += qty + " #t" + item + "#?";
-        prompt += " In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
-        if (mats instanceof Array)
-            for(var i = 0; i < mats.length; i++)
+        }
+        prompt += " In that case,I'm going to need specific items from you in order to make it. Make sure you have room in your inventory,though!#b";
+        if (mats instanceof Array) {
+            for (var i = 0; i < mats.length; i++) {
                 prompt += "\r\n#i" + mats[i] + "# " + (matQty[i] * qty) + " #t" + mats[i] + "#";
-        else
+            }
+        } else {
             prompt += "\r\n#i" + mats + "# " + (matQty * qty) + " #t" + mats + "#";
-        if (cost > 0)
+        }
+        if (cost > 0) {
             prompt += "\r\n#i4031138# " + (cost * qty) + " meso";
+        }
         cm.sendYesNo(prompt);
     }else if (status == 3) {
         var complete = true;
-        
+
         if (cm.getMeso() < (cost * qty)) {
-            cm.sendOk("Sorry, but this is how I make my living. No meso, no item.");
+            cm.sendOk("Sorry,but this is how I make my living. No meso, no item.");
             cm.dispose();
             return;
-        }
-        else{
+        }else{
             if (mats instanceof Array) {
-                for(var i = 0; complete && i < mats.length; i++)
-                    if (!cm.haveItem(mats[i], matQty[i] * qty))
+                for (var i = 0; complete && i < mats.length; i++) {
+                    if (!cm.haveItem(mats[i], matQty[i] * qty)) {
                         complete = false;
-            }else if (!cm.haveItem(mats, matQty * qty))
+                    }
+                }
+            } else if (!cm.haveItem(mats,matQty * qty)) {
                 complete = false;
-        }	
-        if (!complete)
-            cm.sendOk("Surely you, of all people, would understand the value of having quality items? I can't do that without the items I require.");
-        else {
-            var recvItem = item, recvQty;
-            
+            }
+        }
+        if (!complete) {
+            cm.sendOk("Surely you,of all people,would understand the value of having quality items? I can't do that without the items I require.");
+        } else {
+            var recvItem = item,recvQty;
+
             if (item >= 2060000 && item <= 2060002) //bow arrows
+            {
                 recvQty = 1000 - (item - 2060000) * 100;
-            else if (item >= 2061000 && item <= 2061002) //xbow arrows
+            } else if (item >= 2061000 && item <= 2061002) //xbow arrows
+            {
                 recvQty = 1000 - (item - 2061000) * 100;
-            else if (item == 4003000)//screws
+            } else if (item == 4003000)//screws
+            {
                 recvQty = 15 * qty;
-            else
+            } else {
                 recvQty = qty;
-            
-            if (cm.canHold(recvItem, recvQty)) {
+            }
+
+            if (cm.canHold(recvItem,recvQty)) {
                 if (mats instanceof Array) {
-                    for (var i = 0; i < mats.length; i++)
-                        cm.gainItem(mats[i], -(matQty[i] * qty));
-                }else
-                    cm.gainItem(mats, -(matQty * qty));
+                    for (var i = 0; i < mats.length; i++) {
+                        cm.gainItem(mats[i],-(matQty[i] * qty));
+                    }
+                } else {
+                    cm.gainItem(mats,-(matQty * qty));
+                }
                 cm.gainMeso(-(cost * qty));
-                
                 cm.gainItem(recvItem, recvQty);
                 cm.sendOk("A perfect item, as usual. Come and see me if you need anything else.");
             }else {

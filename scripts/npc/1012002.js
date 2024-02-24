@@ -205,9 +205,11 @@ function action(mode, type, selection) {
                 } else {
                     cm.gainItem(mats,-(matQty * qty));
                 }
-                cm.gainMeso(-(cost * qty));
-                cm.gainItem(recvItem, recvQty);
-                cm.sendOk("A perfect item, as usual. Come and see me if you need anything else.");
+                if (cost > 0 ) {
+                 cm.gainMeso(-(cost * qty));
+                }
+                 cm.gainItem(recvItem, recvQty);
+                 cm.sendOk("A perfect item, as usual. Come and see me if you need anything else.");
             }else {
                 cm.sendOk("Please make sure you have room in your inventory, and talk to me again.");
             }

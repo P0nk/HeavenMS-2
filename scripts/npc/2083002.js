@@ -30,12 +30,15 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode < 1)
+    if (mode < 1) {
         cm.dispose();
-    else {
-        if(cm.getMapId() > 240050400) cm.warp(240050600);
-        else cm.warp(240040700, "out00");
-        
+    } else {
+        if (cm.getMapId() > 240050400) {
+            cm.warp(240050600);
+        } else {
+            cm.warp(240040700, "out00");
+        }
+
         cm.dispose();
     }
 }

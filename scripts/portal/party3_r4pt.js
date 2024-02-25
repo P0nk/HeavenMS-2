@@ -23,31 +23,36 @@
 
 function enter(pi) {
     var eim = pi.getEventInstance();
-    if(eim.getProperty("stage4_comb") == null) {
+    if (eim.getProperty("stage4_comb") == null) {
         var r = Math.floor((Math.random() * 3)) + 1;
         var s = Math.floor((Math.random() * 3)) + 1;
-        
+
         eim.setProperty("stage4_comb", "" + r + s);
     }
 
     var pname = Number(pi.getPortal().getName().substring(4, 6));
     var cname = Number(eim.getProperty("stage4_comb"));
-    
+
     var secondPt = true;
-    if(pi.getPortal().getId() < 14) {
+    if (pi.getPortal().getId() < 14) {
         cname = Math.floor(cname / 10);
         secondPt = false;
     }
-    
+
     if ((pname % 10) == (cname % 10)) {    //climb
         var nextPortal;
-        if(secondPt) nextPortal = 1;
-        else nextPortal = pi.getPortal().getId() + 3;
-            
-        pi.playPortalSound(); pi.warp(pi.getMapId(), nextPortal);
+        if (secondPt) {
+            nextPortal = 1;
+        } else {
+            nextPortal = pi.getPortal().getId() + 3;
+        }
+
+        pi.playPortalSound();
+        pi.warp(pi.getMapId(), nextPortal);
     } else {    //fail
-        pi.playPortalSound(); pi.warp(pi.getMapId(), 2);
+        pi.playPortalSound();
+        pi.warp(pi.getMapId(), 2);
     }
-    
+
     return true;
 }

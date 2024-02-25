@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-        pi.message("The gate is not opened yet.");
-        return false;
+    pi.message("The gate is not opened yet.");
+    return false;
 }

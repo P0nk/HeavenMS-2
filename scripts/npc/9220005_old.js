@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* Roudolph Happyville Warp NPC
    @author Moogra
 */
@@ -28,7 +29,8 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode > 0)
+    if (mode > 0) {
         cm.warp(209080000, 0);
+    }
     cm.dispose();
 }

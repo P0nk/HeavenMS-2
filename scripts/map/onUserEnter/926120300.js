@@ -1,6 +1,6 @@
 function getInactiveReactors(map) {
-    var reactors = new Array();
-        
+    var reactors = [];
+
     var iter = map.getReactors().iterator();
     while (iter.hasNext()) {
         var mo = iter.next();
@@ -8,13 +8,13 @@ function getInactiveReactors(map) {
             reactors.push(mo);
         }
     }
-        
+
     return reactors;
 }
 
-function start(ms) {   	       
-	var map = ms.getClient().getChannelServer().getMapFactory().getMap(926120300);
-        map.resetReactors(getInactiveReactors(map));
-        
-	return(true);
+function start(ms) {
+    var map = ms.getClient().getChannelServer().getMapFactory().getMap(926120300);
+    map.resetReactors(getInactiveReactors(map));
+
+    return (true);
 }

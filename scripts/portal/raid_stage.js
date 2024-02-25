@@ -25,16 +25,19 @@ BossRushPQ - Next Stage
 */
 
 function enter(pi) {
-    if(pi.getMap().getMonsters().isEmpty()) {
+    if (pi.getMap().getMonsters().isEmpty()) {
         var nextStage;
-        
-        if(pi.getMapId() % 500 >= 100) nextStage = pi.getMapId() + 100;
-        else nextStage = 970030001 + (Math.floor((pi.getMapId() - 970030100) / 500));
-        
-        pi.playPortalSound(); pi.warp(nextStage);
+
+        if (pi.getMapId() % 500 >= 100) {
+            nextStage = pi.getMapId() + 100;
+        } else {
+            nextStage = 970030001 + (Math.floor((pi.getMapId() - 970030100) / 500));
+        }
+
+        pi.playPortalSound();
+        pi.warp(nextStage);
         return true;
-    }
-    else {
+    } else {
         pi.getPlayer().dropMessage(6, "Defeat all monsters before proceeding to the next stage.");
         return false;
     }

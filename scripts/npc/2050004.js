@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function start() {
-	cm.getPlayer().getStorage().sendStorage(cm.getClient(), 2050004);
-	cm.dispose();
+    cm.getPlayer().getStorage().sendStorage(cm.getClient(), 2050004);
+    cm.dispose();
 }

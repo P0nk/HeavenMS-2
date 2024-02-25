@@ -4,15 +4,15 @@ var questItem = 4032492;
 var status = -1;
 
 function start(mode, type, selection) {
-	action(1, 0, 0);
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
     if (mode == 1) {
-	status++;
+        status++;
     } else {
-	cm.dispose();
-	return;
+        cm.dispose();
+        return;
     }
     if (status == 0) {
         if (cm.isQuestStarted(quest)) {
@@ -27,11 +27,17 @@ function action(mode, type, selection) {
             cm.dispose();
         }
     } else {
-        if(cm.haveItem(4032481, 1)) cm.gainItem(4032481, -1);
-	if(cm.haveItem(4032482, 1)) cm.gainItem(4032482, -1);
-        if(cm.haveItem(4032483, 1)) cm.gainItem(4032483, -1);
-	
-	cm.warp(map, 0);
-	cm.dispose();
+        if (cm.haveItem(4032481, 1)) {
+            cm.gainItem(4032481, -1);
+        }
+        if (cm.haveItem(4032482, 1)) {
+            cm.gainItem(4032482, -1);
+        }
+        if (cm.haveItem(4032483, 1)) {
+            cm.gainItem(4032483, -1);
+        }
+
+        cm.warp(map, 0);
+        cm.dispose();
     }
 }

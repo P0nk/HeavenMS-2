@@ -21,7 +21,7 @@
 /**
  * @author: Ronan
  * @event: Crimsonwood Keep PQ
-*/
+ */
 
 var isPq = true;
 var minPlayers = 6, maxPlayers = 30;
@@ -36,51 +36,57 @@ var maxMapId = 610030800;
 
 var eventTime = 2;     // 2 minutes for first stg
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
-        setEventRequirements();
+    setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function setEventRequirements() {
-        var reqStr = "";
-        
-        reqStr += "\r\n    Number of players: ";
-        if(maxPlayers - minPlayers >= 1) reqStr += minPlayers + " ~ " + maxPlayers;
-        else reqStr += minPlayers;
-        
-        reqStr += "\r\n    Level range: ";
-        if(maxLevel - minLevel >= 1) reqStr += minLevel + " ~ " + maxLevel;
-        else reqStr += minLevel;
-        
-        reqStr += "\r\n    Time limit: ";
-        reqStr += eventTime + " minutes";
-        
-        em.setProperty("party", reqStr);
+    var reqStr = "";
+
+    reqStr += "\r\n    Number of players: ";
+    if (maxPlayers - minPlayers >= 1) {
+        reqStr += minPlayers + " ~ " + maxPlayers;
+    } else {
+        reqStr += minPlayers;
+    }
+
+    reqStr += "\r\n    Level range: ";
+    if (maxLevel - minLevel >= 1) {
+        reqStr += minLevel + " ~ " + maxLevel;
+    } else {
+        reqStr += minLevel;
+    }
+
+    reqStr += "\r\n    Time limit: ";
+    reqStr += eventTime + " minutes";
+
+    em.setProperty("party", reqStr);
 }
 
 function setEventExclusives(eim) {
-        var itemSet = [4001256, 4001257, 4001258, 4001259, 4001260];
-        eim.setExclusiveItems(itemSet);
+    var itemSet = [4001256, 4001257, 4001258, 4001259, 4001260];
+    eim.setExclusiveItems(itemSet);
 }
 
 function setEventRewards(eim) {
-        var itemSet, itemQty, evLevel, expStages, mesoStages;
+    var itemSet, itemQty, evLevel, expStages, mesoStages;
 
-        evLevel = 1;    //Rewards at clear PQ
-        itemSet = [];
-        itemQty = [];
-        eim.setEventRewards(evLevel, itemSet, itemQty);
-        
-        expStages = [2500, 8000, 18000, 25000, 30000, 40000];    //bonus exp given on CLEAR stage signal
-        eim.setEventClearStageExp(expStages);
-        
-        mesoStages = [500, 1000, 2000, 5000, 8000, 20000];    //bonus meso given on CLEAR stage signal
-        eim.setEventClearStageMeso(mesoStages);
+    evLevel = 1;    //Rewards at clear PQ
+    itemSet = [];
+    itemQty = [];
+    eim.setEventRewards(evLevel, itemSet, itemQty);
+
+    expStages = [2500, 8000, 18000, 25000, 30000, 40000];    //bonus exp given on CLEAR stage signal
+    eim.setEventClearStageExp(expStages);
+
+    mesoStages = [500, 1000, 2000, 5000, 8000, 20000];    //bonus meso given on CLEAR stage signal
+    eim.setEventClearStageMeso(mesoStages);
 }
 
 function afterSetup(eim) {}
@@ -90,36 +96,38 @@ function getNameFromList(index, array) {
 }
 
 function generateMapReactors(map) {
-    
-    var jobReactors = [ [0, 0, -1, -1, 0],
-                        [-1, 4, 3, 3, 3],
-                        [1, 3, 4, 2, 2],
-                        [2, -1, 0, 1, -1], 
-                        [3, 2, 1, 0, -1],
-                        [4, 1, -1, 4, 1],
-                        [-1, 2, 4],
-                        [-1, -1]
-                      ];
-                      
+
+    var jobReactors = [[0, 0, -1, -1, 0],
+        [-1, 4, 3, 3, 3],
+        [1, 3, 4, 2, 2],
+        [2, -1, 0, 1, -1],
+        [3, 2, 1, 0, -1],
+        [4, 1, -1, 4, 1],
+        [-1, 2, 4],
+        [-1, -1]
+    ];
+
     var rndIndex;
     var jobFound;
-    while(true) {
+    while (true) {
         jobFound = {};
         rndIndex = [];
-        
-        for(var i = 0; i < jobReactors.length; i++) {
+
+        for (var i = 0; i < jobReactors.length; i++) {
             var jobReactorSlot = jobReactors[i];
-            
+
             var idx = Math.floor(Math.random() * jobReactorSlot.length);
             jobFound["" + jobReactorSlot[idx]] = 1;
             rndIndex.push(idx);
         }
-        
-        if(Object.keys(jobFound).length == 6) break;
+
+        if (Object.keys(jobFound).length == 6) {
+            break;
+        }
     }
-    
+
     var toDeploy = [];
-    
+
     toDeploy.push(getNameFromList(rndIndex[0], ["4skill0a", "4skill0b", "4fake1c", "4fake1d", "4skill0e"]));
     toDeploy.push(getNameFromList(rndIndex[1], ["4fake0a", "4skill4b", "4skill3c", "4skill3d", "4skill3e"]));
     toDeploy.push(getNameFromList(rndIndex[2], ["4skill1a", "4skill3b", "4skill4c", "4skill2d", "4skill2e"]));
@@ -128,22 +136,22 @@ function generateMapReactors(map) {
     toDeploy.push(getNameFromList(rndIndex[5], ["4skill4a", "4skill1b", "4fake0c", "4skill4d", "4skill1e"]));
     toDeploy.push(getNameFromList(rndIndex[6], ["4fake1a", "4skill2c", "4skill4e"]));
     toDeploy.push(getNameFromList(rndIndex[7], ["4fake0b", "4fake0d"]));
-    
-    var toRandomize = new Array();
-    
-    for(var i = 0; i < toDeploy.length; i++) {
+
+    var toRandomize = [];
+
+    for (var i = 0; i < toDeploy.length; i++) {
         var react = map.getReactorByName(toDeploy[i]);
-        
+
         react.setState(1);
         toRandomize.push(react);
     }
-    
+
     map.shuffleReactors(toRandomize);
 }
 
 function setup(channel) {
     var eim = em.newInstance("CWKPQ" + channel);
-    
+
     eim.setProperty("current_instance", "0");
     eim.setProperty("glpq1", "0");
     eim.setProperty("glpq2", "0");
@@ -153,7 +161,7 @@ function setup(channel) {
     eim.setProperty("glpq5", "0");
     eim.setProperty("glpq5_room", "0");
     eim.setProperty("glpq6", "0");
-    
+
     eim.setProperty("glpq_f0", "0");
     eim.setProperty("glpq_f1", "0");
     eim.setProperty("glpq_f2", "0");
@@ -180,10 +188,10 @@ function setup(channel) {
     eim.getInstanceMap(610030600).resetPQ(level);
     eim.getInstanceMap(610030700).resetPQ(level);
     eim.getInstanceMap(610030800).resetPQ(level);
-    
+
     generateMapReactors(eim.getInstanceMap(610030400));
     eim.getInstanceMap(610030550).shuffleReactors();
-    
+
     //add environments
     var a = Array("a", "b", "c", "d", "e", "f", "g", "h", "i");
     var map = eim.getInstanceMap(610030400);
@@ -198,20 +206,20 @@ function setup(channel) {
             }
         }
     }
-    
-    var pos_x = Array(944,401,28,-332,-855);
-    var pos_y = Array(-204,-384,-504,-384,-204);
+
+    var pos_x = Array(944, 401, 28, -332, -855);
+    var pos_y = Array(-204, -384, -504, -384, -204);
     var map = eim.getInstanceMap(610030540);
     for (var z = 0; z < pos_x.length; z++) {
         var mob = em.getMonster(9400594);
         eim.registerMonster(mob);
         map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(pos_x[z], pos_y[z]));
     }
-    
+
     eim.startEventTimer(eventTime * 60000);
     setEventRewards(eim);
     setEventExclusives(eim);
-    
+
     eim.schedule("spawnGuardians", 60000);
     return eim;
 }
@@ -225,13 +233,13 @@ function playerEntry(eim, player) {
 function spawnGuardians(eim) {
     var map = eim.getMapInstance(610030100);
     if (map.countPlayers() <= 0) {
-	return;
+        return;
     }
     map.broadcastStringMessage(5, "The Master Guardians have detected you.");
     for (var i = 0; i < 20; i++) { //spawn 20 guardians
-	var mob = eim.getMonster(9400594);
-	eim.registerMonster(mob);
-	map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(1000, 336));
+        var mob = eim.getMonster(9400594);
+        eim.registerMonster(mob);
+        map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(1000, 336));
     }
 }
 
@@ -241,53 +249,52 @@ function scheduledTimeout(eim) {
 
 function changedMap(eim, player, mapid) {
     if (mapid < minMapId || mapid > maxMapId) {
-	if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+        if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
             eim.unregisterPlayer(player);
             eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
             end(eim);
-        }
-        else {
+        } else {
             eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
             eim.unregisterPlayer(player);
         }
     } else {
-	switch(mapid) {
-	    case 610030200:
-		if (eim.getIntProperty("current_instance") == 0) {
-		    eim.restartEventTimer(600000); //10 mins
-		    eim.setIntProperty("current_instance", 1);
-		}
-		break;
-	    case 610030300:
-		if (eim.getIntProperty("current_instance") == 1) {
-		    eim.restartEventTimer(600000); //10 mins
-		    eim.setIntProperty("current_instance", 2);
-		}
-		break;
-	    case 610030400:
-		if (eim.getIntProperty("current_instance") == 2) {
-		    eim.restartEventTimer(600000); //10 mins
-		    eim.setIntProperty("current_instance", 3);
-		}
-		break;
-	    case 610030500:
-		if (eim.getIntProperty("current_instance") == 3) {
-		    eim.restartEventTimer(1200000); //20 mins
-		    eim.setIntProperty("current_instance", 4);
-		}
-		break;
-	    case 610030600:
-		if (eim.getIntProperty("current_instance") == 4) {
-		    eim.restartEventTimer(3600000); //1 hr
-		    eim.setIntProperty("current_instance", 5);
-		}
-		break;
-	    case 610030800:
-		if (eim.getIntProperty("current_instance") == 5) {
-		    eim.restartEventTimer(60000); //1 min
-		    eim.setIntProperty("current_instance", 6);
-		}
-		break;
+        switch (mapid) {
+            case 610030200:
+                if (eim.getIntProperty("current_instance") == 0) {
+                    eim.restartEventTimer(600000); //10 mins
+                    eim.setIntProperty("current_instance", 1);
+                }
+                break;
+            case 610030300:
+                if (eim.getIntProperty("current_instance") == 1) {
+                    eim.restartEventTimer(600000); //10 mins
+                    eim.setIntProperty("current_instance", 2);
+                }
+                break;
+            case 610030400:
+                if (eim.getIntProperty("current_instance") == 2) {
+                    eim.restartEventTimer(600000); //10 mins
+                    eim.setIntProperty("current_instance", 3);
+                }
+                break;
+            case 610030500:
+                if (eim.getIntProperty("current_instance") == 3) {
+                    eim.restartEventTimer(1200000); //20 mins
+                    eim.setIntProperty("current_instance", 4);
+                }
+                break;
+            case 610030600:
+                if (eim.getIntProperty("current_instance") == 4) {
+                    eim.restartEventTimer(3600000); //1 hr
+                    eim.setIntProperty("current_instance", 5);
+                }
+                break;
+            case 610030800:
+                if (eim.getIntProperty("current_instance") == 5) {
+                    eim.restartEventTimer(60000); //1 min
+                    eim.setIntProperty("current_instance", 6);
+                }
+                break;
         }
     }
 }
@@ -301,8 +308,7 @@ function playerRevive(eim, player) {
         eim.unregisterPlayer(player);
         eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
         end(eim);
-    }
-    else {
+    } else {
         eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
         eim.unregisterPlayer(player);
     }
@@ -313,16 +319,15 @@ function playerDisconnected(eim, player) {
         eim.unregisterPlayer(player);
         eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
         end(eim);
-    }
-    else {
+    } else {
         eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
         eim.unregisterPlayer(player);
     }
 }
 
-function leftParty (eim, player) {}
+function leftParty(eim, player) {}
 
-function disbandParty (eim) {}
+function disbandParty(eim) {}
 
 function monsterValue(eim, mobId) {
     return 1;

@@ -19,13 +19,12 @@
     Credits to: Kevin
 */
 function enter(pi) {
-    if(pi.isQuestStarted(20718)){
+    if (pi.isQuestStarted(20718)) {
         var cml = pi.getEventManager("Cygnus_Magic_Library");
         cml.setProperty("player", pi.getPlayer().getName());
         cml.startInstance(pi.getPlayer());
         pi.playPortalSound();
-    }
-    else{
+    } else {
         pi.playPortalSound();
         pi.warp(101000003, 8);
     }

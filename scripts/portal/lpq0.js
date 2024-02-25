@@ -33,8 +33,7 @@ function enter(pi) {
     if (avail == null) {
         pi.getPlayer().dropMessage(5, "Some seal is blocking this door.");
         return false;
-    }
-    else {
+    } else {
         pi.playPortalSound();
         pi.getPlayer().changeMap(target, targetPortal);
         return true;

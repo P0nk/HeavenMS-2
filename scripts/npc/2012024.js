@@ -35,7 +35,7 @@ function action(mode, type, selection) {
             cm.dispose();
         } else {
             if (status == 1) {
-                cm.sendNext ("Alright, see you next time. Take care.");
+                cm.sendNext("Alright, see you next time. Take care.");
                 status++;
             } else if (status == 2) {
                 cm.warp(200000151, 0);

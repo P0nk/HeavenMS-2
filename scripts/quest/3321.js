@@ -18,24 +18,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("As you may know by now, I am Dr. De Lang. Once an influent alchemist amongst the ranks of the Alcadno society, I have been disconnected from their society due to the disaster of the aftermatch of my failed experiments, that can be seen now all over Magatia.");
         } else if (status == 1) {

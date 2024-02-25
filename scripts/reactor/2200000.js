@@ -25,7 +25,7 @@
  * 2200000.js: Fake Dollhouse: Returns player to Eos Tower 74th Floor [221023200]
 */
 
-function act(){
+function act() {
     rm.playerMessage(5, "Gotcha! Try again next time!");
     rm.warp(221023200);
 }

@@ -12,14 +12,14 @@ var maxMapId;
 
 var eventTime;                  // Max time allotted for the event, in minutes.
 
-var lobbyRange = [0, 0];        // Range of concurrent lobbies (min range is 0, max range is 7).
+const maxLobbies = 7;        // Max amount of concurrent active lobbies.
 
 function init() {
     // After loading, ChannelServer
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -81,7 +81,7 @@ function scheduledTimeout(eim) {
 function timeOut(eim) {
     if (eim.getPlayerCount() > 0) {
         var pIter = eim.getPlayers().iterator();
-        while (pIter.hasNext()){
+        while (pIter.hasNext()) {
             var player = pIter.next();
             player.dropMessage(6, "You have run out of time to complete this event!");
             playerExit(eim, player);
@@ -104,7 +104,7 @@ function friendlyKilled(mob, eim) {
 }
 
 function allMonstersDead(eim) {
-    // When invoking unregisterMonster(MapleMonster mob) OR killed
+    // When invoking unregisterMonster(Monster mob) OR killed
     // Happens only when size = 0
 }
 

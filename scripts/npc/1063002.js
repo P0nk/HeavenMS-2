@@ -25,25 +25,26 @@
 var repeatablePrizes = [[4010006, 4], [4010007, 4], [4020007, 4]];
 
 function start() {
-    if (cm.isQuestStarted(2054) && !cm.haveItem(4031028,30)) {
-        if(!cm.canHold(4031028,30)) {
+    if (cm.isQuestStarted(2054) && !cm.haveItem(4031028, 30)) {
+        if (!cm.canHold(4031028, 30)) {
             cm.sendNext("Check for a available slot on your ETC inventory.")
             cm.dispose();
             return;
         }
-        
-        cm.gainItem(4031028,30);
+
+        cm.gainItem(4031028, 30);
     } else {
-        if(cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).getNumFreeSlot() < 1) {
+        const InventoryType = Java.type('client.inventory.InventoryType');
+        if (cm.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1) {
             cm.sendNext("Check for a available slot on your ETC inventory.");
             cm.dispose();
             return;
         }
-        
+
         var itemPrize = repeatablePrizes[Math.floor((Math.random() * repeatablePrizes.length))];
         cm.gainItem(itemPrize[0], itemPrize[1]);
     }
-    
+
     cm.warp(105040300, 0);
     cm.dispose();
 }

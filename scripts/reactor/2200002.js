@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*Stage 2 Box For LPQ
  *@Author Jvlaple
  */
- 
-function act(){
+
+function act() {
     rm.mapMessage(5, "An unknown force has warped you into a trap.");
     rm.warpMap(922010201);
 }

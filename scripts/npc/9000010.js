@@ -29,5 +29,5 @@ function action(mode, type, selection) {
         cm.dispose();
     }
     cm.warp(cm.getPlayer().getSavedLocation("EVENT"));
-    cm.dispose();    
+    cm.dispose();
 }  

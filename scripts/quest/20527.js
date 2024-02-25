@@ -24,20 +24,21 @@ function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             var mount = qm.getPlayer().getMount();
-            
-            if(mount != null && mount.getLevel() >= 3) {
+
+            if (mount != null && mount.getLevel() >= 3) {
                 qm.forceCompleteQuest();
                 qm.sendNext("Alright, I'll get you started in how to train Mimio, the next step for Mimianas. When you're ready, talk to me again.");
             } else {

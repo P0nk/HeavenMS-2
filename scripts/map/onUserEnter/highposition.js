@@ -25,5 +25,5 @@
  *
 */
 function start(ms) {
-	ms.touchTheSky();
+    ms.touchTheSky();
 }

@@ -22,7 +22,7 @@
 // Opened GPQ boss room, players may now revive and stay on the GPQ
 
 function act() {
-        if(rm.getEventInstance() != null) {
-                rm.getEventInstance().setProperty("canRevive", "1");
-        }
+    if (rm.getEventInstance() != null) {
+        rm.getEventInstance().setProperty("canRevive", "1");
+    }
 }

@@ -26,16 +26,18 @@ ans = [4, 1, 3, 1, 3];
 rand = parseInt(Math.random() * quest.length);
 
 function start() {
-    if (cm.getPlayer().gotPartyQuestItem("JBQ") && !cm.haveItem(4031058))
+    if (cm.getPlayer().gotPartyQuestItem("JBQ") && !cm.haveItem(4031058)) {
         if (cm.haveItem(4005004)) {
-            if(!cm.canHold(4031058)) {
+            if (!cm.canHold(4031058)) {
                 cm.sendNext("Have a free ETC slot available before accepting this trial.");
             } else {
                 cm.sendNext("Alright... I'll be testing out your wisdom here. Answer all the questions correctly, and you will pass the test BUT, if you even lie to me once, then you'll have to start over again ok, here we go.");
                 return;
             }
-        } else
+        } else {
             cm.sendNext("Bring me a #b#t4005004##k to proceed with the questions.");
+        }
+    }
     cm.dispose();
 }
 
@@ -45,16 +47,19 @@ function action(mode, type, selection) {
         cm.dispose();
         return;
     }
-    if (status == 0)
+    if (status == 0) {
         cm.gainItem(4005004, -1);
-    if (status > 0)
+    }
+    if (status > 0) {
         if (selection != ans[rand]) {
             cm.sendNext("You have failed the question.");
             cm.dispose();
             return;
         }
-    while (quest[rand].equals("") && status <= 4)
+    }
+    while (quest[rand] === "" && status <= 4) {
         rand = parseInt(Math.random() * quest.length);
+    }
     if (status <= 4) {
         cm.sendSimple("Here's the " + (status + 1) + (status == 0 ? "st" : status == 1 ? "nd" : status == 2 ? "rd" : "th") + " question. " + quest[rand]);
         quest[rand] = "";

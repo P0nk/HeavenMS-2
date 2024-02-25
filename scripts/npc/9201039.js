@@ -41,8 +41,9 @@ function start() {
     if (cm.isQuestCompleted(8860) && !cm.haveItem(4031528)) {
         cm.sendNext("I've already done your hair once as a trade-for-services, sport. You'll have to snag an EXP Hair coupon from the Cash Shop if you want to change it again!");
         cm.dispose();
-    } else
+    } else {
         cm.sendYesNo("Ready for an awesome hairdo? I think you are! Just say the word, and we'll get started!");
+    }
 }
 
 function action(mode, type, selection) {
@@ -50,18 +51,21 @@ function action(mode, type, selection) {
         if (type == 7) {
             cm.sendNext("Ok, I'll give you a minute.");
         }
-        
+
         cm.dispose();
     }
     status++;
     if (status == 1) {
         hairnew = Array();
-        if (cm.getPlayer().getGender() == 0)
-            for(var i = 0; i < mhair_q.length; i++)
+        if (cm.getPlayer().getGender() == 0) {
+            for (var i = 0; i < mhair_q.length; i++) {
                 pushIfItemExists(hairnew, mhair_q[i]);
-        else
-            for(var j = 0; j < fhair_q.length; j++)
+            }
+        } else {
+            for (var j = 0; j < fhair_q.length; j++) {
                 pushIfItemExists(hairnew, fhair_q[j]);
+            }
+        }
         cm.sendNext("Here we go!");
     } else {
         if (cm.haveItem(4031528)) {

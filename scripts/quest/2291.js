@@ -24,23 +24,24 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
-            if(!qm.haveItem(4032521, 10)) {
+            if (!qm.haveItem(4032521, 10)) {
                 qm.sendNext("Hey, you didn't get #b10 #t4032521##k yet, did you?");
                 qm.dispose();
                 return;
             }
-            
+
             qm.sendNext("You got the #b#i4032521##k with you, great. Let me show you the way.");
         } else if (status == 1) {
             var em = qm.getEventManager("RockSpiritVIP");
@@ -49,7 +50,7 @@ function end(mode, type, selection) {
                 qm.dispose();
                 return;
             }
-            
+
             qm.gainItem(4032521, -10);
             qm.forceCompleteQuest();
             qm.dispose();

@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
  *@Author:     Moogra, Traitor, Ronan
  *@Map(s):     All Dojo fighting maps
@@ -30,13 +31,13 @@ function start(ms) {
     ms.getPlayer().resetEnteredScript();
     var stage = Math.floor(ms.getMapId() / 100) % 100;
     var callBoss = false;
-    
+
     if (stage % 6 == 0) {
         ms.getClient().getChannelServer().dismissDojoSchedule(ms.getMapId(), ms.getParty());
         ms.getClient().getChannelServer().setDojoProgress(ms.getMapId());
     } else {
         callBoss = ms.getClient().getChannelServer().setDojoProgress(ms.getMapId());
-        
+
         var realstage = stage - ((stage / 6) | 0);
         var mob = ms.getMonsterLifeFactory(9300183 + realstage);
         if (callBoss && mob != null && ms.getPlayer().getMap().getMonsterById(9300216) == null) {

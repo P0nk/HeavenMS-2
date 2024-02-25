@@ -18,13 +18,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /*
     Stage 2: Key door - Guild Quest
     @Author Lerk
 */
 function enter(pi) {
     if (pi.getPlayer().getMap().getReactorByName("stonegate").getState() == 1) {
-        pi.playPortalSound(); pi.warp(990000430, 0);
+        pi.playPortalSound();
+        pi.warp(990000430, 0);
         return true;
     } else {
         pi.getPlayer().dropMessage(5, "The door is still blocked.");

@@ -42,12 +42,13 @@ function action(mode, type, selection) {
         if (cm.getMeso() < 1500) {
             cm.sendNext("I am sorry, but I think you are short on mesos. I am afraid I can't let you ride this if you do not have enough money to do so. Please come back when you have enough money to use this.");
             cm.dispose();
-       } else {
+        } else {
             cm.warp(cm.getPlayer().getMapId() == 260020000 ? 261000000 : 260000000, 0);
-	    cm.gainMeso(-1500);
+            cm.gainMeso(-1500);
             cm.dispose();
-	}
-    } else if (mode == 0)
+        }
+    } else if (mode == 0) {
         cm.sendNext("Hmmm... too busy to do it right now? If you feel like doing it, though, come back and find me.");
-        cm.dispose();
+    }
+    cm.dispose();
 }

@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*@author Jvlaple
  *Reactor : LudiPQ Bonus Reactor - 2202004.js
  * Drops all the Bonus Items
  */
- 
+
 function act() {
-        rm.sprayItems(true, 1, 30, 60, 15);
+    rm.sprayItems(true, 1, 30, 60, 15);
 }

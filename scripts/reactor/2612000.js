@@ -19,10 +19,11 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*2612000.js - MagatiaPQ Box
  *@author Ronan
  */
- 
+
 function act() {
-	rm.sprayItems();
+    rm.sprayItems();
 }

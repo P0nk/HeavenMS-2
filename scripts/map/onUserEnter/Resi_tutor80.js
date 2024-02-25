@@ -1,3 +1,3 @@
-function start(ms) { 
-	ms.setDirectionMode(false);
+function start(ms) {
+    ms.setDirectionMode(false);
 }

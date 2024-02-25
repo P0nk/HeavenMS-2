@@ -1,12 +1,12 @@
 /**
-----------------------------------------------------------------------------------
-	Skyferry Between Victoria Island, Ereve and Orbis.
+ ----------------------------------------------------------------------------------
+ Skyferry Between Victoria Island, Ereve and Orbis.
 
-	1100004 Kiru (To Orbis)
+ 1100004 Kiru (To Orbis)
 
-        Credits to: MapleSanta 
-----------------------------------------------------------------------------------
-**/
+ Credits to: MapleSanta
+ ----------------------------------------------------------------------------------
+ **/
 var menu = new Array("Orbis");
 var method;
 
@@ -18,7 +18,7 @@ function start() {
 function action(mode, type, selection) {
     if (mode == -1) {
         cm.dispose();
-        return;
+
     } else {
         if (mode == 0 && status == 0) {
             cm.dispose();

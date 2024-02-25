@@ -1,8 +1,6 @@
 var arena;
 var status = 0;
 
-importPackage(Packages.client);
-
 function start() {
     arena = cm.getPlayer().getAriantColiseum();
     if (arena == null) {
@@ -10,7 +8,7 @@ function start() {
         cm.dispose();
         return;
     }
-    
+
     status = -1;
     action(1, 0, 0);
 }
@@ -23,10 +21,11 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             menuStr = generateSelectionMenu(["I would like to check my battle points! / I would like to exchange (1) Palm Tree Beach Chair", "I would like to know more about the points of the Battle Arena."]);
             cm.sendSimple("Hello, what I can do for you?\r\n\r\n" + menuStr);

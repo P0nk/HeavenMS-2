@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-function start(ms) {   	       
-	ms.mapEffect("maplemap/enter/1010100");
+function start(ms) {
+    ms.mapEffect("maplemap/enter/1010100");
 }

@@ -27,3 +27,5 @@ function hit() {
     var map = rm.getMap();
     map.moveEnvironment("trap" + rm.getReactor().getName()[5], 1);
 }
+
+function act() {}

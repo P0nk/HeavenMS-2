@@ -21,33 +21,33 @@
 */
 /**
  *Dollhouse Event
-**/
-importPackage(Packages.tools);
+ **/
 
 var entryMap = 922000010;
 var exitMap = 221024400;
 var eventTime = 10;     //10 minutes
 
 function init() {
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function setup(level, lobbyid) {
     var eim = em.newInstance("DollHouse_" + lobbyid);
     eim.setProperty("level", level);
     eim.setProperty("boss", "0");
-    
+
     return eim;
 }
 
 function playerEntry(eim, player) {
     eim.getInstanceMap(entryMap).shuffleReactors();
     eim.setExclusiveItems([4031094]);
-    
+
     player.changeMap(entryMap, 0);
-    em.setProperty("noEntry","true");
-    
-    player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
+    em.setProperty("noEntry", "true");
+
+    const PacketCreator = Java.type('tools.PacketCreator');
+    player.sendPacket(PacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }
 
@@ -56,7 +56,7 @@ function playerUnregistered(eim, player) {}
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function scheduledTimeout(eim) {
@@ -73,13 +73,15 @@ function clear(eim) {
     var player = eim.getPlayers().get(0);
     eim.unregisterPlayer(player);
     player.changeMap(exitMap, 4);
-    
+
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function changedMap(eim, chr, mapid) {
-    if(mapid != entryMap) playerExit(eim, chr);
+    if (mapid != entryMap) {
+        playerExit(eim, chr);
+    }
 }
 
 function cancelSchedule() {}

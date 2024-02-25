@@ -3,8 +3,6 @@
  * For Jvlaple's AriantPQ
  */
 
-importPackage(Packages.server.expeditions);
-
 var status = 0;
 var toBan = -1;
 var choice;
@@ -13,9 +11,10 @@ var arena;
 var arenaName;
 var type;
 var map;
-var exped = MapleExpeditionType.ARIANT;
-var exped1 = MapleExpeditionType.ARIANT1;
-var exped2 = MapleExpeditionType.ARIANT2;
+const ExpeditionType = Java.type('server.expeditions.ExpeditionType');
+var exped = ExpeditionType.ARIANT;
+var exped1 = ExpeditionType.ARIANT1;
+var exped2 = ExpeditionType.ARIANT2;
 
 function start() {
     status = -1;
@@ -41,12 +40,12 @@ function action(mode, type, selection) {
                 cm.dispose();
                 return;
             }
-            
+
             if (status == 0) {
                 var expedicao = cm.getExpedition(exped);
                 var expedicao1 = cm.getExpedition(exped1);
                 var expedicao2 = cm.getExpedition(exped2);
-                
+
                 var channelMaps = cm.getClient().getChannelServer().getMapFactory();
                 var startSnd = "What would you like to do? \r\n\r\n\t#e#r(Choose a Battle Arena)#n#k\r\n#b";
                 var toSnd = startSnd;
@@ -66,7 +65,7 @@ function action(mode, type, selection) {
                 } else if (channelMaps.getMap(980010301).getCharacters().isEmpty()) {
                     toSnd += "#L2#Join Battle Arena (3)  Owner (" + expedicao2.getLeader().getName() + ")" + " Current Member: " + cm.getExpeditionMemberNames(exped2) + "\r\n";
                 }
-                if (toSnd.equals(startSnd)) {
+                if (toSnd === startSnd) {
                     cm.sendOk("All the Battle Arena is currently occupied. I suggest you to come back later or change channels.");
                     cm.dispose();
                 } else {
@@ -79,7 +78,7 @@ function action(mode, type, selection) {
                     cm.dispose();
                     return;
                 }
-                
+
                 if (expedicao != null) {
                     enterArena(-1);
                 } else {
@@ -95,7 +94,7 @@ function action(mode, type, selection) {
                     status = 0;
                 } else {
                     enterArena(players);
-                } 
+                }
             }
         }
     }
@@ -104,17 +103,17 @@ function action(mode, type, selection) {
 function fetchArenaType() {
     switch (arenaType) {
         case 0 :
-            exped = MapleExpeditionType.ARIANT;
+            exped = ExpeditionType.ARIANT;
             expedicao = cm.getExpedition(exped);
             map = 980010100;
             break;
         case 1 :
-            exped = MapleExpeditionType.ARIANT1;
+            exped = ExpeditionType.ARIANT1;
             expedicao = cm.getExpedition(exped);
             map = 980010200;
             break;
         case 2 :
-            exped = MapleExpeditionType.ARIANT2;
+            exped = ExpeditionType.ARIANT2;
             expedicao = cm.getExpedition(exped);
             map = 980010300;
             break;
@@ -123,7 +122,7 @@ function fetchArenaType() {
             map = 0;
             expedicao = "";
     }
-    
+
     return expedicao;
 }
 
@@ -131,7 +130,7 @@ function enterArena(arenaPlayers) {
     expedicao = fetchArenaType();
     if (expedicao == "") {
         cm.dispose();
-        return;
+
     } else if (expedicao == null) {
         if (arenaPlayers != -1) {
             var res = cm.createExpedition(exped, true, 0, arenaPlayers);
@@ -146,7 +145,7 @@ function enterArena(arenaPlayers) {
         } else {
             cm.sendOk("An unexpected error has occurred when locating the expedition, please try again later.");
         }
-        
+
         cm.dispose();
     } else {
         if (playerAlreadyInLobby(cm.getPlayer())) {
@@ -175,7 +174,7 @@ function enterArena(arenaPlayers) {
 }
 
 function playerAlreadyInLobby(player) {
-    return cm.getExpedition(MapleExpeditionType.ARIANT) != null && cm.getExpedition(MapleExpeditionType.ARIANT).contains(player) ||
-            cm.getExpedition(MapleExpeditionType.ARIANT1) != null && cm.getExpedition(MapleExpeditionType.ARIANT1).contains(player) ||
-            cm.getExpedition(MapleExpeditionType.ARIANT2) != null && cm.getExpedition(MapleExpeditionType.ARIANT2).contains(player);
+    return cm.getExpedition(ExpeditionType.ARIANT) != null && cm.getExpedition(ExpeditionType.ARIANT).contains(player) ||
+        cm.getExpedition(ExpeditionType.ARIANT1) != null && cm.getExpedition(ExpeditionType.ARIANT1).contains(player) ||
+        cm.getExpedition(ExpeditionType.ARIANT2) != null && cm.getExpedition(ExpeditionType.ARIANT2).contains(player);
 }

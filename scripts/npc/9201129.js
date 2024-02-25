@@ -4,15 +4,15 @@ var questItem = 4032495;
 var status = -1;
 
 function start(mode, type, selection) {
-	action(1, 0, 0);
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
     if (mode == 1) {
-	status++;
+        status++;
     } else {
-	cm.dispose();
-	return;
+        cm.dispose();
+        return;
     }
     if (status == 0) {
         if (cm.isQuestStarted(quest)) {
@@ -27,7 +27,7 @@ function action(mode, type, selection) {
             cm.dispose();
         }
     } else {
-	cm.warp(map, 0);
-	cm.dispose();
+        cm.warp(map, 0);
+        cm.dispose();
     }
 }

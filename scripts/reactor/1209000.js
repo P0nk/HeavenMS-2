@@ -28,6 +28,6 @@ function act() {    // string visibility thanks to ProXAIMeRx & Glvelturall
         rm.setQuestProgress(6400, 1, 2);
         rm.setQuestProgress(6400, 6401, "q3");
     }
-    
+
     rm.message("Real Bart has been found. Return to Jonathan through the portal.");
 }

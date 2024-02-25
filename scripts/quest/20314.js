@@ -36,10 +36,11 @@ function start(mode, type, selection) {
             qm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             qm.sendNext("The jewel you brought back from the Master of Disguise is Shinsoo's Teardrop. It is the crystalization of Shinsoo's powers. If the Black Mage gets his hands on this, then this spells doom for all of us.");
         } else if (status == 1) {
@@ -53,7 +54,8 @@ function start(mode, type, selection) {
                     qm.sendNext("If you wish to receive the medal befitting the title, you may want to make some room in your equipment inventory.");
                 } else {
                     qm.gainItem(1142068, 1);
-                    qm.getPlayer().changeJob(Packages.client.MapleJob.NIGHTWALKER3);
+                    const Job = Java.type('client.Job');
+                    qm.getPlayer().changeJob(Job.NIGHTWALKER3);
                     qm.completeQuest();
                     qm.sendOk("#h #, from here on out, you are an Advanced Knight of Cygnus Knights. The title comes with a newfound broad view on everything. You may encounter temptations here and there, but I want you to keep your faith and beliefs intact and do not succumb to the darkness.");
                 }

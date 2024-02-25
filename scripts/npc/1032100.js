@@ -20,14 +20,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Arwen the Fairy - Victoria Road : Ellinia (101000000)
--- By ---------------------------------------------------------------------------------------------
-	Xterminator
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Xterminator
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Arwen the Fairy - Victoria Road : Ellinia (101000000)
+ -- By ---------------------------------------------------------------------------------------------
+ Xterminator
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.0 - First Version by Xterminator
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 var status = 0;
 var item;
@@ -50,10 +50,11 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             if (cm.getLevel() >= 40) {
                 cm.sendNext("Yeah... I am the master alchemist of the fairies. But the fairies are not supposed to be in contact with a human being for a long period of time... A strong person like you will be fine, though. If you get me the materials, I'll make you a special item.");
@@ -79,8 +80,8 @@ function action(mode, type, selection) {
             if (selected == 0) {
                 if (cm.haveItem(4011000) && cm.haveItem(4011001) && cm.haveItem(4011002) && cm.haveItem(4011003) && cm.haveItem(4011004) && cm.haveItem(4011005) && cm.haveItem(4011006) && cm.getMeso() >= 10000) {
                     cm.gainMeso(-10000);
-                    for(var i = 4011000; i<4011007; i++) {
-                        cm.gainItem(i,-1);
+                    for (var i = 4011000; i < 4011007; i++) {
+                        cm.gainItem(i, -1);
                     }
                     cm.gainItem(4011007, 1);
                     cm.sendNext("Ok here, take " + item + ". It's well-made, probably because I'm using good materials. If you need my help down the road, feel free to come back.");
@@ -90,8 +91,8 @@ function action(mode, type, selection) {
             } else if (selected == 1) {
                 if (cm.haveItem(4021000) && cm.haveItem(4021001) && cm.haveItem(4021002) && cm.haveItem(4021003) && cm.haveItem(4021004) && cm.haveItem(4021005) && cm.haveItem(4021006) && cm.haveItem(4021007) && cm.haveItem(4021008) && cm.getMeso() >= 15000) {
                     cm.gainMeso(-15000);
-                    for(var j = 4021000; j<4021009; j++) {
-                        cm.gainItem(j,-1);
+                    for (var j = 4021000; j < 4021009; j++) {
+                        cm.gainItem(j, -1);
                     }
                     cm.gainItem(4021009, 1);
                     cm.sendNext("Ok here, take " + item + ". It's well-made, probably because I'm using good materials. If you need my help down the road, feel free to come back.");
@@ -101,8 +102,8 @@ function action(mode, type, selection) {
             } else if (selected == 2) {
                 if (cm.haveItem(4001006) && cm.haveItem(4011007) && cm.haveItem(4021008) && cm.getMeso() >= 30000) {
                     cm.gainMeso(-30000);
-                    for(var k = 4001006; k<4021009; k+=10001) {
-                        cm.gainItem(k,-1);
+                    for (var k = 4001006; k < 4021009; k += 10001) {
+                        cm.gainItem(k, -1);
                     }
                     cm.gainItem(4031042, 1);
                     cm.sendNext("Ok here, take " + item + ". It's well-made, probably because I'm using good materials. If you need my help down the road, feel free to come back.");

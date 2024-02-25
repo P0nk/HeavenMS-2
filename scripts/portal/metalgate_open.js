@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 Stage 2: Door guard by Dark Muscle Golems - Guild Quest
 
@@ -27,7 +28,8 @@ Stage 2: Door guard by Dark Muscle Golems - Guild Quest
 
 function enter(pi) {
     if (pi.getPlayer().getMap().getReactorByName("metalgate").getState() == 1) {
-        pi.playPortalSound(); pi.warp(990000431, 0);
+        pi.playPortalSound();
+        pi.warp(990000431, 0);
         return true;
     }
     pi.playerMessage(5, "This way forward is not open yet.");

@@ -18,11 +18,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 	Author: kevintjuh93
 */
 function enter(pi) {
-	pi.talkGuide("You're very close to town. I'll head over there first since I have some things to take care of. You take your time.");
-	pi.blockPortal();
-	return false;
+    pi.talkGuide("You're very close to town. I'll head over there first since I have some things to take care of. You take your time.");
+    pi.blockPortal();
+    return false;
 }

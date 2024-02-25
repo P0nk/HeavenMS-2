@@ -21,8 +21,6 @@
 	Marriage NPC
  */
 
-importPackage(Packages.net.server.channel);
-
 var status;
 var wid;
 var isMarrying;
@@ -42,27 +40,27 @@ function isWeddingIndoors(mapid) {
 
 function hasSuitForWedding(player) {
     var baseid = (player.getGender() == 0) ? 1050131 : 1051150;
-    
-    for(var i = 0; i < 4; i++) {
-        if(player.haveItemWithId(baseid + i, true)) {
+
+    for (var i = 0; i < 4; i++) {
+        if (player.haveItemWithId(baseid + i, true)) {
             return true;
         }
     }
-    
+
     return false;
 }
 
 function getMarriageInstance(weddingId) {
     var em = cm.getEventManager(weddingEventName);
-    
+
     for (var iterator = em.getInstances().iterator(); iterator.hasNext();) {
         var eim = iterator.next();
-        
-        if(eim.getIntProperty("weddingId") == weddingId) {
+
+        if (eim.getIntProperty("weddingId") == weddingId) {
             return eim;
         }
     }
-    
+
     return null;
 }
 
@@ -73,18 +71,18 @@ function hasWeddingRing(player) {
             return true;
         }
     }
-    
+
     return false;
 }
 
-function start() {  
+function start() {
     weddingIndoors = isWeddingIndoors(cm.getMapId());
     status = -1;
-    
-    action(1, 0, 0);  
-}  
 
-function action(mode, type, selection) {  
+    action(1, 0, 0);
+}
+
+function action(mode, type, selection) {
     if (mode == -1) {
         cm.dispose();
     } else {
@@ -92,12 +90,13 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
-        if(!weddingIndoors) {
+        }
+
+        if (!weddingIndoors) {
             var hasEngagement = false;
             for (var x = 4031357; x <= 4031364; x++) {
                 if (cm.haveItem(x, 1)) {
@@ -112,56 +111,56 @@ function action(mode, type, selection) {
                 for (x = 0; x < choice.length; x++) {
                     text += "\r\n#L" + x + "##b" + choice[x] + "#l";
                 }
-                
+
                 if (cm.haveItem(5251100)) {
                     text += "\r\n#L" + x + "##bMake additional invitation cards#l";
                 }
-                
+
                 cm.sendSimple(text);
             } else if (status == 1) {
-                switch(selection) {
+                switch (selection) {
                     case 0:
                         cm.sendOk("Firstly you need to be #bengaged#k to someone. #p9201000# makes the engagement ring. Once attained the engagement status, purchase a #b#t" + weddingEntryTicketCommon + "##k.\r\nShow me your engagement ring and a wedding ticket, and I will book a reservation for you along with #r15 Wedding Tickets#k. Use them to invite your guests into the wedding. They need 1 each to enter.");
                         cm.dispose();
                         break;
-                        
+
                     case 1:
                         if (hasEngagement) {
                             var wserv = cm.getClient().getWorldServer();
                             var cserv = cm.getClient().getChannelServer();
                             var weddingId = wserv.getRelationshipId(cm.getPlayer().getId());
 
-                            if(weddingId > 0) {
-                                if(cserv.isWeddingReserved(weddingId)) {    // registration check
+                            if (weddingId > 0) {
+                                if (cserv.isWeddingReserved(weddingId)) {    // registration check
                                     var placeTime = cserv.getWeddingReservationTimeLeft(weddingId);
                                     cm.sendOk("Your wedding is set to start at the #r" + placeTime + "#k. Get formally dressed and don't be late!");
                                 } else {
                                     var partner = wserv.getPlayerStorage().getCharacterById(cm.getPlayer().getPartnerId());
-                                    if(partner == null) {
+                                    if (partner == null) {
                                         cm.sendOk("Your partner seems to be offline right now... Make sure to get both gathered here when the time comes!");
                                         cm.dispose();
                                         return;
                                     }
 
-                                    if(hasWeddingRing(cm.getPlayer()) || hasWeddingRing(partner)) {
+                                    if (hasWeddingRing(cm.getPlayer()) || hasWeddingRing(partner)) {
                                         cm.sendOk("Either you or your partner already has a marriage ring.");
                                         cm.dispose();
                                         return;
                                     }
 
-                                    if(!cm.getMap().equals(partner.getMap())) {
+                                    if (!cm.getMap().equals(partner.getMap())) {
                                         cm.sendOk("Please let your partner come here as well to register the reservation.");
                                         cm.dispose();
                                         return;
                                     }
 
-                                    if(!cm.canHold(weddingSendTicket, 15) || !partner.canHold(weddingSendTicket, 15)) {
+                                    if (!cm.canHold(weddingSendTicket, 15) || !partner.canHold(weddingSendTicket, 15)) {
                                         cm.sendOk("Either you or your partner doesn't have a free ETC slot for the Wedding tickets! Please make some room before trying to register a reservation.");
                                         cm.dispose();
                                         return;
                                     }
-                                    
-                                    if(!cm.getUnclaimedMarriageGifts().isEmpty() || !partner.getAbstractPlayerInteraction().getUnclaimedMarriageGifts().isEmpty()) {
+
+                                    if (!cm.getUnclaimedMarriageGifts().isEmpty() || !partner.getAbstractPlayerInteraction().getUnclaimedMarriageGifts().isEmpty()) {
                                         cm.sendOk("Eerhm... I'm sorry, something doesn't seem right according to the Amoria's Wedding Gift Registry reserve. Please check in the situation with #b#p9201014##k.");
                                         cm.dispose();
                                         return;
@@ -170,17 +169,18 @@ function action(mode, type, selection) {
                                     var hasCommon = cm.haveItem(weddingEntryTicketCommon);
                                     var hasPremium = cm.haveItem(weddingEntryTicketPremium);
 
-                                    if(hasCommon || hasPremium) {
+                                    if (hasCommon || hasPremium) {
                                         var weddingType = (hasPremium ? true : false);
 
                                         var player = cm.getPlayer();
                                         var resStatus = cserv.pushWeddingReservation(weddingId, cathedralWedding, weddingType, player.getId(), player.getPartnerId());
-                                        if(resStatus > 0) {
+                                        if (resStatus > 0) {
                                             cm.gainItem((weddingType) ? weddingEntryTicketPremium : weddingEntryTicketCommon, -1);
 
+                                            const Channel = Java.type('net.server.channel.Channel');
                                             var expirationTime = Channel.getRelativeWeddingTicketExpireTime(resStatus);
-                                            cm.gainItem(weddingSendTicket,15,false,true,expirationTime);
-                                            partner.getAbstractPlayerInteraction().gainItem(weddingSendTicket,15,false,true,expirationTime);
+                                            cm.gainItem(weddingSendTicket, 15, false, true, expirationTime);
+                                            partner.getAbstractPlayerInteraction().gainItem(weddingSendTicket, 15, false, true, expirationTime);
 
                                             var placeTime = cserv.getWeddingReservationTimeLeft(weddingId);
 
@@ -190,11 +190,11 @@ function action(mode, type, selection) {
                                             player.dropMessage(6, "Wedding Assistant: You both have received 15 Wedding Tickets. Invitations can only be sent before the wedding start time. Your " + wedType + " wedding is set to start at the " + placeTime + ". Get dressed and don't be late!");
                                             partner.dropMessage(6, "Wedding Assistant: You both have received 15 Wedding Tickets. Invitations can only be sent before the wedding start time. Your " + wedType + " wedding is set to start at the " + placeTime + ". Get dressed and don't be late!");
 
-                                            if(!hasSuitForWedding(player)) {
+                                            if (!hasSuitForWedding(player)) {
                                                 player.dropMessage(5, "Wedding Assistant: Please purchase a wedding garment before showing up for the ceremony. One can be bought at the Wedding Shop left-most Amoria.");
                                             }
 
-                                            if(!hasSuitForWedding(partner)) {
+                                            if (!hasSuitForWedding(partner)) {
                                                 partner.dropMessage(5, "Wedding Assistant: Please purchase a wedding garment before showing up for the ceremony. One can be bought at the Wedding Shop left-most Amoria.");
                                             }
                                         } else {
@@ -214,16 +214,16 @@ function action(mode, type, selection) {
                             cm.dispose();
                         }
                         break;
-                        
+
                     case 2:
                         if (cm.haveItem(weddingGuestTicket)) {
                             var cserv = cm.getClient().getChannelServer();
 
                             wid = cserv.getOngoingWedding(cathedralWedding);
-                            if(wid > 0) {
-                                if(cserv.isOngoingWeddingGuest(cathedralWedding, cm.getPlayer().getId())) {
+                            if (wid > 0) {
+                                if (cserv.isOngoingWeddingGuest(cathedralWedding, cm.getPlayer().getId())) {
                                     var eim = getMarriageInstance(wid);
-                                    if(eim != null) {
+                                    if (eim != null) {
                                         cm.sendOk("Enjoy the wedding. Don't drop your Gold Maple Leaf or you won't be able to finish the whole wedding.");
                                     } else {
                                         cm.sendOk("Please wait a moment while the couple get ready to enter the Cathedral.");
@@ -242,32 +242,33 @@ function action(mode, type, selection) {
                             cm.dispose();
                         }
                         break;
-                        
+
                     default:
                         var wserv = cm.getClient().getWorldServer();
                         var cserv = cm.getClient().getChannelServer();
                         var weddingId = wserv.getRelationshipId(cm.getPlayer().getId());
 
                         var resStatus = cserv.getWeddingReservationStatus(weddingId, cathedralWedding);
-                        if(resStatus > 0) {
-                            if(cm.canHold(weddingSendTicket, 3)) {
+                        if (resStatus > 0) {
+                            if (cm.canHold(weddingSendTicket, 3)) {
                                 cm.gainItem(5251100, -1);
 
+                                const Channel = Java.type('net.server.channel.Channel');
                                 var expirationTime = Channel.getRelativeWeddingTicketExpireTime(resStatus);
-                                cm.gainItem(weddingSendTicket,3,false,true,expirationTime);
+                                cm.gainItem(weddingSendTicket, 3, false, true, expirationTime);
                             } else {
                                 cm.sendOk("Please have a free ETC slot available to get more invitations.");
                             }
                         } else {
                             cm.sendOk("You're not currently booked on the Cathedral to make additional invitations.");
                         }
-                        
+
                         cm.dispose();
                 }
             } else if (status == 2) {   // registering guest
                 var eim = getMarriageInstance(wid);
 
-                if(eim != null) {
+                if (eim != null) {
                     cm.gainItem(weddingGuestTicket, -1);
                     eim.registerPlayer(cm.getPlayer());     //cm.warp(680000210, 0);
                 } else {
@@ -279,16 +280,16 @@ function action(mode, type, selection) {
         } else {
             if (status == 0) {
                 var eim = cm.getEventInstance();
-                if(eim == null) {
-                    cm.warp(680000000,0);
+                if (eim == null) {
+                    cm.warp(680000000, 0);
                     cm.dispose();
                     return;
                 }
 
                 isMarrying = (cm.getPlayer().getId() == eim.getIntProperty("groomId") || cm.getPlayer().getId() == eim.getIntProperty("brideId"));
 
-                if(eim.getIntProperty("weddingStage") == 0) {
-                    if(!isMarrying) {
+                if (eim.getIntProperty("weddingStage") == 0) {
+                    if (!isMarrying) {
                         cm.sendOk("Welcome to the #b#m" + cm.getMapId() + "##k. Please hang around with the groom and bride while the other guests are gathering here.\r\n\r\nWhen the timer reach it's end the couple will head to the altar, at that time you will be allowed to root over them from the #bguests area#k.");
                     } else {
                         cm.sendOk("Welcome to the #b#m" + cm.getMapId() + "##k. Please greet the guests that are already here while the others are coming. When the timer reach it's end the couple will head to the altar.");
@@ -299,10 +300,10 @@ function action(mode, type, selection) {
                     cm.sendYesNo("The #bbride and groom#k are already on their way to the altar. Would you like to join them now?");
                 }
             } else if (status == 1) {
-                cm.warp(weddingAltarMapid,"sp");            
+                cm.warp(weddingAltarMapid, "sp");
                 cm.dispose();
             }
         }
-        
+
     }
 }

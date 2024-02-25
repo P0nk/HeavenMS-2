@@ -1565,9 +1565,9 @@ ossyria
 200090057 - Empress' Road - To Ellinia
 200090058 - Empress' Road - To Ereve
 200090059 - Empress' Road - To Ellinia
-200010303 - Hidden Street - Eliza’s Garden
-211040102 - Hidden Street - Snow Soul’s Resting Place
-209000100 - Happy Village - Cliff’s Hut
+200010303 - Hidden Street - Elizaï¿½s Garden
+211040102 - Hidden Street - Snow Soulï¿½s Resting Place
+209000100 - Happy Village - Cliffï¿½s Hut
 219000000 - Hidden Street - Coke Town
 219000001 - Hidden Street - Coke Town Sundry Goods Shop
 219000002 - Hidden Street - House of Pouch
@@ -2863,7 +2863,7 @@ etc
 980027000 - Goldrich's Maze - Maze of Erosion
 980027100 - Goldrich's Maze - Maze of Erosion
 980027200 - Goldrich's Maze - Maze of Erosion
-980027300 - Goldrich's Maze - Beginning of the Maze…
+980027300 - Goldrich's Maze - Beginning of the Mazeï¿½
 980027400 - Goldrich's Maze - Monster's Maze
 980027500 - Goldrich's Maze - Monster's Maze
 980027600 - Goldrich's Maze - Monster's Maze
@@ -2944,7 +2944,7 @@ etc
 980027001 - Goldrich's Maze - Maze of Erosion
 980027101 - Goldrich's Maze - Maze of Erosion
 980027201 - Goldrich's Maze - Maze of Erosion
-980027301 - Goldrich's Maze - Beginning of the Maze…
+980027301 - Goldrich's Maze - Beginning of the Mazeï¿½
 980027401 - Goldrich's Maze - Monster's Maze
 980027501 - Goldrich's Maze - Monster's Maze
 980027601 - Goldrich's Maze - Monster's Maze
@@ -3025,7 +3025,7 @@ etc
 980027002 - Goldrich's Maze - Maze of Erosion
 980027102 - Goldrich's Maze - Maze of Erosion
 980027202 - Goldrich's Maze - Maze of Erosion
-980027302 - Goldrich's Maze - Beginning of the Maze…
+980027302 - Goldrich's Maze - Beginning of the Mazeï¿½
 980027402 - Goldrich's Maze - Monster's Maze
 980027502 - Goldrich's Maze - Monster's Maze
 980027602 - Goldrich's Maze - Monster's Maze
@@ -3349,7 +3349,7 @@ etc
 913040007 - Opening - Cygnus Knights
 913040008 - Opening - Cygnus Knights
 913040009 - Opening - Cygnus Knights
-920020000 - Hidden Street - Eliza’s Garden
+920020000 - Hidden Street - Elizaï¿½s Garden
 922020300 - Hidden Street - Origin of the Clock Tower
 922220000 - Hidden Street - Gloomy Forest
 922230000 - Hidden Street - Lunar World

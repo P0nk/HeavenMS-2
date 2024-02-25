@@ -18,8 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-function start(ms) {   	       
-        var map = ms.getClient().getChannelServer().getMapFactory().getMap(926000010);
-        map.resetPQ(1);
-	return(true);	
+function start(ms) {
+    var map = ms.getClient().getChannelServer().getMapFactory().getMap(926000010);
+    map.resetPQ(1);
+    return (true);
 }

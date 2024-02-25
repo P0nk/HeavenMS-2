@@ -24,44 +24,45 @@
  * @author: Ronan
  * @npc: Romeo & Juliet
  * @func: MagatiaPQ exit
-*/
+ */
 
 var status;
- 
+
 function start() {
-        status = -1;
-        action(1, 0, 0);
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-        if (mode == -1) {
-                cm.dispose();
-        } else {
-                if (mode == 0 && status == 0) {
-                        cm.dispose();
-                        return;
-                }
-                if (mode == 1)
-                        status++;
-                else
-                        status--;
-    
-                var eim = cm.getEventInstance();
-                
-                if(status == 0) {
-                        if(eim.getIntProperty("escortFail") == 1) {
-                                cm.sendNext("Thanks to you, we were capable of reunion once again. Yulete will now be forwarded to jail for attempt against the Law of Magatia. Once again, thank you.");
-                        } else {
-                                cm.sendNext("Thanks to you, we were capable of reunion once again. Yulete will now pass through rehabilitation, as his studies are invaluable for the growth of our town, and all his doings were being made because he was blinded by the greed for power, although it was for the sake of Magatia. Once again, thank you.");
-                        }
-                } else {
-                        if(eim.giveEventReward(cm.getPlayer())) {
-                                cm.warp((eim.getIntProperty("isAlcadno") == 0) ? 261000011 : 261000021);
-                        } else {
-                                cm.sendOk("Please free a slot on one of your inventories before receiving your reward.");
-                        }
-                        
-                        cm.dispose();
-                }
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0 && status == 0) {
+            cm.dispose();
+            return;
         }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        var eim = cm.getEventInstance();
+
+        if (status == 0) {
+            if (eim.getIntProperty("escortFail") == 1) {
+                cm.sendNext("Thanks to you, we were capable of reunion once again. Yulete will now be forwarded to jail for attempt against the Law of Magatia. Once again, thank you.");
+            } else {
+                cm.sendNext("Thanks to you, we were capable of reunion once again. Yulete will now pass through rehabilitation, as his studies are invaluable for the growth of our town, and all his doings were being made because he was blinded by the greed for power, although it was for the sake of Magatia. Once again, thank you.");
+            }
+        } else {
+            if (eim.giveEventReward(cm.getPlayer())) {
+                cm.warp((eim.getIntProperty("isAlcadno") == 0) ? 261000011 : 261000021);
+            } else {
+                cm.sendOk("Please free a slot on one of your inventories before receiving your reward.");
+            }
+
+            cm.dispose();
+        }
+    }
 }

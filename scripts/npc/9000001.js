@@ -38,10 +38,11 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 1) {
             cm.sendNextPrev("Hmm... What should I do? The event will start, soon... Many people went to participate in the event, so we better be hurry...");
         } else if (status == 2) {
@@ -53,19 +54,20 @@ function action(mode, type, selection) {
             } else if (selection == 1) {
                 cm.sendSimple("There are many games for this event. It will help you a lot to know how to play the game before you play it. Choose the one you want to know more of! #b\r\n#L0# Ola Ola#l\r\n#L1# MapleStory Maple Physical Fitness Test#l\r\n#L2# Snow Ball#l\r\n#L3# Coconut Harvest#l\r\n#L4# OX Quiz#l\r\n#L5# Treasure Hunt#l#k");
             } else if (selection == 2) {
-				if (cm.getEvent() != null && cm.getEvent().getLimit() > 0) {
-					cm.getPlayer().saveLocation("EVENT");
-					if (cm.getEvent().getMapId() == 109080000 || cm.getEvent().getMapId() == 109060001) 
-						cm.divideTeams();
-        
-					cm.getEvent().minusLimit();
-					cm.warp(cm.getEvent().getMapId(), 0);
-					cm.dispose();
-				} else {
-					cm.sendNext("Either the event has not been started, you already have the #bScroll of Secrets#k, or you have already participated in this event within the last 24 hours. Please try again later!");
-					cm.dispose();                
+                if (cm.getEvent() != null && cm.getEvent().getLimit() > 0) {
+                    cm.getPlayer().saveLocation("EVENT");
+                    if (cm.getEvent().getMapId() == 109080000 || cm.getEvent().getMapId() == 109060001) {
+                        cm.divideTeams();
+                    }
+
+                    cm.getEvent().minusLimit();
+                    cm.warp(cm.getEvent().getMapId(), 0);
+                    cm.dispose();
+                } else {
+                    cm.sendNext("Either the event has not been started, you already have the #bScroll of Secrets#k, or you have already participated in this event within the last 24 hours. Please try again later!");
+                    cm.dispose();
+                }
             }
-			}
         } else if (status == 4) {
             if (selection == 0) {
                 cm.sendNext("#b[Ola Ola]#k is a game where participants climb ladders to reach the top. Climb your way up and move to the next level by choosing the correct portal out of the numerous portals available. \r\n\r\nThe game consists of three levels, and the time limit is #b6 MINUTES#k. During [Ola Ola], you #bwon't be able to jump, teleport, haste, or boost your speed using potions or items#k. There are also trick portals that'll lead you to a strange place, so please be aware of those.");
@@ -86,6 +88,6 @@ function action(mode, type, selection) {
                 cm.sendNext("#b[Treasure Hunt]#k is a game in which your goal is to find the #btreasure scrolls#k that are hidden all over the map #rin 10 minutes#k. There will be a number of mysterious treasure chests hidden away, and once you break them apart, many items will surface from the chest. Your job is to pick out the treasure scroll from those items. \r\nTreasure chests can be destroyed using #bregular attacks#k, and once you have the treasure scroll in possession, you can trade it for the Scroll of Secrets through an NPC that's in charge of trading items. The trading NPC can be found on the Treasure Hunt map, but you can also trade your scroll through #bVikin#k of Lith Harbor.\r\n\r\nThis game has its share of hidden portals and hidden teleporting spots. To use them, press the #bup arrow#k at a certain spot, and you'll be teleported to a different place. Try jumping around, for you may also run into hidden stairs or ropes. There will also be a treasure chest that'll take you to a hidden spot, and a hidden chest that can only be found through the hidden portal, so try looking around.\r\n\r\nDuring the game of Treasure Hunt, all attack skills will be #rdisabled#k, so please break the treasure chest with the regular attack.");
                 cm.dispose();
             }
-        }   
+        }
     }
 }  

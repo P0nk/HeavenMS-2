@@ -6,11 +6,11 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if(mode == -1 || mode == 0 && type > 0) {
+    if (mode == -1 || mode == 0 && type > 0) {
         qm.dispose();
         return;
     }
-    
+
     if (mode == 1) {
         status++;
     } else {

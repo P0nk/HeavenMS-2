@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 -- Odin JavaScript --------------------------------------------------------------------------------
 	Parwen - Magatia (GMS Like)
@@ -30,11 +31,11 @@
 */
 
 function start() {
-    if(cm.isQuestStarted(3320) || cm.isQuestCompleted(3320)) {
+    if (cm.isQuestStarted(3320) || cm.isQuestCompleted(3320)) {
         cm.warp(926120200, 1);
     } else {
         cm.sendOk("uuuuhuk...Why only Ghost are around here?...");
     }
-    
+
     cm.dispose();
 }

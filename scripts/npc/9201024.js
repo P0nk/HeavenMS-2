@@ -34,25 +34,25 @@ var options;
 
 function hasProofOfLoves(player) {
     var count = 0;
-    
-    for(var i = 4031367; i <= 4031372; i++) {
-        if(player.haveItem(i)) {
+
+    for (var i = 4031367; i <= 4031372; i++) {
+        if (player.haveItem(i)) {
             count++;
         }
     }
-    
+
     return count >= 4;
 }
 
 function getNanaLocation(player) {
     var mapid = player.getMap().getId();
-    
-    for(var i = 0; i < mapids.length; i++) {
-        if(mapid == mapids[i]) {
+
+    for (var i = 0; i < mapids.length; i++) {
+        if (mapid == mapids[i]) {
             return i;
         }
     }
-    
+
     return -1;
 }
 
@@ -62,8 +62,8 @@ var questItems = [4000001, 4000037, 4000215, 4000026, 4000070, 4000128];
 var questExp = [2000, 5000, 10000, 17000, 22000, 30000];
 
 function processNanaQuest() {
-    if(cm.haveItem(questItems[nanaLoc], 50)) {
-        if(cm.canHold(4031367 + nanaLoc, 1)) {
+    if (cm.haveItem(questItems[nanaLoc], 50)) {
+        if (cm.canHold(4031367 + nanaLoc, 1)) {
             cm.gainItem(questItems[nanaLoc], -50);
             cm.gainItem(4031367 + nanaLoc, 1);
 
@@ -75,7 +75,7 @@ function processNanaQuest() {
     } else {
         cm.sendOk("Please gather to me #b50 #t" + questItems[nanaLoc] + "##k.");
     }
-    
+
     return false;
 }
 
@@ -92,35 +92,36 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
-        if(status == 0) {
-            if(!cm.isQuestStarted(100400)) {
+        if (status == 0) {
+            if (!cm.isQuestStarted(100400)) {
                 cm.sendOk("Hello #b#h0##k, I'm #p9201024# the fairy of Love.");
                 cm.dispose();
                 return;
             }
-            
+
             nanaLoc = getNanaLocation(cm.getPlayer());
-            if(nanaLoc == -1) {
+            if (nanaLoc == -1) {
                 cm.sendOk("Hello #b#h0##k, I'm #p9201024# the fairy of Love.");
                 cm.dispose();
                 return;
             }
-            
-            if(!cm.haveItem(4031367 + nanaLoc, 1)) {
-                if(cm.isQuestCompleted(100401 + nanaLoc)) {
+
+            if (!cm.haveItem(4031367 + nanaLoc, 1)) {
+                if (cm.isQuestCompleted(100401 + nanaLoc)) {
                     state = 1;
                     cm.sendAcceptDecline("Did you lost the #k#t4031367##k I gave to you? Well, I can share another one with you, but you will need to redo the favor I asked last time, is that ok? I need you to bring me #r50 #t" + questItems[nanaLoc] + "#'s.#k");
-                } else if(cm.isQuestStarted(100401 + nanaLoc)) {
-                    if(processNanaQuest()) {
+                } else if (cm.isQuestStarted(100401 + nanaLoc)) {
+                    if (processNanaQuest()) {
                         cm.gainExp(questExp[nanaLoc] * cm.getPlayer().getExpRate());
                         cm.completeQuest(100401 + nanaLoc);
                     }
-                    
+
                     cm.dispose();
                 } else {
                     state = 0;
@@ -130,10 +131,10 @@ function action(mode, type, selection) {
                 cm.sendOk("Hey there. Did you get the #t4031367# from the other Nana's already?");
                 cm.dispose();
             }
-        } else if(status == 1) {
-            if(state == 0) {
+        } else if (status == 1) {
+            if (state == 0) {
                 cm.startQuest(100401 + nanaLoc);
-                
+
                 cm.sendOk("I need you to collect #r50 #t" + questItems[nanaLoc] + "##k.");
                 cm.dispose();
             } else {

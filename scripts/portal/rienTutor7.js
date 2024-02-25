@@ -18,16 +18,17 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 	Author: kevintjuh93
 */
 function enter(pi) {
-	if (pi.getPlayer().getJob().getId() == 2000 && !pi.isQuestCompleted(21014)) {
-		pi.showInfoText("The town of Rien is to the right. Take the portal on the right and go into town to meet Lilin.");
-                return false;
-	} else {
-		pi.playPortalSound();
-		pi.warp(140010100, 2);
-                return true;
-	}
+    if (pi.getPlayer().getJob().getId() == 2000 && !pi.isQuestCompleted(21014)) {
+        pi.showInfoText("The town of Rien is to the right. Take the portal on the right and go into town to meet Lilin.");
+        return false;
+    } else {
+        pi.playPortalSound();
+        pi.warp(140010100, 2);
+        return true;
+    }
 }

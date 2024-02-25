@@ -36,10 +36,11 @@ function start(mode, type, selection) {
             qm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             qm.sendNext("The jewel you brought back from the Master of Disguise is Shinsoo's Teardrop. It is the crystalization of Shinsoo's powers. If the Black Mage gets his hands on this, then this spells doom for all of us.");
         } else if (status == 1) {
@@ -54,7 +55,8 @@ function start(mode, type, selection) {
                 } else {
                     qm.completeQuest();
                     qm.gainItem(1142068, 1);
-                    qm.getPlayer().changeJob(Packages.client.MapleJob.DAWNWARRIOR3);
+                    const Job = Java.type('client.Job');
+                    qm.getPlayer().changeJob(Job.DAWNWARRIOR3);
                     qm.sendOk("#h #, as of this moment, you are an Advanced Knight. From this moment on, you shall carry yourself with dignity and respect befitting your new title, an Advanced Knight of Cygnus Knights. May your glory continue to shine as bright as this moment.");
                 }
             }

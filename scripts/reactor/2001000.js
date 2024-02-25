@@ -19,21 +19,21 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*@author Ronan
  *Nependeath Pot - Spawns Nependeath or Dark Nependeath
  */
- 
+
 function act() {
-    if(rm.getMap().getSummonState()) {
+    if (rm.getMap().getSummonState()) {
         var count = Number(rm.getEventInstance().getIntProperty("statusStg7_c"));
 
-        if(count < 7) {
+        if (count < 7) {
             var nextCount = (count + 1);
 
             rm.spawnMonster(Math.random() >= .6 ? 9300049 : 9300048);
             rm.getEventInstance().setProperty("statusStg7_c", nextCount);
-        }
-        else {
+        } else {
             rm.spawnMonster(9300049);
         }
     }

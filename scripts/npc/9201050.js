@@ -32,18 +32,19 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1)
+    if (mode == -1) {
         cm.dispose();
-    else {
+    } else {
         if (mode == 0 && type > 0) {
             cm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0 && mode == 1) {
             if (cm.isQuestCompleted(4911)) {
                 cm.sendNext("Good job! You've solved all of my questions about NLC. Enjoy your trip!");
@@ -53,12 +54,13 @@ function action(mode, type, selection) {
                 cm.dispose();
             } else {
                 var selStr = "What up! Name's Icebyrd Slimm, mayor of New Leaf City! Happy to see you accepted my invite. So, what can I do for you?#b"
-                var info = new Array("What is this place?","Who is Professor Foxwit?","What's a Foxwit Door?","Where are the MesoGears?","What is the Krakian Jungle?","What's a Gear Portal?","What do the street signs mean?","What's the deal with Jack Masque?","Lita Lawless looks like a tough cookie, what's her story?","When will new boroughs open up in the city?","I want to take the quiz!");
-                for (var i = 0; i < info.length; i++)
+                var info = ["What is this place?", "Who is Professor Foxwit?", "What's a Foxwit Door?", "Where are the MesoGears?", "What is the Krakian Jungle?", "What's a Gear Portal?", "What do the street signs mean?", "What's the deal with Jack Masque?", "Lita Lawless looks like a tough cookie, what's her story?", "When will new boroughs open up in the city?", "I want to take the quiz!"];
+                for (var i = 0; i < info.length; i++) {
                     selStr += "\r\n#L" + i + "# " + info[i] + "#l";
+                }
                 cm.sendSimple(selStr);
             }
-        } else if(status == 1) {
+        } else if (status == 1) {
             switch (selection) {
                 case 0:
                     cm.sendNext("I've always dreamed of building a city. Not just any city, but one where everyone was welcome. I used to live in Kerning City, so I decided to see if I could create a city. As I went along in finding the means to do so, I encountered many people, some of whom I've come to regard as friends. Like Professor Foxwit-he's our resident genius; saved him from a group of man-eating plants. Jack Masque is an old hunting buddy from Amoria-almost too smooth of a talker for his own good. Lita and I are old friends from Kerning City-she's saved me a few times with that weapon of hers; so I figured she was a perfect choice for Town Sheriff. It took a bit of persuasion, but she came to believe her destiny lies here. About our resident explorer, Barricade came searching for something; he agreed to bring whatever he found to the museum. I'd heard stories about him and his brother when I was still in Kerning City. And Elpam...well, let's just say he's not from around here. At all. We've spoken before, and he seems to mean well, so I've allowed him to stay. I just realized that I've rambled quite a bit! What else would you like to know?");
@@ -107,7 +109,7 @@ function action(mode, type, selection) {
                     } else {
                         cm.sendNext("Eager, are we? How about you explore a bit more before I let you take the quiz?");
                     }
-                    
+
                     cm.dispose();
                     break;
             }

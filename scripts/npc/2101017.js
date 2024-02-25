@@ -3,9 +3,6 @@
  *@author Jvlaple
  */
 
-importPackage(Packages.server.expeditions);
-
-
 var status = 0;
 var toBan = -1;
 var choice;
@@ -13,6 +10,7 @@ var arena;
 var arenaName;
 var type;
 var map;
+const ExpeditionType = Java.type('server.expeditions.ExpeditionType');
 var exped;
 var expedicao;
 var expedMembers;
@@ -22,7 +20,7 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    
+
     if (mode == -1) {
         cm.dispose();
     } else {
@@ -31,24 +29,25 @@ function action(mode, type, selection) {
             return;
         }
 
+        const GameConstants = Java.type('constants.game.GameConstants');
         if (cm.getPlayer().getMapId() == 980010100 || cm.getPlayer().getMapId() == 980010200 || cm.getPlayer().getMapId() == 980010300) {
             if (cm.getPlayer().getMapId() == 980010100) {
-                exped = MapleExpeditionType.ARIANT;
+                exped = ExpeditionType.ARIANT;
                 expedicao = cm.getExpedition(exped);
 
             } else if (cm.getPlayer().getMapId() == 980010200) {
-                exped = MapleExpeditionType.ARIANT1;
+                exped = ExpeditionType.ARIANT1;
                 expedicao = cm.getExpedition(exped);
             } else {
-                exped = MapleExpeditionType.ARIANT2;
+                exped = ExpeditionType.ARIANT2;
                 expedicao = cm.getExpedition(exped);
             }
-            
+
             if (expedicao == null) {
                 cm.dispose();
                 return;
             }
-            
+
             expedMembers = expedicao.getMemberList();
             if (status == 0) {
                 if (cm.isLeaderExpedition(exped)) {
@@ -90,12 +89,12 @@ function action(mode, type, selection) {
                             cm.dispose();
                             return;
                         }
-                        
+
                         var errorMsg = cm.startAriantBattle(exped, cm.getPlayer().getMapId());
                         if (errorMsg != "") {
                             cm.sendOk(errorMsg);
                         }
-                        
+
                         cm.dispose();
                     }
                 } else if (selection == 4) {
@@ -115,15 +114,15 @@ function action(mode, type, selection) {
                     status = 2;
                 }
             }
-        } else if (Packages.constants.game.GameConstants.isAriantColiseumArena(cm.getPlayer().getMapId())) {
+        } else if (GameConstants.isAriantColiseumArena(cm.getPlayer().getMapId())) {
             if (cm.getPlayer().getMapId() == 980010101) {
-                exped = MapleExpeditionType.ARIANT;
+                exped = ExpeditionType.ARIANT;
                 expedicao = cm.getExpedition(exped);
             } else if (cm.getPlayer().getMapId() == 980010201) {
-                exped = MapleExpeditionType.ARIANT1;
+                exped = ExpeditionType.ARIANT1;
                 expedicao = cm.getExpedition(exped);
             } else {
-                exped = MapleExpeditionType.ARIANT2;
+                exped = ExpeditionType.ARIANT2;
                 expedicao = cm.getExpedition(exped);
             }
             if (status == 0) {
@@ -145,6 +144,6 @@ function action(mode, type, selection) {
         } else {
             cm.sendOk("Hi there, have you heard of the Ariant Coliseum Battle Arena, it's a competitive event available to players between level 20 to 30!");
             cm.dispose();
-        } 
+        }
     }
 }

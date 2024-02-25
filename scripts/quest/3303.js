@@ -36,44 +36,45 @@ function end(mode, type, selection) {
             qm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
         if (status == 0) {
             oreArray = getOreArray();
-	    if (oreArray.length > 0) {
-		qm.sendSimple("Oh, looks like someone's ready to make a deal. You want to join Zenumist so badly, huh? I really don't understand you, but that's just fine. What will you give me in return?\r\n" + getOreString(oreArray));
-	    } else {
-		qm.sendOk("What is this, you don't have the #rjewel ores#k with you. No ore, no deal.");    // script would loop undefinitely at completion, thanks IxianMace for noticing
-		qm.dispose();
-                return;
-	    }
-	} else if (status == 1) {
+            if (oreArray.length > 0) {
+                qm.sendSimple("Oh, looks like someone's ready to make a deal. You want to join Zenumist so badly, huh? I really don't understand you, but that's just fine. What will you give me in return?\r\n" + getOreString(oreArray));
+            } else {
+                qm.sendOk("What is this, you don't have the #rjewel ores#k with you. No ore, no deal.");    // script would loop undefinitely at completion, thanks IxianMace for noticing
+                qm.dispose();
+
+            }
+        } else if (status == 1) {
             if (!qm.haveItem(oreArray[selection], 2)) {     // thanks resinate for noticing a function missing here
                 qm.sendNext("What's this, you haven't got the #rjewel ores#k. No ores no deal!");
                 qm.dispose();
                 return;
             }
 
-	    qm.gainItem(oreArray[selection], -2); // Take 2 ores
-	    qm.sendNext("Then wait for awhile. I'll go and get the stuff to help you pass the test of Chief Zenumist.");
-	    qm.forceCompleteQuest();
-	} else if (status == 2) {
-	    qm.dispose();
-	}
+            qm.gainItem(oreArray[selection], -2); // Take 2 ores
+            qm.sendNext("Then wait for awhile. I'll go and get the stuff to help you pass the test of Chief Zenumist.");
+            qm.forceCompleteQuest();
+        } else if (status == 2) {
+            qm.dispose();
+        }
     }
 }
 
 function getOreArray() {
-    var ores = new Array();
+    var ores = [];
     var y = 0;
     for (var x = 4020000; x <= 4020008; x++) {
-	if (qm.haveItem(x, 2)) {
-	    ores[y] = x;
-	    y++;
-	}
+        if (qm.haveItem(x, 2)) {
+            ores[y] = x;
+            y++;
+        }
     }
     return ores;
 }
@@ -82,8 +83,8 @@ function getOreString(ids) { // Parameter 'ids' is just the array of getOreArray
     var thestring = "#b";
     var extra;
     for (x = 0; x < ids.length; x++) {
-	extra = "#L" + x + "##t" + ids[x] + "##l\r\n";
-	thestring += extra;
+        extra = "#L" + x + "##t" + ids[x] + "##l\r\n";
+        thestring += extra;
     }
     thestring += "#k";
     return thestring;

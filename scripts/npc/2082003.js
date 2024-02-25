@@ -3,9 +3,9 @@ function start() {
 }
 
 function action(m, t, s) {
-   if (m > 0){
-      cm.useItem(2210016);
-      cm.warp(200090500, 0);
-   }
-   cm.dispose();
+    if (m > 0) {
+        cm.useItem(2210016);
+        cm.warp(200090500, 0);
+    }
+    cm.dispose();
 }  

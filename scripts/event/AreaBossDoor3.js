@@ -20,9 +20,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Door boss Spawner (based on xQuasar's King Clang spawner)
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Door boss Spawner (based on xQuasar's King Clang spawner)
+ **/
 
 function init() {
     scheduleNew();
@@ -33,26 +33,31 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var bossMobid = 9400613;
     var bossMapid = 677000009;
     var bossMsg = "Valefor has appeared!";
-    var bossPos = new Packages.java.awt.Point(251, -841);
-    
+
     var map = em.getChannelServer().getMapFactory().getMap(bossMapid);
     if (map.getMonsterById(bossMobid) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
         return;
     }
-    
-    var boss = Packages.server.life.MapleLifeFactory.getMonster(bossMobid);
+
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    const Point = Java.type('java.awt.Point');
+    const PacketCreator = Java.type('tools.PacketCreator');
+
+    var boss = LifeFactory.getMonster(bossMobid);
+    var bossPos = new Point(251, -841);
     map.spawnMonsterOnGroundBelow(boss, bossPos);
-    map.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, bossMsg));
-    
+    map.broadcastMessage(PacketCreator.serverNotice(6, bossMsg));
+
     em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

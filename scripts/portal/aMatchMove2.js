@@ -19,13 +19,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*	
+
+/*
  * @author:  Moogra
  * @portal:  aMatchMove2
  * @purpose: warps user out from Ariant PQ
  */
 
 function enter(pi) {
-    pi.playPortalSound(); pi.warp(pi.getPlayer().getSavedLocation("MIRROR"));
+    pi.playPortalSound();
+    pi.warp(pi.getPlayer().getSavedLocation("MIRROR"));
     return true;
 }

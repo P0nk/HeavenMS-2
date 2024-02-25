@@ -1,3 +1,3 @@
-function start(ms) { 
-	ms.openNpc(2159007);
+function start(ms) {
+    ms.openNpc(2159007);
 }

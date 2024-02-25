@@ -20,13 +20,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Mano Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
-**/
-
-importPackage(Packages.client);
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Mano Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
+ **/
 
 function init() {
     scheduleNew();
@@ -37,21 +35,27 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var thicketAroundTheBeach3 = em.getChannelServer().getMapFactory().getMap(104000400);
-    var mano = Packages.server.life.MapleLifeFactory.getMonster(2220000);
-    if(thicketAroundTheBeach3.getMonsterById(2220000) != null) {
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var mano = LifeFactory.getMonster(2220000);
+    if (thicketAroundTheBeach3.getMonsterById(2220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
         return;
     }
-	
-    thicketAroundTheBeach3.spawnMonsterOnGroundBelow(mano, new Packages.java.awt.Point(279, -496));
-    thicketAroundTheBeach3.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
-    em.schedule("start", 3 * 60 *60 * 1000);
+
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(279, -496);
+    thicketAroundTheBeach3.spawnMonsterOnGroundBelow(mano, spawnpoint);
+
+    const PacketCreator = Java.type('tools.PacketCreator');
+    thicketAroundTheBeach3.broadcastMessage(PacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

@@ -18,17 +18,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.client);
-
 function isTigunMorphed(ch) {
-        return ch.getBuffSource(MapleBuffStat.MORPH) == 2210005;
+    const BuffStat = Java.type('client.BuffStat');
+    return ch.getBuffSource(BuffStat.MORPH) == 2210005;
 }
 
 function enter(pi) {
-    if(isTigunMorphed(pi.getPlayer())) {
+    if (isTigunMorphed(pi.getPlayer())) {
         return false;
     } else {
-        pi.playPortalSound(); pi.warp(260000300, 7);
+        pi.playPortalSound();
+        pi.warp(260000300, 7);
         pi.message("You, intruder! You don't have permission to roam the palace! Get out!!");
         return true;
     }

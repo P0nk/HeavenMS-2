@@ -21,5 +21,5 @@
 */
 
 function start(ms) {
-	ms.goAdventure();	   	       
+    ms.goAdventure();
 }

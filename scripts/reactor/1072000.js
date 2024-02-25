@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* @Author Lerk
  * 
  * 1072000.js: Kerning Swamp Plant - drops Witchgrass Leaves
 */
 
 function act() {
-	rm.dropItems();
+    rm.dropItems();
 }

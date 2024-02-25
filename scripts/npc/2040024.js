@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*      Author: Xterminator, Moogra
 	NPC Name: 		First Eos Rock
 	Map(s): 		Ludibrium : Eos Tower 100th Floor (221024400)
@@ -26,9 +27,9 @@
 */
 
 function start() {
-    if (cm.haveItem(4001020))
+    if (cm.haveItem(4001020)) {
         cm.sendYesNo("You can use #bEos Rock Scroll#k to activate #bFirst Eos Rock#k. Will you teleport to #bSecond Eos Rock#k at the 71st floor?");
-    else {
+    } else {
         cm.sendOk("There's a rock that will enable you to teleport to #bSecond Eos Rock#k, but it cannot be activated without the scroll.");
         cm.dispose();
     }

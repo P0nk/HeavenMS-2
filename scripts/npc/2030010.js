@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* Amon
  * 
  * @Author Stereo
@@ -28,21 +29,23 @@
  * Zakum Quest NPC 
  * Helps players leave the map
  */
- importPackage(Packages.server.expeditions);
- 
+
 function start() {
-    if(cm.getMapId() == 280030000) {
-        if(!cm.getEventInstance().isEventCleared()) cm.sendYesNo("If you leave now, you'll have to start over. Are you sure you want to leave?");
-        else cm.sendYesNo("You guys finally overthrew Zakum, what a superb feat! Congratulations! Are you sure you want to leave now?");
+    if (cm.getMapId() == 280030000) {
+        if (!cm.getEventInstance().isEventCleared()) {
+            cm.sendYesNo("If you leave now, you'll have to start over. Are you sure you want to leave?");
+        } else {
+            cm.sendYesNo("You guys finally overthrew Zakum, what a superb feat! Congratulations! Are you sure you want to leave now?");
+        }
     } else {
         cm.sendYesNo("If you leave now, you'll have to start over. Are you sure you want to leave?");
     }
 }
 
 function action(mode, type, selection) {
-    if (mode < 1)
+    if (mode < 1) {
         cm.dispose();
-    else {
+    } else {
         cm.warp(211042300);
         cm.dispose();
     }

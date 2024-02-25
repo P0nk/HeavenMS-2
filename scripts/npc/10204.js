@@ -27,16 +27,17 @@ function start() {
 
 function action(mode, type, selection) {
     status++;
-    if (mode != 1){
-        if(mode == 0)
-           cm.sendNext("If you wish to experience what it's like to be a Pirate, come see me again.");
+    if (mode != 1) {
+        if (mode == 0) {
+            cm.sendNext("If you wish to experience what it's like to be a Pirate, come see me again.");
+        }
         cm.dispose();
         return;
     }
     if (status == 0) {
         cm.sendYesNo("Would you like to experience what it's like to be a Pirate?");
-    } else if (status == 1){
-	cm.lockUI();
+    } else if (status == 1) {
+        cm.lockUI();
         cm.warp(1020500, 0);
         cm.dispose();
     }

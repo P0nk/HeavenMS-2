@@ -24,16 +24,17 @@ function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("We're a pack of wolves looking for our lost child. I hear you are taking care of our baby. We appreciate your kindness, but it's time to return our baby to us.", 9);
         } else if (status == 1) {
@@ -44,9 +45,8 @@ function start(mode, type, selection) {
             var em = qm.getEventManager("Aran_3rdmount");
             if (em == null) {
                 qm.sendOk("Sorry, but the 3rd mount quest (Wolves) is closed.");
-                return;
-            }
-            else {
+
+            } else {
                 var em = qm.getEventManager("Aran_3rdmount");
                 if (!em.startInstance(qm.getPlayer())) {
                     qm.sendOk("There is currently someone in this map, come back later.");

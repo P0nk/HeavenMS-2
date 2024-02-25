@@ -28,10 +28,10 @@ var messages = Array("Your courage for challenging the Mu Lung Dojo is commendab
 
 function start(ms) {
     if (ms.getPlayer().getMap().getId() == 925020000) {
-        if(ms.getPlayer().getMap().findClosestPlayerSpawnpoint(ms.getPlayer().getPosition()).getId() == 0) {
+        if (ms.getPlayer().getMap().findClosestPlayerSpawnpoint(ms.getPlayer().getPosition()).getId() == 0) {
             ms.getPlayer().startMapEffect(messages[(Math.random() * messages.length) | 0], 5120024);
         }
-        
+
         ms.resetDojoEnergy();
     } else {
         ms.getPlayer().resetEnteredScript(); //in case the person dcs in here we set it at dojang_tuto portal

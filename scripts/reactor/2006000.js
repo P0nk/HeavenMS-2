@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*@author Jvlaple
  * Spawns Eak When 20 Clouds are Dropped.
   *2006000.js
   */
-  
+
 function act() {
     rm.mapMessage(5, "As the light flickers, someone appears out of the light.");
     rm.spawnNpc(2013001);

@@ -1779,8 +1779,8 @@
 4032103 - The Lost Treasure - The lost treasure that was stolen by the Master of Disguise who brazenly entered Ereve. Let's take it back to Irena.
 4032104 - The Lost Treasure - The lost treasure that was stolen by the Master of Disguise who brazenly entered Ereve. Let's take it back to Eckhart.
 4032105 - The Lost Treasure - The lost treasure that was stolen by the Master of Disguise who brazenly entered Ereve. Let's take it back to Hawkeye.
-4000209 - Co-ke Slime’s Bell - The bell of Co-ke Slime that has been taken off.
-4000210 - Co-ke Pig’s Ribbon - A piece of Co-ke Pig’s ribbon.
+4000209 - Co-ke Slimeï¿½s Bell - The bell of Co-ke Slime that has been taken off.
+4000210 - Co-ke Pigï¿½s Ribbon - A piece of Co-ke Pigï¿½s ribbon.
 4000211 - Coca-Cola Cube - A cube with a drawing of a Coca-Cola bottle on it.
 4000212 - CokePLAY Cube - A cube with the CokePLAY symbol.
 4000213 - Coca-Cola Card - A card with a drawing of Coca-Cola.
@@ -1802,10 +1802,10 @@
 4001151 - Happy Valley - Happy Valley
 4001152 - Ariant - Ariant
 4001153 - Magatia - Magatia
-4031832 - Sophelia’s Portrait - A portrait of Sophelia.
+4031832 - Sopheliaï¿½s Portrait - A portrait of Sophelia.
 4031833 - Pumpkin Juice - A juice made with pumpkin. It is very fragrant.
 4031834 - Perfect Tool - The most perfect tool for making dolls.
-4031835 - Lyudmilla’s Earring - The earrings that Lyudmilla lost. They shine with brilliance.
+4031835 - Lyudmillaï¿½s Earring - The earrings that Lyudmilla lost. They shine with brilliance.
 4031836 - Score - The score that Lyudmilla asked for. No one knows what kind of music is in it.
 4031837 - Dumped Doll - A doll that Sophelia used to cherish a long time ago. She threw it away when she got a new doll.
 4031838 - Piece of Cloth - A small piece of cloth. If you drag and drop it onto the rag doll, the doll will be completed bit by bit.
@@ -1893,26 +1893,26 @@
 4032127 - Proof of Ability - The Proof of Ability that is required to learn a new skill. This proof signifies that you are ready to learn a new skill.
 4032128 - Proof of Ability - The Proof of Ability that is required to learn a new skill. This proof signifies that you are ready to learn a new skill.
 4032129 - Proof of Ability - The Proof of Ability that is required to learn a new skill. This proof signifies that you are ready to learn a new skill.
-4032130 - Pig Doll - An adorable doll that resembles a pig. However, something doesn't seem right…
-4032131 - Pig Doll - An adorable doll that resembles a pig. However, something doesn't seem right…
+4032130 - Pig Doll - An adorable doll that resembles a pig. However, something doesn't seem rightï¿½
+4032131 - Pig Doll - An adorable doll that resembles a pig. However, something doesn't seem rightï¿½
 4032132 - Roca's Mission Report - A mission report written by Roca, the Agent for Henesys. This compiles a list of events that have taken place recently.
 4032136 - Bubbling Doll - An adorable doll that was designed based on Bubbling, but something doesn't seem right. The way it smiles just seems a bit off, as if it has hidden agenda.
 4032137 - Bubbling Doll - An adorable doll that was designed based on Bubbling, but something doesn't seem right. The way it smiles just seems a bit off, as if it has hidden agenda.
-4032138 - Bubbling Doll - An adorable doll that was designed based on Bubbling, but something doesn't seem right. It's in…tears.
+4032138 - Bubbling Doll - An adorable doll that was designed based on Bubbling, but something doesn't seem right. It's inï¿½tears.
 4032139 - Old Key - An old, rusty key that Mr. Pickall has been looking for.
-4032140 - Bubbling Doll - An adorable doll that was designed based on Bubbling, but something doesn't seem right. It's in…tears.
+4032140 - Bubbling Doll - An adorable doll that was designed based on Bubbling, but something doesn't seem right. It's inï¿½tears.
 4032141 - Mattias' Mission Report - A mission report written by Roca, the Agent for Kerning City. This compiles a list of events that have taken place recently.
 4032142 - Clear Tree Sap - A clear tree sap that can only be found at the very top of the skyscraping trees. Accompanied by the freshest green scent.
 4032143 - Fruit - A fruit picked from plants near Henesys.
 4032144 - Hersha's Mission Report - A mission report written by Hersha, the Agent for Ellinia. This compiles a list of events that have taken place recently.
 4032145 - Detector - A detector made to detect any forces of darkness. Take this to the 10 Boogies.
-4032146 - Wooden Mask Doll - An adorable doll modeled after the Wooden Mask, but something doesn't seem right…
-4032147 - Rocky Mask Doll - An adorable doll modeled after the Stone Mask, but something doesn't seem right…
+4032146 - Wooden Mask Doll - An adorable doll modeled after the Wooden Mask, but something doesn't seem rightï¿½
+4032147 - Rocky Mask Doll - An adorable doll modeled after the Stone Mask, but something doesn't seem rightï¿½
 4032148 - Detector - A detector created with the sole purpose of detecting the Puppeteer's movements. We put it to good use, so let's return it to Neinheart.
 4032149 - 10 Boogies' Mission Report - A mission report written by 10 Boogies, the Agents for Perion. This compiles a list of events that have taken place recently.
 4032178 - Hack Attempt - A record that shows that Chief Grays tried to hack into the system.
 4032179 - Ereve Investigation Permit - A permitt that allows one to investigate every part of Ereve. When the Red Alert is on, this permit is the only way you can roam freely around Ereve.
-4032190 - Orange Mushroom Doll - An adorable doll modeled after the Orange Mushroom, but something doesn't seem right…
+4032190 - Orange Mushroom Doll - An adorable doll modeled after the Orange Mushroom, but something doesn't seem rightï¿½
 4032196 - Concentrated Formula: Step 1 - A formula concentrated with effective and potent ingredients. The first formula used to raise Mimiana and Mimio
 4032197 - Concentrated Formula: Step 2 - A formula concentrated with effective and potent ingredients. The second formula used to raise Mimiana and Mimio.
 4032198 - Concentrated Formula: Step 3 - A formula concentrated with effective and potent ingredients. The third formula used to raise Mimiana and Mimio.
@@ -2048,16 +2048,16 @@
 4032270 - Glistening Sunlight  - Glistening sunlight filled with the feeling of spring.  
 4032271 - Pure Small Sprout   - A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume.  
 4032272 - Stationery of Longing  - Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  
-4032273 - Pencil of Courage X 10   - A pencil that's used to write things you don’t have the courage to say. 
+4032273 - Pencil of Courage X 10   - A pencil that's used to write things you donï¿½t have the courage to say. 
 4032275 - Pure Normal Sprout   - A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume. 
 4032276 - Pure Sprout   - A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume. 
 4032277 - Pure Large Sprout - A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume. 
 4032278 - Stationery of Deep Longing   - Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  
 4032279 - Stationary of Hope and Longing   - Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  
 4032280 - Letter of Love and Longing   - Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  
-4032281 - Pencil of Courage X 100   - A pencil that's used to write things you don’t have the courage to say. 
-4032282 - Pencil of Courage X 1000   - AA pencil that's used to write things you don’t have the courage to say. 
-4032283 - Pencil of Courage X 10000   - A pencil that's used to write things you don’t have the courage to say. 
+4032281 - Pencil of Courage X 100   - A pencil that's used to write things you donï¿½t have the courage to say. 
+4032282 - Pencil of Courage X 1000   - AA pencil that's used to write things you donï¿½t have the courage to say. 
+4032283 - Pencil of Courage X 10000   - A pencil that's used to write things you donï¿½t have the courage to say. 
 4032284 - Child's Broken Toy   - A toy stolen from a child by a monster. It's broken and cannot be used.  
 4032285 - Child's Broken Toy   - A toy stolen from a child by a monster. It's broken and cannot be used.  
 4032286 - Child's Broken Toy   - A toy stolen from a child by a monster. It's broken and cannot be used.  

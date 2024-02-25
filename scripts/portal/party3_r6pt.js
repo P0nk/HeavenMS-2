@@ -23,10 +23,10 @@
 
 function enter(pi) {
     var eim = pi.getEventInstance();
-    if(eim.getProperty("stage6_comb") == null) {
+    if (eim.getProperty("stage6_comb") == null) {
         var comb = "0";
 
-        for(var i = 0; i < 16; i++) {
+        for (var i = 0; i < 16; i++) {
             var r = Math.floor((Math.random() * 4)) + 1;
             comb += r.toString();
         }
@@ -35,20 +35,22 @@ function enter(pi) {
     }
 
     var comb = eim.getProperty("stage6_comb");
-    
+
     var name = pi.getPortal().getName().substring(2, 5);
     var portalId = parseInt(name, 10);
-    
-    
+
+
     var pRow = Math.floor(portalId / 10);
     var pCol = portalId % 10;
-    
+
     if (pCol == parseInt(comb.substring(pRow, pRow + 1), 10)) {    //climb
-        pi.playPortalSound(); pi.warp(pi.getMapId(), (pRow % 4 != 0) ? pi.getPortal().getId() + 4 : (pRow / 4));
+        pi.playPortalSound();
+        pi.warp(pi.getMapId(), (pRow % 4 != 0) ? pi.getPortal().getId() + 4 : (pRow / 4));
     } else {    //fail
         pRow--;
-        pi.playPortalSound(); pi.warp(pi.getMapId(), (pRow / 4) > 1 ? (pRow / 4) : 5);  // thanks Chloek3, seth1 for noticing next plaform issues
+        pi.playPortalSound();
+        pi.warp(pi.getMapId(), (pRow / 4) > 1 ? (pRow / 4) : 5);  // thanks Chloek3, seth1 for noticing next plaform issues
     }
-    
+
     return true;
 }

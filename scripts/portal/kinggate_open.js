@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 Stage 5: Door before Ergoth - Guild Quest
 
@@ -27,13 +28,13 @@ Stage 5: Door before Ergoth - Guild Quest
 
 function enter(pi) {
     if (pi.getPlayer().getMap().getReactorByName("kinggate").getState() == 1) {
-        pi.playPortalSound(); pi.warp(990000900, 1);
-        if (pi.getPlayer().getEventInstance().getProperty("boss") != null && pi.getPlayer().getEventInstance().getProperty("boss").equals("true")) {
+        pi.playPortalSound();
+        pi.warp(990000900, 1);
+        if (pi.getPlayer().getEventInstance().getProperty("boss") != null && pi.getPlayer().getEventInstance().getProperty("boss") === "true") {
             pi.changeMusic("Bgm10/Eregos");
         }
         return true;
-    }
-    else {
+    } else {
         pi.playerMessage(5, "This door is closed.");
         return false;
     }

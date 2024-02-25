@@ -24,16 +24,17 @@ function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendAcceptDecline("Who would have thought that the hero's successor would reappear after hundred of years...? Will you bring prosperity to Maple World or will you end its existence? I suppose it really doesn't matter. Alright, I'll tell you what I know about the Seal Stone of Mu Lung.");
         } else if (status == 1) {
@@ -49,16 +50,17 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("So you have defeated the Shadow Knight. I have never doubted of your handiwork, and you handled the task well.");
         } else if (status == 1) {
@@ -66,7 +68,7 @@ function end(mode, type, selection) {
         } else if (status == 2) {
             qm.gainExp(16000);
             qm.forceCompleteQuest();
-            
+
             qm.dispose();
         }
     }

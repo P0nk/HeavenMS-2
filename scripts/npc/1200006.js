@@ -1,12 +1,12 @@
 /**
-----------------------------------------------------------------------------------
-	Whale Between Lith harbor and Rien.
+ ----------------------------------------------------------------------------------
+ Whale Between Lith harbor and Rien.
 
-	1200006 Puro
+ 1200006 Puro
 
-        Credits to: MapleSanta 
-----------------------------------------------------------------------------------
-**/
+ Credits to: MapleSanta
+ ----------------------------------------------------------------------------------
+ **/
 
 function start() {
     cm.sendOk("The current is serene, wich means we may arive in lith harbor earlier than expected.");

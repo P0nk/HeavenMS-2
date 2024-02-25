@@ -38,15 +38,17 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
-            if(cm.haveItem(4001086)) {
+            const YamlConfig = Java.type('config.YamlConfig');
+            if (cm.haveItem(4001086)) {
                 cm.sendYesNo("Do you want to access #b#m240050400##k right now?");
-            } else if(Packages.config.YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS) {
-                if(canBypassHTPQ()) {
+            } else if (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS) {
+                if (canBypassHTPQ()) {
                     cm.sendYesNo("Do you want to access #b#m240050400##k right now?");
                 } else {
                     cm.sendOk("Those who don't have the #r#t4001086##k must prove their valor before challenging #bHorntail#k. Come here holding the #r3 certificates#k that proves you're worthy to || the task.");    // NPC picture is so long it goes through some section of text, || to fill up that space
@@ -56,8 +58,7 @@ function action(mode, type, selection) {
                 cm.sendOk("Those who don't have the #r#t4001086##k must prove their valor before challenging #bHorntail#k.");
                 cm.dispose();
             }
-        }
-        else {
+        } else {
             cm.warp(240050400);
             cm.dispose();
         }

@@ -30,7 +30,7 @@ var status;
 var map = 120000101;
 var job = "Pirate";
 var jobType = 5;
-var no = "Come back to me if you decided to be a #b"+job+"#k.";
+var no = "Come back to me if you decided to be a #b" + job + "#k.";
 
 function start() {
     status = -1;
@@ -47,17 +47,18 @@ function action(mode, type, selection) {
             cm.dispose();
         }
 
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
-        if(status == 0) {
+        if (status == 0) {
             if (cm.getJob() == "BEGINNER") {
                 if (cm.getLevel() >= 10 && cm.canGetFirstJob(jobType)) {
-                    cm.sendYesNo("Hey #h #, I can send you to #b#m"+map+"##k if you want to be a #b"+job+"#k. Do you want to go now?");
+                    cm.sendYesNo("Hey #h #, I can send you to #b#m" + map + "##k if you want to be a #b" + job + "#k. Do you want to go now?");
                 } else {
-                    cm.sendOk("If you want to be a #b"+job+"#k, train yourself further until you reach #blevel 10, " + cm.getFirstJobStatRequirement(jobType) + "#k.");
+                    cm.sendOk("If you want to be a #b" + job + "#k, train yourself further until you reach #blevel 10, " + cm.getFirstJobStatRequirement(jobType) + "#k.");
                     cm.dispose();
                 }
             } else {

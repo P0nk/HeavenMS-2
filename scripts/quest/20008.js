@@ -33,12 +33,12 @@ var choice1;
 function start(mode, type, selection) {
     if (mode < 1) {
         qm.dispose();
-    } 
-    else if (mode > 0)
+    } else if (mode > 0) {
         status++;
-    if (status == 0)
+    }
+    if (status == 0) {
         qm.sendSimple("Are you ready to take on a mission? If you can't pass this test, then you won't be able to call yourself a real Knight. Are you sure you can do this? If you are afraid to do this, let me know. I won't tell Neinheart. \r\n #L0#I'll try this later.#l \r\n #L1#I'm not afraid. Let's do this.#l");
-    else if (status == 1) {
+    } else if (status == 1) {
         if (selection == 0) {
             qm.sendNext("If you call yourself a Knight, then do not hesitate. Show everyone how much courage you have in you.");
             qm.dispose();

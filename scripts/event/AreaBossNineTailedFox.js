@@ -20,14 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Nine Tailed Fox (Old Fox) Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Nine Tailed Fox (Old Fox) Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
-
-importPackage(Packages.client);
+ **/
 
 function init() {
     scheduleNew();
@@ -38,23 +36,29 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var moonRidge = em.getChannelServer().getMapFactory().getMap(222010310);
-    var nineTailedFox = Packages.server.life.MapleLifeFactory.getMonster(7220001);
-	if(moonRidge.getMonsterById(7220001) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var nineTailedFox = LifeFactory.getMonster(7220001);
+    if (moonRidge.getMonsterById(7220001) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
     var posX;
     var posY = 33;
-    posX =  Math.floor((Math.random() * 1300) - 800);
-    moonRidge.spawnMonsterOnGroundBelow(nineTailedFox, new Packages.java.awt.Point(posX, posY));
-    moonRidge.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
-	em.schedule("start", 3 * 60 *60 * 1000);
+    posX = Math.floor((Math.random() * 1300) - 800);
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    moonRidge.spawnMonsterOnGroundBelow(nineTailedFox, spawnpoint);
+
+    const PacketCreator = Java.type('tools.PacketCreator');
+    moonRidge.broadcastMessage(PacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

@@ -29,23 +29,24 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode < 1)
+    if (mode < 1) {
         cm.dispose();
-    else {
+    } else {
         status++;
         if (status == 1) {
             sel = selection;
             if (sel == 0) {
-                if (cm.getPlayer().getGuildRank() == 1)
+                if (cm.getPlayer().getGuildRank() == 1) {
                     cm.sendYesNo("Creating or changing Guild Emblem costs #b 5000000 mesos#k, are you sure you want to continue?");
-                else
+                } else {
                     cm.sendOk("You must be the Guild Leader to change the Emblem. Please tell your leader to speak with me.");
+                }
             }
-        }
-        else if (status == 2 && sel == 0) {
+        } else if (status == 2 && sel == 0) {
             cm.getPlayer().genericGuildMessage(17);
             cm.dispose();
-        } else
+        } else {
             cm.dispose();
+        }
     }
 }

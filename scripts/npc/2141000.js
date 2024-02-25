@@ -9,8 +9,8 @@ function start() {
 
 function action(mode, type, selection) {
     if (mode == 1) {
-	cm.removeNpc(270050100, 2141000);
-	cm.forceStartReactor(270050100, 2709000);
+        cm.removeNpc(270050100, 2141000);
+        cm.forceStartReactor(270050100, 2709000);
     }
     cm.dispose();
 

@@ -27,6 +27,6 @@
  * and nobody would see the other unless they had the other quest started and were in your party.
 */
 
-function act(){
+function act() {
     rm.spawnMonster(9500400);
 }

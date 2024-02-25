@@ -20,7 +20,7 @@
 /**
  * @Author Ronan
  * Event - Jonathan's Test Quest
-**/
+ **/
 
 var entryMap = 912020000;
 var exitMap = 120000102;
@@ -30,14 +30,14 @@ var maxMapId = 912020000;
 
 var eventTime = 2; //2 minutes
 
-var lobbyRange = [0, 7];
+const maxLobbies = 7;
 
-function setLobbyRange() {
-    return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function init() {
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function setup(level, lobbyid) {
@@ -68,7 +68,7 @@ function playerUnregistered(eim, player) {}
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function playerLeft(eim, player) {}
@@ -84,7 +84,9 @@ function playerDisconnected(eim, player) {
 }
 
 function changedMap(eim, chr, mapid) {
-    if(mapid < minMapId || mapid > maxMapId) playerExit(eim, chr);
+    if (mapid < minMapId || mapid > maxMapId) {
+        playerExit(eim, chr);
+    }
 }
 
 function clearPQ(eim) {

@@ -21,16 +21,16 @@
 */
 
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Hikari - Showa Town(801000000)
--- By ---------------------------------------------------------------------------------------------
-	Information
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Information
-        2.0 - Second Version by Moogra
-        2.1 - Code revamped by Moogra
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Hikari - Showa Town(801000000)
+ -- By ---------------------------------------------------------------------------------------------
+ Information
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.0 - First Version by Information
+ 2.0 - Second Version by Moogra
+ 2.1 - Code revamped by Moogra
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 var price = 300;
 
@@ -40,14 +40,15 @@ function start() {
 
 function action(mode, type, selection) {
     if (mode < 1) {
-        if (mode == 0)
+        if (mode == 0) {
             cm.sendOk("Please come back some other time.");
+        }
         cm.dispose();
         return;
     }
-    if (cm.getMeso < price)
+    if (cm.getMeso < price) {
         cm.sendOk("Please check and see if you have " + price + " mesos to enter this place.");
-    else {
+    } else {
         cm.gainMeso(-price);
         cm.warp(801000100 + 100 * cm.getPlayer().getGender(), "out00");
     }

@@ -20,12 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Bamboo Warrior Spawner
--- Edited by --------------------------------------------------------------------------------------
-	Ronan - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Bamboo Warrior Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ Ronan - based on xQuasar's King Clang spawner
 
-**/
+ **/
 function init() {
     scheduleNew();
 }
@@ -35,22 +35,26 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
+    const LifeFactory = Java.type('server.life.LifeFactory');
     var mapObj = em.getChannelServer().getMapFactory().getMap(800020120);   // original mapid was 251010101
-    var mobObj = Packages.server.life.MapleLifeFactory.getMonster(6090002);
-	
-	if(mapObj.getMonsterById(6090002) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
-	
-    mapObj.spawnMonsterOnGroundBelow(mobObj, new Packages.java.awt.Point(560, 50));
-    mapObj.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "From amongst the ruins shrouded by the mists, Bamboo Warrior appears."));
-	em.schedule("start", 3 * 60 *60 * 1000);
+    var mobObj = LifeFactory.getMonster(6090002);
+
+    if (mapObj.getMonsterById(6090002) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
+
+    const Point = Java.type('java.awt.Point');
+    const PacketCreator = Java.type('tools.PacketCreator');
+    mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(560, 50));
+    mapObj.broadcastMessage(PacketCreator.serverNotice(6, "From amongst the ruins shrouded by the mists, Bamboo Warrior appears."));
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

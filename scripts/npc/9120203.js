@@ -21,40 +21,41 @@
 */
 
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Konpei - Near the Hideout (Beautiful Sky)(801040101)
--- By ---------------------------------------------------------------------------------------------
-	Ronan
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Ronan
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Konpei - Near the Hideout (Beautiful Sky)(801040101)
+ -- By ---------------------------------------------------------------------------------------------
+ Ronan
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.0 - First Version by Ronan
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 var status;
 
 function start() {
-        status = -1;
-        action(1, 0, 0);
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-        if (mode == -1) {
-                cm.dispose();
-        } else {
-                if (mode == 0 && status == 0) {
-                        cm.dispose();
-                        return;
-                }
-                if (mode == 1)
-                        status++;
-                else
-                        status--;
-    
-                if (status == 0) {
-                        cm.sendNext("Ah, The Boss has been defeated. What a happy day this turns out to be! Congratulations, everyone. Follow this way back to town.");
-                } else if (status == 1) {
-                        cm.warp(801000000);
-                        cm.dispose();
-                }
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0 && status == 0) {
+            cm.dispose();
+            return;
         }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        if (status == 0) {
+            cm.sendNext("Ah, The Boss has been defeated. What a happy day this turns out to be! Congratulations, everyone. Follow this way back to town.");
+        } else if (status == 1) {
+            cm.warp(801000000);
+            cm.dispose();
+        }
+    }
 }

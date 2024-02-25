@@ -43,7 +43,7 @@ function pushIfItemExists(array, itemid) {
 function pushIfItemsExists(array, itemidList) {
     for (var i = 0; i < itemidList.length; i++) {
         var itemid = itemidList[i];
-        
+
         if ((itemid = cm.getCosmeticItem(itemid)) != -1 && !cm.isCosmeticEquipped(itemid)) {
             array.push(itemid);
         }
@@ -59,10 +59,11 @@ function action(mode, type, selection) {
     if (mode < 1) {  // disposing issue with stylishs found thanks to Vcoc
         cm.dispose();
     } else {
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             cm.sendSimple("Well well well, welcome to the Showa Plastic Surgery! Would you like to transform your face into something new? With a #b#t5152009##k or a #b#t5152045##k, you can let us take care of the rest and have the face you've always wanted~!\r\n#L1#Plastic Surgery: #i5152009##t5152009##l\r\n#L2#Cosmetic Lens: #i5152045##t5152045##l\r\n#L3#One-time Cosmetic Lenses: #i5152102# (any color)#l");
         } else if (status == 1) {
@@ -70,14 +71,14 @@ function action(mode, type, selection) {
                 beauty = 0;
                 facenew = Array();
                 if (cm.getPlayer().getGender() == 0) {
-                    for(var i = 0; i < mface_v.length; i++) {
+                    for (var i = 0; i < mface_v.length; i++) {
                         pushIfItemExists(facenew, mface_v[i] + cm.getPlayer().getFace()
                             % 1000 - (cm.getPlayer().getFace()
                                 % 100));
                     }
                 }
                 if (cm.getPlayer().getGender() == 1) {
-                    for(var i = 0; i < fface_v.length; i++) {
+                    for (var i = 0; i < fface_v.length; i++) {
                         pushIfItemExists(facenew, fface_v[i] + cm.getPlayer().getFace()
                             % 1000 - (cm.getPlayer().getFace()
                                 % 100));
@@ -88,47 +89,46 @@ function action(mode, type, selection) {
                 beauty = 1;
                 if (cm.getPlayer().getGender() == 0) {
                     var current = cm.getPlayer().getFace()
-                    % 100 + 20000;
+                        % 100 + 20000;
                 }
                 if (cm.getPlayer().getGender() == 1) {
                     var current = cm.getPlayer().getFace()
-                    % 100 + 21000;
+                        % 100 + 21000;
                 }
                 colors = Array();
-                pushIfItemsExists(colors, [current , current + 100, current + 200, current + 300, current +400, current + 500, current + 700]);
+                pushIfItemsExists(colors, [current, current + 100, current + 200, current + 300, current + 400, current + 500, current + 700]);
                 cm.sendStyle("With our new computer program, you can see yourself after the treatment in advance. What kind of lens would you like to wear? Please choose the style of your liking.", colors);
             } else if (selection == 3) {
                 beauty = 3;
                 if (cm.getPlayer().getGender() == 0) {
                     var current = cm.getPlayer().getFace()
-                    % 100 + 20000;
+                        % 100 + 20000;
                 }
                 if (cm.getPlayer().getGender() == 1) {
                     var current = cm.getPlayer().getFace()
-                    % 100 + 21000;
+                        % 100 + 21000;
                 }
-                
+
                 colors = Array();
                 for (var i = 0; i < 8; i++) {
                     if (cm.haveItem(5152100 + i)) {
                         pushIfItemExists(colors, current + 100 * i);
                     }
                 }
-                
+
                 if (colors.length == 0) {
                     cm.sendOk("You don't have any One-Time Cosmetic Lens to use.");
                     cm.dispose();
                     return;
                 }
-                
+
                 cm.sendStyle("What kind of lens would you like to wear? Please choose the style of your liking.", colors);
             }
-        }
-        else if (status == 2){
+        } else if (status == 2) {
             cm.dispose();
-            
+
             if (beauty == 0) {
-                if (cm.haveItem(5152009) == true){
+                if (cm.haveItem(5152009) == true) {
                     cm.gainItem(5152009, -1);
                     cm.setFace(facenew[selection]);
                     cm.sendOk("Enjoy your new and improved face!");
@@ -136,17 +136,17 @@ function action(mode, type, selection) {
                     cm.sendOk("Hmm ... it looks like you don't have the coupon specifically for this place. Sorry to say this, but without the coupon, there's no plastic surgery for you...");
                 }
             } else if (beauty == 1) {
-                if (cm.haveItem(5152045) == true){
+                if (cm.haveItem(5152045) == true) {
                     cm.gainItem(5152045, -1);
                     cm.setFace(colors[selection]);
                     cm.sendOk("Enjoy your new and improved cosmetic lenses!");
                 } else {
                     cm.sendOk("Hmm ... it looks like you don't have the coupon specifically for this place. Sorry to say this, but without the coupon, there's no plastic surgery for you...");
                 }
-            } else if (beauty == 3){
-                var color = (colors[selection] / 100) % 100 | 0;
-                
-                if (cm.haveItem(5152100 + color)){
+            } else if (beauty == 3) {
+                var color = (colors[selection] / 100) % 10 | 0;
+
+                if (cm.haveItem(5152100 + color)) {
                     cm.gainItem(5152100 + color, -1);
                     cm.setFace(colors[selection]);
                     cm.sendOk("Enjoy your new and improved cosmetic lenses!");

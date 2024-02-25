@@ -21,43 +21,44 @@
 */
 
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Kino Konoko - Zipangu - Mushroom Shrine(800000000)
--- By ---------------------------------------------------------------------------------------------
-	Ronan
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Ronan        
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Kino Konoko - Zipangu - Mushroom Shrine(800000000)
+ -- By ---------------------------------------------------------------------------------------------
+ Ronan
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.0 - First Version by Ronan
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 var status;
 
 function start() {
-        status = -1;
-        action(1, 0, 0);
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-        if (mode == -1) {
-                cm.dispose();
-        } else {
-                if (mode == 0 && status == 0) {
-                        cm.dispose();
-                        return;
-                }
-                if (mode == 1)
-                        status++;
-                else
-                        status--;
-    
-                if(status == 0) {
-                        if(cm.isQuestCompleted(8074)) {
-                                cm.openNpc(9110002);
-                        } else {
-                                cm.sendOk("Musssshhhhroooom Shrine~~~");
-                        }
-                        
-                        cm.dispose();
-                }
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0 && status == 0) {
+            cm.dispose();
+            return;
         }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        if (status == 0) {
+            if (cm.isQuestCompleted(8074)) {
+                cm.openNpc(9110002);
+            } else {
+                cm.sendOk("Musssshhhhroooom Shrine~~~");
+            }
+
+            cm.dispose();
+        }
+    }
 }

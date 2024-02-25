@@ -22,31 +22,30 @@
 //@Author Moogra, Ronan
 //Fixed grammar, javascript syntax
 
-importPackage(Packages.client);
-
 var status = 0;
 var price = 100000;
 
 function isTransformed(ch) {
-        return ch.getBuffSource(MapleBuffStat.MORPH) == 2210003;
+    const BuffStat = Java.type('client.BuffStat');
+    return ch.getBuffSource(BuffStat.MORPH) == 2210003;
 }
 
 function start() {
-    if(!(isTransformed(cm.getPlayer()) || cm.haveItem(4001086))) {
+    if (!(isTransformed(cm.getPlayer()) || cm.haveItem(4001086))) {
         cm.sendOk("This is the cave of the mighty Horntail, supreme ruler of the Leafre Canyons. Only those #bdeemed worthy#k to meet him can pass here, #boutsiders#k are not welcome. Get lost!");
         cm.dispose();
         return;
     }
-    
+
     cm.sendSimple("Welcome to Cave of Life - Entrance ! Would you like to go inside and fight #rHorntail#k ? If you want to fight him, you may might need some #b#v2000005##k, so you can recover some HP if you have been hit by #rHorntail#k.\r\n#L1#I would like to buy 10 for 100,000 Mesos!#l\r\n\#L2#No thanks, let me in now!#l");
 }
 
 function action(mode, type, selection) {
-    if (mode < 1)
+    if (mode < 1) {
         cm.dispose();
-    else if (selection == 1) {
-        if(cm.getMeso() >= price) {
-            if(!cm.canHold(2000005)) {
+    } else if (selection == 1) {
+        if (cm.getMeso() >= price) {
+            if (!cm.canHold(2000005)) {
                 cm.sendOk("Sorry, you don't have a slot on your inventory for the item!");
             } else {
                 cm.gainMeso(-price);
@@ -58,10 +57,11 @@ function action(mode, type, selection) {
         }
         cm.dispose();
     } else if (selection == 2) {
-        if (cm.getLevel() > 99)
+        if (cm.getLevel() > 99) {
             cm.warp(240050000, 0);
-        else
+        } else {
             cm.sendOk("I'm sorry. You need to be atleast level 100 or above to enter.");
+        }
         cm.dispose();
     }
 }

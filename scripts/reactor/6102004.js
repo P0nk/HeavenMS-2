@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*@author Ronan
  *6102004.js
  *Drops CWKPQ chest bonuses...
  */
- 
+
 function act() {
-	rm.sprayItems(true, 1, 90, 360, 15);
+    rm.sprayItems(true, 1, 90, 360, 15);
 }

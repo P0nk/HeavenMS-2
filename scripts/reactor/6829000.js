@@ -19,7 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-function act(){ //wtf is this?
+function act() { //wtf is this?
     rm.playerMessage(5, "Enjoy Halloween!");
     rm.spawnMonster(9400202, 10);
 }

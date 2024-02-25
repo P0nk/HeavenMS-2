@@ -18,26 +18,26 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 LudiPQ - 1 - 2 Portal
 @author Jvlaple
 */
 
 function enter(pi) {
-	var nextMap = 922010500;
-	var eim = pi.getPlayer().getEventInstance();
-	var target = eim.getMapInstance(nextMap);
-	var targetPortal = target.getPortal("st00");
-	// only let people through if the eim is ready
-	var avail = eim.getProperty("4stageclear");
-	if (avail == null) {
-		// can't go thru eh?
-		pi.getPlayer().dropMessage(5, "Some seal is blocking this door.");
-		return false;
-        }
-	else {
-                pi.playPortalSound();
-		pi.getPlayer().changeMap(target, targetPortal);
-		return true;
-	}
+    var nextMap = 922010500;
+    var eim = pi.getPlayer().getEventInstance();
+    var target = eim.getMapInstance(nextMap);
+    var targetPortal = target.getPortal("st00");
+    // only let people through if the eim is ready
+    var avail = eim.getProperty("4stageclear");
+    if (avail == null) {
+        // can't go thru eh?
+        pi.getPlayer().dropMessage(5, "Some seal is blocking this door.");
+        return false;
+    } else {
+        pi.playPortalSound();
+        pi.getPlayer().changeMap(target, targetPortal);
+        return true;
+    }
 }

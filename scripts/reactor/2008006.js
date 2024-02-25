@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*@author Ronan
  *Reactor : Orbis PQ LP Player - 2008006.js
  * Makes Chamberlain Eak spawn box.
  */
- 
+
 function act() {
-	rm.getEventInstance().setProperty("statusStg3", "0");
+    rm.getEventInstance().setProperty("statusStg3", "0");
 }

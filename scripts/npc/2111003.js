@@ -32,7 +32,7 @@
 */
 
 function start() {
-    if(cm.isQuestStarted(3335) && !cm.haveItem(4031695, 1)) {
+    if (cm.isQuestStarted(3335) && !cm.haveItem(4031695, 1)) {
         cm.warp(926120300, "out00");
         cm.dispose();
     } else {

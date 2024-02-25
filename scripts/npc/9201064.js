@@ -44,54 +44,62 @@ function start() {
 
 function action(mode, type, selection) {
     if (mode < 1)  // disposing issue with stylishs found thanks to Vcoc
+    {
         cm.dispose();
-    else {
-        if (mode == 1)
+    } else {
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 1) {
             if (selection == 1) {
                 beauty = 1;
                 hairnew = Array();
-                if (cm.getPlayer().getGender() == 0)
-                    for(var i = 0; i < mhair_v.length; i++)
-                        pushIfItemExists(hairnew, mhair_v[i] + parseInt(cm.getPlayer().getHair()% 10));
-                if (cm.getPlayer().getGender() == 1)
-                    for(var i = 0; i < fhair_v.length; i++)
+                if (cm.getPlayer().getGender() == 0) {
+                    for (var i = 0; i < mhair_v.length; i++) {
+                        pushIfItemExists(hairnew, mhair_v[i] + parseInt(cm.getPlayer().getHair() % 10));
+                    }
+                }
+                if (cm.getPlayer().getGender() == 1) {
+                    for (var i = 0; i < fhair_v.length; i++) {
                         pushIfItemExists(hairnew, fhair_v[i] + parseInt(cm.getPlayer().getHair() % 10));
+                    }
+                }
                 cm.sendStyle("I can totally change up your hairstyle and make it look so good. Why don't you change it up a bit? With #b#t5150031##k, I'll take care of the rest for you. Choose the style of your liking!", hairnew);
             } else if (selection == 2) {
                 beauty = 2;
                 haircolor = Array();
-                var current = parseInt(cm.getPlayer().getHair()/10)*10;
-                for(var i = 0; i < 8; i++)
+                var current = parseInt(cm.getPlayer().getHair() / 10) * 10;
+                for (var i = 0; i < 8; i++) {
                     pushIfItemExists(haircolor, current + i);
+                }
                 cm.sendStyle("I can totally change your haircolor and make it look so good. Why don't you change it up a bit? With #b#t5151026##k, I'll take care of the rest. Choose the color of your liking!", haircolor);
             }
-        }
-        else if (status == 2){
+        } else if (status == 2) {
             cm.dispose();
-            if (beauty == 1){
-                if (cm.haveItem(5420001)){
+            if (beauty == 1) {
+                if (cm.haveItem(5420001)) {
                     cm.setHair(hairnew[selection]);
                     cm.sendOk("Enjoy your new and improved hairstyle!");
-                } else if (cm.haveItem(5150031)){
+                } else if (cm.haveItem(5150031)) {
                     cm.gainItem(5150031, -1);
                     cm.setHair(hairnew[selection]);
                     cm.sendOk("Enjoy your new and improved hairstyle!");
-                } else
+                } else {
                     cm.sendOk("Hmmm...it looks like you don't have our designated coupon...I'm afraid I can't give you a haircut without it. I'm sorry...");
+                }
             }
-            if (beauty == 2){
-                if (cm.haveItem(5151026) == true){
+            if (beauty == 2) {
+                if (cm.haveItem(5151026) == true) {
                     cm.gainItem(5151026, -1);
                     cm.setHair(haircolor[selection]);
                     cm.sendOk("Enjoy your new and improved haircolor!");
-                } else
+                } else {
                     cm.sendOk("Hmmm...it looks like you don't have our designated coupon...I'm afraid I can't dye your hair without it. I'm sorry...");
+                }
             }
-            if (beauty == 0){
+            if (beauty == 0) {
                 if (selection == 0 && cm.getMeso() >= hairprice) {
                     cm.gainMeso(-hairprice);
                     cm.gainItem(5150031, 1);
@@ -100,8 +108,9 @@ function action(mode, type, selection) {
                     cm.gainMeso(-haircolorprice);
                     cm.gainItem(5151026, 1);
                     cm.sendOk("Enjoy!");
-                } else
+                } else {
                     cm.sendOk("You don't have enough mesos to buy a coupon!");
+                }
             }
         }
     }

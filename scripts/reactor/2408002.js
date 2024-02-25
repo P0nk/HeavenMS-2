@@ -19,13 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
  *2408002.js
  *Key Warp for Horn Tail PQ [HTPQ]
  *@author Jvlaple
 */
-
-importPackage(Packages.client.inventory);
 
 function act() {
     var eim = rm.getPlayer().getEventInstance();
@@ -62,9 +61,10 @@ function act() {
             break;
         }
     }
-    
+
     eim.setIntProperty(vvpStage + "stageclear", 1);
-    
+
+    const Item = Java.type('client.inventory.Item');
     var tehWomanfred = new Item(vvpKey, 0, 1);
     var theWomanfred = womanfred.getReactorByName("keyDrop1");
     var dropper = eim.getPlayers().get(0);

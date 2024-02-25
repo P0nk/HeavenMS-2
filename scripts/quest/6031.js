@@ -27,16 +27,17 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("I am to teach you about the basics of the Theory of Science.");
         } else if (status == 1) {
@@ -49,7 +50,7 @@ function end(mode, type, selection) {
             qm.sendNextPrev("That has been made clear, right? Good, then the class is over. Dismissed.");
         } else if (status == 5) {
             qm.gainMeso(-10000);
-            
+
             qm.forceCompleteQuest();
             qm.dispose();
         }

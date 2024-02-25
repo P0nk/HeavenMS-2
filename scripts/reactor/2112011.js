@@ -25,6 +25,6 @@
  * 2112011.js: Zakum Party Quest Rock - drops a key
 */
 
-function act(){
-	rm.dropItems();
+function act() {
+    rm.dropItems();
 }

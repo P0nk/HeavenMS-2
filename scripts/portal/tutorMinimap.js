@@ -1,5 +1,5 @@
 function enter(pi) {
-	pi.guideHint(1);
-	pi.blockPortal();
-	return true;
+    pi.guideHint(1);
+    pi.blockPortal();
+    return true;
 }

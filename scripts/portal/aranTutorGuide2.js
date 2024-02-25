@@ -19,16 +19,17 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 @author kevintjuh93
 */
-function enter(pi) { 
-    	pi.blockPortal();
-	if (pi.containsAreaInfo(21002, "cmd=o")) {
-		return false;
-	}
-    	pi.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialGuide3");  
-    	pi.message("You can use a Command Attack by pressing both the arrow key and the attack key after a Consecutive Attack."); 
-	pi.updateAreaInfo(21002, "cmd=o;normal=o;arr0=o;arr1=o;arr2=o;mo1=o;chain=o;mo2=o;mo3=o;mo4=o");
-	return true; 
+function enter(pi) {
+    pi.blockPortal();
+    if (pi.containsAreaInfo(21002, "cmd=o")) {
+        return false;
+    }
+    pi.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialGuide3");
+    pi.message("You can use a Command Attack by pressing both the arrow key and the attack key after a Consecutive Attack.");
+    pi.updateAreaInfo(21002, "cmd=o;normal=o;arr0=o;arr1=o;arr2=o;mo1=o;chain=o;mo2=o;mo3=o;mo4=o");
+    return true;
 }  

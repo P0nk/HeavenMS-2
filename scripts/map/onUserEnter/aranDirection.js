@@ -21,5 +21,5 @@
 */
 
 function start(ms) {
-	ms.displayAranIntro();	   	       
+    ms.displayAranIntro();
 }

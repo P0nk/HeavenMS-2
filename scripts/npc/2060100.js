@@ -19,9 +19,10 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 //carta
-function start(){
-    if(cm.isQuestStarted(6301)) {
+function start() {
+    if (cm.isQuestStarted(6301)) {
         if (cm.haveItem(4000175)) {
             cm.gainItem(4000175, -1);
             cm.warp(923000000, 0);
@@ -31,6 +32,6 @@ function start(){
     } else {
         cm.sendOk("I'm #bCarta the sea-witch.#k Don't fool around with me, as I'm known for my habit of turning people into worms.");
     }
-    
+
     cm.dispose();
 }

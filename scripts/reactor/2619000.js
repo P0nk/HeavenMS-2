@@ -19,10 +19,16 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*2619000.js - Zenumist crystal
  *@author Ronan
  */
- 
+
 function hit() {
-	rm.dropItems();
+    rm.dropItems();
+}
+
+function act() {
+    // There's a timeout of 3 seconds to revert back from state 1 to 0.
+    // Reactor is destroyed (state 2) and triggers this if dropping two Magic Devices at once, which shouldn't really happen.
 }

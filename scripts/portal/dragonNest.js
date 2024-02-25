@@ -21,7 +21,8 @@
 */
 function enter(pi) {
     if (pi.isQuestCompleted(3706)) {
-        pi.playPortalSound(); pi.warp(240040612, "out00");
+        pi.playPortalSound();
+        pi.warp(240040612, "out00");
         return true;
     } else if (pi.isQuestStarted(100203) || pi.getPlayer().haveItem(4001094)) {
         var em = pi.getEventManager("NineSpirit");

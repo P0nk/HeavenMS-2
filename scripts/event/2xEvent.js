@@ -20,53 +20,59 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	2x EXP Event Script
--- Author --------------------------------------------------------------------------------------
-	Twdtwd
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ 2x EXP Event Script
+ -- Author --------------------------------------------------------------------------------------
+ Twdtwd
+ **/
 
 var timer1;
 var timer2;
 var timer3;
 var timer4;
 
-importPackage(Packages.client);
-
 function init() {
-	/*
+    /*
         if(em.getChannelServer().getId() == 1) { // Only run on channel 1.
-		// AEST
-		timer1 = em.scheduleAtTimestamp("start", 1428220800000);
-		timer2 = em.scheduleAtTimestamp("stop", 1428228000000);
-		// EDT
-		timer1 = em.scheduleAtTimestamp("start", 1428271200000);
-		timer2 = em.scheduleAtTimestamp("stop", 1428278400000);
-	}
+        // AEST
+        timer1 = em.scheduleAtTimestamp("start", 1428220800000);
+        timer2 = em.scheduleAtTimestamp("stop", 1428228000000);
+        // EDT
+        timer1 = em.scheduleAtTimestamp("start", 1428271200000);
+        timer2 = em.scheduleAtTimestamp("stop", 1428278400000);
+    }
         */
 }
 
 function cancelSchedule() {
-    if (timer1 != null)
+    if (timer1 != null) {
         timer1.cancel(true);
-	if (timer2 != null)
+    }
+    if (timer2 != null) {
         timer2.cancel(true);
-	if (timer3 != null)
+    }
+    if (timer3 != null) {
         timer3.cancel(true);
-	if (timer4 != null)
+    }
+    if (timer4 != null) {
         timer4.cancel(true);
+    }
 }
 
 function start() {
-   var world = Packages.net.server.Server.getInstance().getWorld(em.getChannelServer().getWorld());
-   world.setExpRate(8);
-   world.broadcastPacket(Packages.tools.MaplePacketCreator.serverNotice(6, "The Bunny Onslaught Survival Scanner (BOSS) has detected an Easter Bunny onslaught soon! The GM team has activated the Emergency XP Pool (EXP) that doubles experience gained for the next two hours!"));
+    const Server = Java.type('net.server.Server');
+    const PacketCreator = Java.type('tools.PacketCreator');
+    var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
+    world.setExpRate(8);
+    world.broadcastPacket(PacketCreator.serverNotice(6, "The Bunny Onslaught Survival Scanner (BOSS) has detected an Easter Bunny onslaught soon! The GM team has activated the Emergency XP Pool (EXP) that doubles experience gained for the next two hours!"));
 }
 
 function stop() {
-   var world = Packages.net.server.Server.getInstance().getWorld(em.getChannelServer().getWorld());
-   world.setExpRate(4);
-   world.broadcastPacket(Packages.tools.MaplePacketCreator.serverNotice(6, "Unfortunately the Emergency XP Pool (EXP) has run out of juice for now and needs to recharge causing the EXP rate to go back to normal."));
+    const Server = Java.type('net.server.Server');
+    const PacketCreator = Java.type('tools.PacketCreator');
+    var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
+    world.setExpRate(4);
+    world.broadcastPacket(PacketCreator.serverNotice(6, "Unfortunately the Emergency XP Pool (EXP) has run out of juice for now and needs to recharge causing the EXP rate to go back to normal."));
 }
 
 // ---------- FILLER FUNCTIONS ----------

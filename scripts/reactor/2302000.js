@@ -26,6 +26,6 @@
  * 
 */
 
-function act(){
-	rm.dropItems(true, 2, 75, 90);
+function act() {
+    rm.dropItems(true, 2, 75, 90);
 }

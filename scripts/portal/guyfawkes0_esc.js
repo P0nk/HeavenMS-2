@@ -18,11 +18,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-        if(pi.getEventInstance().getIntProperty("statusStg1") == 1) {
-                pi.playPortalSound(); pi.warp(674030200, 0);
-                return true;
-        } else {
-                pi.message("The tunnel is currently blocked.");
-                return false;
-        }
+    if (pi.getEventInstance().getIntProperty("statusStg1") == 1) {
+        pi.playPortalSound();
+        pi.warp(674030200, 0);
+        return true;
+    } else {
+        pi.message("The tunnel is currently blocked.");
+        return false;
+    }
 }

@@ -24,11 +24,11 @@
 function enter(pi) {
     var mapplayer = "stage6_comb" + (pi.getMapId() % 10);
     var eim = pi.getEventInstance();
-    
-    if(eim.getProperty(mapplayer) == null) {
+
+    if (eim.getProperty(mapplayer) == null) {
         var comb = "";
 
-        for(var i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
             var r = Math.floor((Math.random() * 4));
             comb += r.toString();
         }
@@ -37,29 +37,32 @@ function enter(pi) {
     }
 
     var comb = eim.getProperty(mapplayer);
-    
+
     var name = pi.getPortal().getName().substring(2, 4);
     var portalId = parseInt(name, 10);
-    
-    
+
+
     var pRow = Math.floor(portalId / 10);
     var pCol = (portalId % 10);
-    
+
     if (pCol == parseInt(comb.substring(pRow, pRow + 1), 10)) {    //climb
-        if(pRow < 9) {
-            pi.playPortalSound(); pi.warp(pi.getMapId(), pi.getPortal().getId() + 4);
+        if (pRow < 9) {
+            pi.playPortalSound();
+            pi.warp(pi.getMapId(), pi.getPortal().getId() + 4);
         } else {
-            if(eim.getIntProperty("statusStg6") == 0) {
+            if (eim.getIntProperty("statusStg6") == 0) {
                 eim.setIntProperty("statusStg6", 1);
                 eim.giveEventPlayersStageReward(6);
             }
-            
-            pi.playPortalSound(); pi.warp(pi.getMapId(), 1);
+
+            pi.playPortalSound();
+            pi.warp(pi.getMapId(), 1);
         }
-        
+
     } else {    //fail
-        pi.playPortalSound(); pi.warp(pi.getMapId(), 2);
+        pi.playPortalSound();
+        pi.warp(pi.getMapId(), 2);
     }
-    
+
     return true;
 }

@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* Portal for the LightBulb Map...
 
 **hontale_c.js
@@ -32,13 +33,13 @@ function enter(pi) {
         var theWay = pi.getMap().getReactorByName("light").getState();
         if (theWay == 1) {
             target = 240050300; //light
-        } else if(theWay == 3) {
+        } else if (theWay == 3) {
             target = 240050310; //dark
         } else {
             pi.playerMessage(5, "Hit the Lightbulb to determine your fate!");
             return false;
         }
-        
+
         pi.playPortalSound();
         eim.warpEventTeam(target);
         return true;

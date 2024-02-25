@@ -1,6 +1,6 @@
 function start() {
     var status = cm.getQuestStatus(20706);
-    
+
     if (status == 0) {
         cm.sendNext("It looks like there's nothing suspicious in the area.");
     } else if (status == 1) {

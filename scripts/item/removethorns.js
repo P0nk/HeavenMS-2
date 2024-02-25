@@ -19,10 +19,10 @@
 */
 
 var status;
- 
+
 function start() {
-        status = -1;
-        action(1, 0, 0);
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
@@ -33,15 +33,16 @@ function action(mode, type, selection) {
             im.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
-        if(status == 0) {
+        if (status == 0) {
             if (im.getMapId() == 106020400 && im.isQuestActive(2324)) {
                 var player = im.getPlayer();
-                
+
                 var portal = im.getMap().getPortal("right00");
                 if (portal != null && portal.getPosition().distance(player.getPosition()) < 210) {
                     player.gainExp(3300 * player.getExpRate());
@@ -51,7 +52,7 @@ function action(mode, type, selection) {
                     im.playerMessage(5, "You have used the Thorn Remover to clear the path.");
                 }
             }
-            
+
             im.dispose();
         }
     }

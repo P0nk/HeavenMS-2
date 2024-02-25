@@ -1,0 +1,24 @@
+# This workflow will tag the merge commit when merging a PR into the master branch.
+# Add "#patch", "#minor", or "#major" at end of the merge commit subject to dictate the type of bump.
+
+name: Bump version
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: '0'
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.55.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          BRANCH_HISTORY: last

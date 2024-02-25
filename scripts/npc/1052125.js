@@ -45,28 +45,28 @@ function action(mode, type, selection) {
         }
     }
     if (status == 0) {
-    	if (selection == 0) {
-    		if (cm.isQuestStarted(2286) || cm.isQuestStarted(2287) || cm.isQuestStarted(2288)) {
-        		var em = cm.getEventManager("RockSpirit");
-                        if (!em.startInstance(cm.getPlayer())) {
-                            cm.sendOk("Uh... It looks like the rooms ahead are a bit crowded right now. Please wait around here for a bit, ok?");
-                        }
-    			cm.dispose();
-    			return;
-    		} else {
-    			cm.sendOk("I did not hear anything from Blake that you are assisting him.");  
-       		}
-    	} else {
-    		if (cm.isQuestCompleted(2290)) {
-                        if(cm.getPlayer().getLevel() > 50) {
-                                cm.sendOk("The VIP area is available only for players #rlevel 50 or below#k.");
-                        } else {
-                                cm.sendOk("The VIP area only gets available after handing over #r#t4032521#s#k from the #b'Admission to the VIP Zone'#k quest.");
-                        }
-                } else {
-                        cm.sendOk("#rVIP#k? Yeah that is funny #rMr. VIP#k, now get lost before I call security."); 
+        if (selection == 0) {
+            if (cm.isQuestStarted(2286) || cm.isQuestStarted(2287) || cm.isQuestStarted(2288)) {
+                var em = cm.getEventManager("RockSpirit");
+                if (!em.startInstance(cm.getPlayer())) {
+                    cm.sendOk("Uh... It looks like the rooms ahead are a bit crowded right now. Please wait around here for a bit, ok?");
                 }
-    	}
-    	cm.dispose();
+                cm.dispose();
+                return;
+            } else {
+                cm.sendOk("I did not hear anything from Blake that you are assisting him.");
+            }
+        } else {
+            if (cm.isQuestCompleted(2290)) {
+                if (cm.getPlayer().getLevel() > 50) {
+                    cm.sendOk("The VIP area is available only for players #rlevel 50 or below#k.");
+                } else {
+                    cm.sendOk("The VIP area only gets available after handing over #r#t4032521#s#k from the #b'Admission to the VIP Zone'#k quest.");
+                }
+            } else {
+                cm.sendOk("#rVIP#k? Yeah that is funny #rMr. VIP#k, now get lost before I call security.");
+            }
+        }
+        cm.dispose();
     }
 }

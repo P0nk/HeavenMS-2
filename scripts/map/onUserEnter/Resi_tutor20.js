@@ -1,3 +1,3 @@
-function start(ms) { 
-	ms.mapEffect("resistance/tutorialGuide");
+function start(ms) {
+    ms.mapEffect("resistance/tutorialGuide");
 }

@@ -46,24 +46,25 @@ function action(mode, type, selection) {
     if (mode < 1) {  // disposing issue with stylishs found thanks to Vcoc
         cm.dispose();
     } else {
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             cm.sendSimple("Well, hello! Welcome to the Ludibrium Plastic Surgery! Would you like to transform your face into something new? With a #b#t5152007##k, you can let us take care of the rest and have the face you've always wanted~!\r\n#L2#Plastic Surgery: #i5152007##t5152007##l");
         } else if (status == 1) {
             if (selection == 2) {
                 facenew = Array();
                 if (cm.getPlayer().getGender() == 0) {
-                    for(var i = 0; i < mface_v.length; i++) {
+                    for (var i = 0; i < mface_v.length; i++) {
                         pushIfItemExists(facenew, mface_v[i] + cm.getPlayer().getFace()
                             % 1000 - (cm.getPlayer().getFace()
                                 % 100));
                     }
                 }
                 if (cm.getPlayer().getGender() == 1) {
-                    for(var i = 0; i < fface_v.length; i++) {
+                    for (var i = 0; i < fface_v.length; i++) {
                         pushIfItemExists(facenew, fface_v[i] + cm.getPlayer().getFace()
                             % 1000 - (cm.getPlayer().getFace()
                                 % 100));
@@ -71,10 +72,9 @@ function action(mode, type, selection) {
                 }
                 cm.sendStyle("Let's see... I can totally transform your face into something new. Don't you want to try it? For #b#t5152007##k, you can get the face of your liking. Take your time in choosing the face of your preference.", facenew);
             }
-        }
-        else if (status == 2){
+        } else if (status == 2) {
             cm.dispose();
-            if (cm.haveItem(5152007)){
+            if (cm.haveItem(5152007)) {
                 cm.gainItem(5152007, -1);
                 cm.setFace(facenew[selection]);
                 cm.sendOk("Enjoy your new and improved face!");

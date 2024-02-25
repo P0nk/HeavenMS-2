@@ -3,11 +3,12 @@ function enter(pi) {
         pi.playerMessage(5, "You already have the proof of qualification.");
         return false;
     }
-    if (pi.isQuestStarted(20601) || pi.isQuestStarted(20602) || pi.isQuestStarted(20603) || pi.isQuestStarted(20604) || pi.isQuestStarted(20605)) {    	
+    if (pi.isQuestStarted(20601) || pi.isQuestStarted(20602) || pi.isQuestStarted(20603) || pi.isQuestStarted(20604) || pi.isQuestStarted(20605)) {
         if (pi.getPlayerCount(913010200) == 0) {
             var map = pi.getMap(913010200);
-            map.killAllMonsters();  
-            pi.playPortalSound(); pi.warp(913010200, 0);
+            map.killAllMonsters();
+            pi.playPortalSound();
+            pi.warp(913010200, 0);
             pi.spawnMonster(9300289, 0, 0);
             return true;
         } else {
@@ -15,7 +16,7 @@ function enter(pi) {
             return false;
         }
     } else {
-    	pi.playerMessage(5, "The only way to enter the hall #3 is if you're training for the Level 100 skills.");
+        pi.playerMessage(5, "The only way to enter the hall #3 is if you're training for the Level 100 skills.");
         return false;
     }
 }

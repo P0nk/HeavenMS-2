@@ -33,19 +33,20 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
-            if(qm.haveItem(4001159, 25) && qm.haveItem(4001160, 25) && !qm.haveItemWithId(1122010, true)) {
-                if(qm.canHold(1122010)) {
+            if (qm.haveItem(4001159, 25) && qm.haveItem(4001160, 25) && !qm.haveItemWithId(1122010, true)) {
+                if (qm.canHold(1122010)) {
                     qm.gainItem(4001159, -25);
                     qm.gainItem(4001160, -25);
                     qm.gainItem(1122010, 1);
@@ -55,8 +56,8 @@ function end(mode, type, selection) {
                     qm.sendNext("Free a slot on your EQUIP tab before claiming a prize.");
                     return;
                 }
-            } else if(qm.haveItem(4001159, 10) && qm.haveItem(4001160, 10)) {
-                if(qm.canHold(2041212)) {
+            } else if (qm.haveItem(4001159, 10) && qm.haveItem(4001160, 10)) {
+                if (qm.canHold(2041212)) {
                     qm.gainItem(4001159, -10);
                     qm.gainItem(4001160, -10);
                     qm.gainItem(2041212, 1);

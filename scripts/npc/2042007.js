@@ -1,9 +1,9 @@
 /**
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Drago (MapleStorySA)
-        2.0 - Second Version by Jayd - translated CPQ contents to English
----------------------------------------------------------------------------------------------------
-**/
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.0 - First Version by Drago (MapleStorySA)
+ 2.0 - Second Version by Jayd - translated CPQ contents to English
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 var status = 0;
 var rnk = -1;
@@ -22,11 +22,12 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (cm.getPlayer().getMapId() == 980030010) {
             if (status == 0) {
                 cm.sendNext("I hope you had fun at the Monster Carnival!");

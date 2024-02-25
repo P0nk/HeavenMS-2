@@ -20,40 +20,41 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Mue - Leafre Ticketing Booth(240000100)
--- By ---------------------------------------------------------------------------------------------
-	Information
--- Version Info -----------------------------------------------------------------------------------
-    1.2 - Cleanup by Moogra
-	1.1 - Price like GMS [sadiq]
-	1.0 - First Version by Information
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Mue - Leafre Ticketing Booth(240000100)
+ -- By ---------------------------------------------------------------------------------------------
+ Information
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.2 - Cleanup by Moogra
+ 1.1 - Price like GMS [sadiq]
+ 1.0 - First Version by Information
+ ---------------------------------------------------------------------------------------------------
+ **/
 var status = 0;
 var cost = 30000;
 
 function start() {
-    cm.sendYesNo("Hello, I'm in charge of selling tickets for the ship ride to Orbis Station of Ossyria. The ride to Orbis takes off every 10 minutes, beginning on the hour, and it'll cost you #b"+cost+" mesos#k. Are you sure you want to purchase #b#t4031045##k?");
+    cm.sendYesNo("Hello, I'm in charge of selling tickets for the ship ride to Orbis Station of Ossyria. The ride to Orbis takes off every 10 minutes, beginning on the hour, and it'll cost you #b" + cost + " mesos#k. Are you sure you want to purchase #b#t4031045##k?");
 }
 
 function action(mode, type, selection) {
-    if(mode == -1)
+    if (mode == -1) {
         cm.dispose();
-    else {
-        if(mode == 1)
+    } else {
+        if (mode == 1) {
             status++;
-        else {
+        } else {
             cm.sendNext("You must have some business to take care of here, right?");
             cm.dispose();
             return;
         }
-        if(status == 1) {
-            if(cm.getMeso() >= cost && cm.canHold(4031045)) {
-                cm.gainItem(4031045,1);
+        if (status == 1) {
+            if (cm.getMeso() >= cost && cm.canHold(4031045)) {
+                cm.gainItem(4031045, 1);
                 cm.gainMeso(-cost);
-            } else
-                cm.sendOk("Are you sure you have #b"+cost+" mesos#k? If so, then I urge you to check your etc. inventory, and see if it's full or not.");
+            } else {
+                cm.sendOk("Are you sure you have #b" + cost + " mesos#k? If so, then I urge you to check your etc. inventory, and see if it's full or not.");
+            }
             cm.dispose();
         }
     }

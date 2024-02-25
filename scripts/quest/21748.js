@@ -24,16 +24,17 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("Aran, you came back home safe! So, how fared the mission in Mu Lung? #rGentleman#k ambushed and stole the seal rock again? That's unfortunate. At least you are unharmed, I'm glad.");
         } else if (status == 1) {
@@ -41,9 +42,9 @@ function end(mode, type, selection) {
         } else if (status == 2) {
             qm.gainExp(20000);
             qm.teachSkill(21100002, 0, 30, -1); // final charge
-            
+
             qm.forceCompleteQuest();
-            
+
             qm.dispose();
         }
     }

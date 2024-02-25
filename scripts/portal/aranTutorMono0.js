@@ -19,15 +19,16 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 @author kevintjuh93
 */
-function enter(pi) { 
-	pi.blockPortal();
-	if (pi.containsAreaInfo(21002, "mo1=o")) {
-	    return false;
-	}
-	pi.updateAreaInfo(21002, "mo1=o");
-	pi.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/legendBalloon1");
-	return true;
+function enter(pi) {
+    pi.blockPortal();
+    if (pi.containsAreaInfo(21002, "mo1=o")) {
+        return false;
+    }
+    pi.updateAreaInfo(21002, "mo1=o");
+    pi.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/legendBalloon1");
+    return true;
 }  

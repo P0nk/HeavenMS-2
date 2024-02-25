@@ -13,24 +13,28 @@ function monsterValue(eim, mobId) {
 }
 
 function getEligibleParty(party) {      //selects, from the given party, the team that is allowed to attempt this event
-        var eligible = [];
-        var hasLeader = false;
-        
-        if(party.size() > 0) {
-                var partyList = party.toArray();
+    var eligible = [];
+    var hasLeader = false;
 
-                for(var i = 0; i < party.size(); i++) {
-                        var ch = partyList[i];
+    if (party.size() > 0) {
+        var partyList = party.toArray();
 
-                        if(ch.getMapId() == 105090200 && ch.getLevel() >= 120) {
-                                if(ch.isLeader()) hasLeader = true;
-                                eligible.push(ch);
-                        }
+        for (var i = 0; i < party.size(); i++) {
+            var ch = partyList[i];
+
+            if (ch.getMapId() == 105090200 && ch.getLevel() >= 120) {
+                if (ch.isLeader()) {
+                    hasLeader = true;
                 }
+                eligible.push(ch);
+            }
         }
-        
-        if(!(hasLeader && eligible.length >= minPlayers)) eligible = [];
-        return eligible;
+    }
+
+    if (!(hasLeader && eligible.length >= minPlayers)) {
+        eligible = [];
+    }
+    return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -49,9 +53,9 @@ function setup(level, lobbyid) {
 
 function afterSetup(eim) {}
 
-function respawnStages(eim) {    
-        eim.getMapInstance(910500000).instanceMapRespawn();
-        eim.schedule("respawnStages", 15 * 1000);
+function respawnStages(eim) {
+    eim.getMapInstance(910500000).instanceMapRespawn();
+    eim.schedule("respawnStages", 15 * 1000);
 }
 
 function playerEntry(eim, player) {
@@ -73,11 +77,11 @@ function scheduledTimeout(eim) {
 
 function changedMap(eim, player, mapid) {
     if (mapid != 910500000) {
-	eim.unregisterPlayer(player);
+        eim.unregisterPlayer(player);
 
-	if (eim.disposeIfPlayerBelow(minPlayers, 105090200)) {
-	    em.setProperty("started", "false");
-	}
+        if (eim.disposeIfPlayerBelow(minPlayers, 105090200)) {
+            em.setProperty("started", "false");
+        }
     }
 }
 

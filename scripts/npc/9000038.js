@@ -23,7 +23,7 @@
  * @npc: Agent Kitty
  * @map: 970030000 - Hidden Street - Exclusive Training Center
  * @func: Boss Rush PQ Reward Announcer
-*/
+ */
 
 var status;
 
@@ -48,63 +48,66 @@ var itemQty_lv1 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 25, 25, 25, 25, 25,
 var levels = ["#m970030001#", "#m970030002#", "#m970030003#", "#m970030004#", "#m970030005#", "Final stage"];
 
 function start() {
-        status = -1;
-        action(1, 0, 0);
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-        if (mode == -1) {
-                cm.dispose();
-        } else {
-                if (mode == 0 && status == 0) {
-                        cm.dispose();
-                        return;
-                }
-                if (mode == 1)
-                        status++;
-                else
-                        status--;
-
-                if (status == 0) {
-                        var sendStr = "The #bBoss Rush Party Quest#k rewards players accordingly to how far the team went on the boss huntings. Take note that each player #bcan only claim a reward if they leave through a portal inside a Resting Spot#k. Challenging stronger bosses will require the team to commit to more fightings until the next Resting Spot is reached, or until the final boss is defeated.\r\n\r\nThe possible rewards for those leaving in the selected Resting Spot are depicted here:\r\n\r\n#b";
-                        for(var i = 0; i < 6; i++) {
-                            sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
-                        }
-                        
-                        cm.sendSimple(sendStr);
-                } else if(status == 1) {
-                        var lvTarget, lvQty;
-                        
-                        if(selection == 0) {
-                                lvTarget = itemSet_lv1;
-                                lvQty = itemQty_lv1;
-                        } else if(selection == 1) {
-                                lvTarget = itemSet_lv2;
-                                lvQty = itemQty_lv2;
-                        } else if(selection == 2) {
-                                lvTarget = itemSet_lv3;
-                                lvQty = itemQty_lv3;
-                        } else if(selection == 3) {
-                                lvTarget = itemSet_lv4;
-                                lvQty = itemQty_lv4;
-                        } else if(selection == 4) {
-                                lvTarget = itemSet_lv5;
-                                lvQty = itemQty_lv5;
-                        } else {
-                                lvTarget = itemSet_lv6;
-                                lvQty = itemQty_lv6;
-                        }
-                        
-                        var sendStr = "The following items are being awarded at #b" + levels[selection] + "#k:\r\n\r\n";
-                        for(var i = 0; i < lvTarget.length; i++) {
-                            sendStr += "  #L" + i + "# #i" + lvTarget[i] + "#  #t" + lvTarget[i] + "#";
-                            if(lvQty[i] > 1) sendStr += " (" + lvQty[i] + ")";
-                            sendStr += "#l\r\n";
-                        }
-                        
-                        cm.sendPrev(sendStr);
-                } else if(status == 2) {
-                        cm.dispose();
-                }
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0 && status == 0) {
+            cm.dispose();
+            return;
         }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        if (status == 0) {
+            var sendStr = "The #bBoss Rush Party Quest#k rewards players accordingly to how far the team went on the boss huntings. Take note that each player #bcan only claim a reward if they leave through a portal inside a Resting Spot#k. Challenging stronger bosses will require the team to commit to more fightings until the next Resting Spot is reached, or until the final boss is defeated.\r\n\r\nThe possible rewards for those leaving in the selected Resting Spot are depicted here:\r\n\r\n#b";
+            for (var i = 0; i < 6; i++) {
+                sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
+            }
+
+            cm.sendSimple(sendStr);
+        } else if (status == 1) {
+            var lvTarget, lvQty;
+
+            if (selection == 0) {
+                lvTarget = itemSet_lv1;
+                lvQty = itemQty_lv1;
+            } else if (selection == 1) {
+                lvTarget = itemSet_lv2;
+                lvQty = itemQty_lv2;
+            } else if (selection == 2) {
+                lvTarget = itemSet_lv3;
+                lvQty = itemQty_lv3;
+            } else if (selection == 3) {
+                lvTarget = itemSet_lv4;
+                lvQty = itemQty_lv4;
+            } else if (selection == 4) {
+                lvTarget = itemSet_lv5;
+                lvQty = itemQty_lv5;
+            } else {
+                lvTarget = itemSet_lv6;
+                lvQty = itemQty_lv6;
+            }
+
+            var sendStr = "The following items are being awarded at #b" + levels[selection] + "#k:\r\n\r\n";
+            for (var i = 0; i < lvTarget.length; i++) {
+                sendStr += "  #L" + i + "# #i" + lvTarget[i] + "#  #t" + lvTarget[i] + "#";
+                if (lvQty[i] > 1) {
+                    sendStr += " (" + lvQty[i] + ")";
+                }
+                sendStr += "#l\r\n";
+            }
+
+            cm.sendPrev(sendStr);
+        } else if (status == 2) {
+            cm.dispose();
+        }
+    }
 }

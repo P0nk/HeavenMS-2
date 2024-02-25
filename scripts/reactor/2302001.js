@@ -27,10 +27,10 @@
 */
 
 
-function act(){
+function act() {
 
-	//rm.dropItems(true, 2, 105, 140);
+    //rm.dropItems(true, 2, 105, 140);
 
-	rm.dropItems();
+    rm.dropItems();
 
 }

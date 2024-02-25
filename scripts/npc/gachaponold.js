@@ -32,9 +32,10 @@ var remoteGachapon = false;
 var ticketId = 5220000;
 
 function start() {
-	if(remoteGachapon)
-		ticketId = 5451000;
-		
+    if (remoteGachapon) {
+        ticketId = 5451000;
+    }
+
     if (cm.haveItem(ticketId)) {
         cm.sendYesNo("You may use Gachapon. Would you like to use your Gachapon ticket?");
     } else {
@@ -42,17 +43,17 @@ function start() {
     }
 }
 
-function action(mode, type, selection){
-	if(mode == -1) {
-		cm.dispose();
-	} else if (mode == 1 && cm.haveItem(ticketId)) {
-		if(cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000)) { // One free slot in every inventory.
-			cm.gainItem(ticketId, -1);
-			cm.doGachapon();
-		} else {
-			cm.sendOk("Please have at least one slot in your #rEQUIP, USE, SET-UP, #kand #bETC#k inventories free.");
-		}
-		cm.dispose();
+function action(mode, type, selection) {
+    if (mode == -1) {
+        cm.dispose();
+    } else if (mode == 1 && cm.haveItem(ticketId)) {
+        if (cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000)) { // One free slot in every inventory.
+            cm.gainItem(ticketId, -1);
+            cm.doGachapon();
+        } else {
+            cm.sendOk("Please have at least one slot in your #rEQUIP, USE, SET-UP, #kand #bETC#k inventories free.");
+        }
+        cm.dispose();
     } else {
         if (mode > 0) {
             status++;
@@ -64,10 +65,10 @@ function action(mode, type, selection){
                 cm.sendNext("You'll find a variety of items from the " + cm.getPlayer().getMap().getMapName() + " Gachapon, but you'll most likely find several related items and scrolls since " + cm.getPlayer().getMap().getMapName() + " is known as the town.");
                 cm.dispose();
             } else {
-				
-			}
+
+            }
         } else {
-			cm.dispose();
-		}
+            cm.dispose();
+        }
     }
 }

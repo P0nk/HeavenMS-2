@@ -19,13 +19,14 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*2002003.js - Pot of life
  *@author Jvlaple
  */
- 
+
 function act() {
-	rm.dropItems();
-        
-        var eim = rm.getEventInstance();
-        eim.setProperty("statusStg7", "1");
+    rm.dropItems();
+
+    var eim = rm.getEventInstance();
+    eim.setProperty("statusStg7", "1");
 }

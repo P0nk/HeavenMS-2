@@ -41,10 +41,11 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
         if (cm.getMapId() == 100000200) {
             if (status == 0) {
@@ -73,8 +74,7 @@ function action(mode, type, selection) {
                             if (!em.startInstance(cm.getParty(), cm.getPlayer().getMap(), 1)) {
                                 cm.sendOk("Someone is already attempting the PQ. Please wait for them to finish, or find another channel.");
                             }
-                        }
-                        else {
+                        } else {
                             cm.sendOk("You cannot start this party quest yet, because either your party is not in the range size, some of your party members are not eligible to attempt it or they are not in this map. If you're having trouble finding party members, try Party Search.");
                         }
 
@@ -109,8 +109,7 @@ function action(mode, type, selection) {
             } else if (status == 1) {
                 if (cm.getEventInstance().giveEventReward(cm.getPlayer())) {
                     cm.warp(100000200);
-                }
-                else {
+                } else {
                     cm.sendOk("It seems you are short on space in one of your inventories. Please check that first to get rewarded properly.");
                 }
                 cm.dispose();

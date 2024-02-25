@@ -5,96 +5,98 @@ var entryMap = 101000000;
 var exitMap = 101000000;
 var eventMap = 910110000;
 
-function init(){}
+function init() {}
 
-function setup(difficulty, lobbyId){
-	var eim = em.newInstance("Cygnus_Magic_Library_" +lobbyId);
-	eim.getInstanceMap(eventMap).resetFully();
-	eim.getInstanceMap(eventMap).allowSummonState(false);
-	respawn(eim);
-	eim.startEventTimer(eventTimer);
-	return eim;
+function setup(difficulty, lobbyId) {
+    var eim = em.newInstance("Cygnus_Magic_Library_" + lobbyId);
+    eim.getInstanceMap(eventMap).resetFully();
+    eim.getInstanceMap(eventMap).allowSummonState(false);
+    respawn(eim);
+    eim.startEventTimer(eventTimer);
+    return eim;
 }
 
-function afterSetup(eim){}
+function afterSetup(eim) {}
 
-function respawn(eim){
-	var map = eim.getMapInstance(entryMap);
-	map.allowSummonState(true);
-	map.instanceMapRespawn();
-	eim.schedule("respawn", 10000);
+function respawn(eim) {
+    var map = eim.getMapInstance(entryMap);
+    map.allowSummonState(true);
+    map.instanceMapRespawn();
+    eim.schedule("respawn", 10000);
 }
 
-function playerEntry(eim, player){
-	var magicLibrary = eim.getMapInstance(eventMap);
-	player.changeMap(magicLibrary, magicLibrary.getPortal(1));
+function playerEntry(eim, player) {
+    var magicLibrary = eim.getMapInstance(eventMap);
+    player.changeMap(magicLibrary, magicLibrary.getPortal(1));
 }
 
-function scheduledTimeout(eim){
-	var party = eim.getPlayers();
+function scheduledTimeout(eim) {
+    var party = eim.getPlayers();
 
-	for(var i = 0; i < party.size(); i++)
-		playerExit(eim, party.get(i));
+    for (var i = 0; i < party.size(); i++) {
+        playerExit(eim, party.get(i));
+    }
 
-	eim.dispose();
+    eim.dispose();
 }
 
-function playerRevive(eim, player){
-        player.respawn(eim, entryMap);
-	return false;
+function playerRevive(eim, player) {
+    player.respawn(eim, entryMap);
+    return false;
 }
 
-function playerDead(eim, player){}
+function playerDead(eim, player) {}
 
-function playerDisconnected(eim, player){
-	var party = eim.getPlayers();
+function playerDisconnected(eim, player) {
+    var party = eim.getPlayers();
 
-	for(var i = 0; i < party.size(); i++){
-		if(party.get(i).equals(player))
-			removePlayer(eim, player);
-		else
-			playerExit(eim, party.get(i));
-	}
-	eim.dispose();
+    for (var i = 0; i < party.size(); i++) {
+        if (party.get(i).equals(player)) {
+            removePlayer(eim, player);
+        } else {
+            playerExit(eim, party.get(i));
+        }
+    }
+    eim.dispose();
 }
 
-function monsterValue(eim, mobId){
-	return -1;
+function monsterValue(eim, mobId) {
+    return -1;
 }
 
-function leftParty(eim, player){}
+function leftParty(eim, player) {}
 
-function disbandParty(eim){}
+function disbandParty(eim) {}
 
-function playerUnregistered(eim, player){}
+function playerUnregistered(eim, player) {}
 
-function playerExit(eim, player){
-	eim.unregisterPlayer(player);
-	player.changeMap(entryMap, 2);
+function playerExit(eim, player) {
+    eim.unregisterPlayer(player);
+    player.changeMap(entryMap, 2);
 }
 
 function changedMap(eim, chr, mapid) {
-        if(mapid == exitMap){
-                removePlayer(eim, chr);
-                eim.dispose();
-	}
+    if (mapid == exitMap) {
+        removePlayer(eim, chr);
+        eim.dispose();
+    }
 }
 
-function removePlayer(eim, player){
-	eim.unregisterPlayer(player);
-	player.getMap().removePlayer(player);
-	player.setMap(entryMap);
+function removePlayer(eim, player) {
+    eim.unregisterPlayer(player);
+    player.getMap().removePlayer(player);
+    player.setMap(entryMap);
 }
 
-function cancelSchedule(){}
+function cancelSchedule() {}
 
-function dispose(){}
+function dispose() {}
 
-function clearPQ(eim){}
+function clearPQ(eim) {}
 
-function monsterKilled(mob, eim){}
+function monsterKilled(mob, eim) {}
 
-function allMonstersDead(eim){}
+function allMonstersDead(eim) {}
 
 // ---------- FILLER FUNCTIONS ----------
 

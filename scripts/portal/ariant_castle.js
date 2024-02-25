@@ -20,22 +20,22 @@
 */
 
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Portal - To get into Ariant Castle
--- By ---------------------------------------------------------------------------------------------
-	Jayd
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Jayd
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Portal - To get into Ariant Castle
+ -- By ---------------------------------------------------------------------------------------------
+ Jayd
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.0 - First Version by Jayd
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 function enter(pi) {
-	if (pi.getPlayer().haveItem(4031582) == true) {
-		pi.playPortalSound();
-		pi.warp(260000301, 5);
-		return true;
-	} else {
-		pi.playerMessage(5, "You can enter only if you have a Entry Pass to the Palace.");
-		return false;
-	}
+    if (pi.getPlayer().haveItem(4031582) == true) {
+        pi.playPortalSound();
+        pi.warp(260000301, 5);
+        return true;
+    } else {
+        pi.playerMessage(5, "You can enter only if you have a Entry Pass to the Palace.");
+        return false;
+    }
 }

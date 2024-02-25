@@ -32,25 +32,27 @@ function start() {
 
 function action(mode, type, selection) {
     if (mode < 1)  // disposing issue with stylishs found thanks to Vcoc
+    {
         cm.dispose();
-    else {
-        if (mode == 1)
+    } else {
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        if (status == 1) {
-            if (selection == 2) 
-                cm.sendStyle("With our specialized machine, you can see the way you'll look after the treatment PRIOR to the procedure. What kind of a look are you looking for? Go ahead and choose the style of your liking~!", skin);
         }
-        else if (status == 2){
-            if (cm.haveItem(5153009)){
+        if (status == 1) {
+            if (selection == 2) {
+                cm.sendStyle("With our specialized machine, you can see the way you'll look after the treatment PRIOR to the procedure. What kind of a look are you looking for? Go ahead and choose the style of your liking~!", skin);
+            }
+        } else if (status == 2) {
+            if (cm.haveItem(5153009)) {
                 cm.gainItem(5153009, -1);
                 cm.setSkin(skin[selection]);
                 cm.sendOk("Enjoy your new and improved skin!");
             } else {
                 cm.sendOk("Um...you don't have the skin-care coupon you need to receive the treatment. Sorry, but I am afraid we can't do it for you...");
             }
-            
+
             cm.dispose();
         }
     }

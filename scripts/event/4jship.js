@@ -20,7 +20,7 @@
 /**
  * @Author Ronan
  * Event - Kyrin's Test Quest
-**/
+ **/
 
 var entryMap = 912010000;
 var exitMap = 120000101;
@@ -30,14 +30,14 @@ var maxMapId = 912010200;
 
 var eventTime = 4; //4 minutes
 
-var lobbyRange = [0, 7];
+const maxLobbies = 7;
 
-function setLobbyRange() {
-    return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function init() {
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function setup(level, lobbyid) {
@@ -82,7 +82,7 @@ function playerUnregistered(eim, player) {}
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function playerLeft(eim, player) {}
@@ -98,19 +98,21 @@ function playerDisconnected(eim, player) {
 }
 
 function changedMap(eim, chr, mapid) {
-    if(mapid < minMapId || mapid > maxMapId) playerExit(eim, chr);
+    if (mapid < minMapId || mapid > maxMapId) {
+        playerExit(eim, chr);
+    }
 }
 
 function clearPQ(eim) {
     eim.stopEventTimer();
     eim.setEventCleared();
-    
+
     var player = eim.getPlayers().get(0);
     eim.unregisterPlayer(player);
     player.changeMap(exitMap);
-    
+
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function monsterKilled(mob, eim) {}
@@ -124,7 +126,7 @@ function monsterValue(eim, mobId) {
 }
 
 function friendlyKilled(mob, eim) {
-    if(em.getProperty("noEntry") != "false") {
+    if (em.getProperty("noEntry") != "false") {
         var player = eim.getPlayers().get(0);
         playerExit(eim, player);
         player.changeMap(exitMap);

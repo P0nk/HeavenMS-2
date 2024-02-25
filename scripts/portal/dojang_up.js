@@ -19,13 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
  * @author:   Moogra
  * @function: Warp character up and award player with dojo points
  * @maps:     All Dojo fighting maps
 */
-
-importPackage(Packages.constants.game);
 
 function enter(pi) {
     try {
@@ -33,14 +32,17 @@ function enter(pi) {
             pi.goDojoUp();
             pi.getPlayer().getMap().setReactorState();
             var stage = Math.floor(pi.getPlayer().getMapId() / 100) % 100;
-            if ((stage - (stage / 6) | 0) == pi.getPlayer().getVanquisherStage() && !GameConstants.isDojoPartyArea(pi.getPlayer().getMapId())) // we can also try 5 * stage / 6 | 0 + 1
+            const MapId = Java.type('constants.id.MapId');
+            if ((stage - (stage / 6) | 0) == pi.getPlayer().getVanquisherStage() && !MapId.isPartyDojo(pi.getPlayer().getMapId())) // we can also try 5 * stage / 6 | 0 + 1
+            {
                 pi.getPlayer().setVanquisherKills(pi.getPlayer().getVanquisherKills() + 1);
+            }
         } else {
             pi.getPlayer().message("There are still some monsters remaining.");
         }
         pi.enableActions();
         return true;
-    } catch(err) {
+    } catch (err) {
         pi.getPlayer().dropMessage(err);
     }
 }

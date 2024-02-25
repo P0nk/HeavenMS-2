@@ -20,7 +20,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-function start(ms) {   	       
-	ms.lockUI();
-	ms.showIntro("Effect/Direction4.img/meetWithDragon/Scene" + ms.getPlayer().getGender());
+function start(ms) {
+    ms.lockUI();
+    ms.showIntro("Effect/Direction4.img/meetWithDragon/Scene" + ms.getPlayer().getGender());
 }

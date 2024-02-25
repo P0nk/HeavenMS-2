@@ -1,4 +1,4 @@
 function enter(pi) {
-    pi.blockPortal();   
-    return true; 
+    pi.blockPortal();
+    return true;
 }  

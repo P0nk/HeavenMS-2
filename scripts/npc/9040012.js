@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* @Author Lerk
  * Armor Statue - Sharenian: Hall of the Knight (990000400)
  * Guild Quest Stage 2 Info

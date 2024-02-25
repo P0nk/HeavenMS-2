@@ -20,8 +20,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
-Purin (On Boat ) 1032009
-**/
+ Purin (On Boat ) 1032009
+ **/
 
 var status = 0;
 
@@ -38,7 +38,7 @@ function action(mode, type, selection) {
             cm.dispose();
         } else {
             if (status == 1) {
-                cm.sendNext ("Alright, see you next time. Take care.");
+                cm.sendNext("Alright, see you next time. Take care.");
                 status++;
             } else if (status == 2) {
                 cm.warp(101000300, 0);// back to orbis

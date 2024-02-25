@@ -21,9 +21,7 @@
 /**
  * @author: Ronan
  * @event: Zakum Battle
-*/
-
-importPackage(Packages.server.life);
+ */
 
 var isPq = true;
 var minPlayers = 6, maxPlayers = 30;
@@ -38,51 +36,57 @@ var maxMapId = 280030000;
 
 var eventTime = 120;     // 120 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
-        setEventRequirements();
+    setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function setEventRequirements() {
-        var reqStr = "";
-        
-        reqStr += "\r\n    Number of players: ";
-        if(maxPlayers - minPlayers >= 1) reqStr += minPlayers + " ~ " + maxPlayers;
-        else reqStr += minPlayers;
-        
-        reqStr += "\r\n    Level range: ";
-        if(maxLevel - minLevel >= 1) reqStr += minLevel + " ~ " + maxLevel;
-        else reqStr += minLevel;
-        
-        reqStr += "\r\n    Time limit: ";
-        reqStr += eventTime + " minutes";
-        
-        em.setProperty("party", reqStr);
+    var reqStr = "";
+
+    reqStr += "\r\n    Number of players: ";
+    if (maxPlayers - minPlayers >= 1) {
+        reqStr += minPlayers + " ~ " + maxPlayers;
+    } else {
+        reqStr += minPlayers;
+    }
+
+    reqStr += "\r\n    Level range: ";
+    if (maxLevel - minLevel >= 1) {
+        reqStr += minLevel + " ~ " + maxLevel;
+    } else {
+        reqStr += minLevel;
+    }
+
+    reqStr += "\r\n    Time limit: ";
+    reqStr += eventTime + " minutes";
+
+    em.setProperty("party", reqStr);
 }
 
 function setEventExclusives(eim) {
-        var itemSet = [];
-        eim.setExclusiveItems(itemSet);
+    var itemSet = [];
+    eim.setExclusiveItems(itemSet);
 }
 
 function setEventRewards(eim) {
-        var itemSet, itemQty, evLevel, expStages, mesoStages;
+    var itemSet, itemQty, evLevel, expStages, mesoStages;
 
-        evLevel = 1;    //Rewards at clear PQ
-        itemSet = [];
-        itemQty = [];
-        eim.setEventRewards(evLevel, itemSet, itemQty);
-        
-        expStages = [];    //bonus exp given on CLEAR stage signal
-        eim.setEventClearStageExp(expStages);
-        
-        mesoStages = [];    //bonus meso given on CLEAR stage signal
-        eim.setEventClearStageMeso(mesoStages);
+    evLevel = 1;    //Rewards at clear PQ
+    itemSet = [];
+    itemQty = [];
+    eim.setEventRewards(evLevel, itemSet, itemQty);
+
+    expStages = [];    //bonus exp given on CLEAR stage signal
+    eim.setEventClearStageExp(expStages);
+
+    mesoStages = [];    //bonus meso given on CLEAR stage signal
+    eim.setEventClearStageMeso(mesoStages);
 }
 
 function afterSetup(eim) {
@@ -96,11 +100,11 @@ function setup(channel) {
 
     var level = 1;
     eim.getInstanceMap(280030000).resetPQ(level);
-    
+
     eim.startEventTimer(eventTime * 60000);
     setEventRewards(eim);
     setEventExclusives(eim);
-    
+
     return eim;
 }
 
@@ -116,12 +120,11 @@ function scheduledTimeout(eim) {
 
 function changedMap(eim, player, mapid) {
     if (mapid < minMapId || mapid > maxMapId) {
-	if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
+        if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
             eim.unregisterPlayer(player);
             eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
             end(eim);
-        }
-        else {
+        } else {
             eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
             eim.unregisterPlayer(player);
         }
@@ -137,8 +140,7 @@ function playerRevive(eim, player) {
         eim.unregisterPlayer(player);
         eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
         end(eim);
-    }
-    else {
+    } else {
         eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
         eim.unregisterPlayer(player);
     }
@@ -149,23 +151,22 @@ function playerDisconnected(eim, player) {
         eim.unregisterPlayer(player);
         eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
         end(eim);
-    }
-    else {
+    } else {
         eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
         eim.unregisterPlayer(player);
     }
 }
 
-function leftParty (eim, player) {}
+function leftParty(eim, player) {}
 
-function disbandParty (eim) {}
+function disbandParty(eim) {}
 
 function monsterValue(eim, mobId) {
     return 1;
 }
 
 function playerUnregistered(eim, player) {
-    if(eim.isEventCleared()) {
+    if (eim.isEventCleared()) {
         em.completeQuest(player, 100200, 2030010);
     }
 }
@@ -199,11 +200,11 @@ function isZakum(mob) {
 }
 
 function monsterKilled(mob, eim) {
-    if(isZakum(mob)) {
+    if (isZakum(mob)) {
         eim.setIntProperty("defeatedBoss", 1);
         eim.showClearEffect(mob.getMap().getId());
         eim.clearPQ();
-        
+
         mob.getMap().broadcastZakumVictory();
     }
 }

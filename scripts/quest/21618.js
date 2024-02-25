@@ -26,16 +26,17 @@ function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("Oh, this befriended wolf of yours... I sense some hidden powers hidden behind his furs, you see. Wat'cha say, master, if I awaken it's hidden power?", 9);
         } else if (status == 1) {
@@ -53,30 +54,31 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
-            if(!qm.haveItemWithId(1902017, false)) {
+            if (!qm.haveItemWithId(1902017, false)) {
                 qm.sendNext("You will have to unequip the wolf first before going for the evolution.");
                 qm.dispose();
                 return;
             }
-            
+
             qm.sendNext("Step aside, behold the mighty prowess of Maha!!");
         } else if (status == 1) {
             qm.forceCompleteQuest();
-            
+
             qm.gainItem(1902017, -1);
             qm.gainItem(1902018, 1);
-            
+
             qm.dispose();
         }
     }

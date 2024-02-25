@@ -27,7 +27,7 @@
  * 
  * Kerning City Party Quest NPC 
 */
-			
+
 function start() {
     cm.showEffect("quest/party/clear");
     cm.dispose();

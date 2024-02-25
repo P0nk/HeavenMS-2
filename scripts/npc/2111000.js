@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 -- Odin JavaScript --------------------------------------------------------------------------------
 	Carson - Magatia (GMS Like)
@@ -29,11 +30,11 @@
 ---------------------------------------------------------------------------------------------------
 */
 function start() {
-    if(cm.isQuestStarted(3310) && !cm.haveItem(4031709, 1)) {
+    if (cm.isQuestStarted(3310) && !cm.haveItem(4031709, 1)) {
         cm.warp(926120100, "out00");
     } else {
         cm.sendNext("Alchemy....and Alchemist.....both of them are important. But more importantly, it is the Magatia that tolerate everything. The honor of Magatia should be protected by me.");
     }
-    
+
     cm.dispose();
 }

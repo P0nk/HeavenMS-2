@@ -23,7 +23,7 @@
  * @npc: Billy
  * @map: 193000000 - Premium Road - Kerning City Internet Cafe
  * @func: Cafe PQ Reward Announcer
-*/
+ */
 
 var status;
 
@@ -48,63 +48,66 @@ var itemQty_lv1 = [1, 1, 1, 1, 1, 20, 20, 20, 20, 20, 25, 25, 25, 50, 50, 12, 1,
 var levels = ["Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6"];
 
 function start() {
-        status = -1;
-        action(1, 0, 0);
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-        if (mode == -1) {
-                cm.dispose();
-        } else {
-                if (mode == 0 && status == 0) {
-                        cm.dispose();
-                        return;
-                }
-                if (mode == 1)
-                        status++;
-                else
-                        status--;
-
-                if (status == 0) {
-                        var sendStr = "The #bInternet Cafe Party Quest#k rewards players with ticket-like #bfigure erasers#k, that can be used on the vending machine to retrieve prizes. By further increasing the stakes, one can get better prizes, separated by #rtiers#k.\r\n\r\nThe possible rewards for each tier are depicted here:\r\n\r\n#b";
-                        for(var i = 0; i < 6; i++) {
-                            sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
-                        }
-                        
-                        cm.sendSimple(sendStr);
-                } else if(status == 1) {
-                        var lvTarget, lvQty;
-                        
-                        if(selection == 0) {
-                                lvTarget = itemSet_lv1;
-                                lvQty = itemQty_lv1;
-                        } else if(selection == 1) {
-                                lvTarget = itemSet_lv2;
-                                lvQty = itemQty_lv2;
-                        } else if(selection == 2) {
-                                lvTarget = itemSet_lv3;
-                                lvQty = itemQty_lv3;
-                        } else if(selection == 3) {
-                                lvTarget = itemSet_lv4;
-                                lvQty = itemQty_lv4;
-                        } else if(selection == 4) {
-                                lvTarget = itemSet_lv5;
-                                lvQty = itemQty_lv5;
-                        } else {
-                                lvTarget = itemSet_lv6;
-                                lvQty = itemQty_lv6;
-                        }
-                        
-                        var sendStr = "The following items are being awarded at #b" + levels[selection] + "#k:\r\n\r\n";
-                        for(var i = 0; i < lvTarget.length; i++) {
-                            sendStr += "  #L" + i + "# #i" + lvTarget[i] + "#  #t" + lvTarget[i] + "#";
-                            if(lvQty[i] > 1) sendStr += " (" + lvQty[i] + ")";
-                            sendStr += "#l\r\n";
-                        }
-                        
-                        cm.sendPrev(sendStr);
-                } else if(status == 2) {
-                        cm.dispose();
-                }
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0 && status == 0) {
+            cm.dispose();
+            return;
         }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        if (status == 0) {
+            var sendStr = "The #bInternet Cafe Party Quest#k rewards players with ticket-like #bfigure erasers#k, that can be used on the vending machine to retrieve prizes. By further increasing the stakes, one can get better prizes, separated by #rtiers#k.\r\n\r\nThe possible rewards for each tier are depicted here:\r\n\r\n#b";
+            for (var i = 0; i < 6; i++) {
+                sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
+            }
+
+            cm.sendSimple(sendStr);
+        } else if (status == 1) {
+            var lvTarget, lvQty;
+
+            if (selection == 0) {
+                lvTarget = itemSet_lv1;
+                lvQty = itemQty_lv1;
+            } else if (selection == 1) {
+                lvTarget = itemSet_lv2;
+                lvQty = itemQty_lv2;
+            } else if (selection == 2) {
+                lvTarget = itemSet_lv3;
+                lvQty = itemQty_lv3;
+            } else if (selection == 3) {
+                lvTarget = itemSet_lv4;
+                lvQty = itemQty_lv4;
+            } else if (selection == 4) {
+                lvTarget = itemSet_lv5;
+                lvQty = itemQty_lv5;
+            } else {
+                lvTarget = itemSet_lv6;
+                lvQty = itemQty_lv6;
+            }
+
+            var sendStr = "The following items are being awarded at #b" + levels[selection] + "#k:\r\n\r\n";
+            for (var i = 0; i < lvTarget.length; i++) {
+                sendStr += "  #L" + i + "# #i" + lvTarget[i] + "#  #t" + lvTarget[i] + "#";
+                if (lvQty[i] > 1) {
+                    sendStr += " (" + lvQty[i] + ")";
+                }
+                sendStr += "#l\r\n";
+            }
+
+            cm.sendPrev(sendStr);
+        } else if (status == 2) {
+            cm.dispose();
+        }
+    }
 }

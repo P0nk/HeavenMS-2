@@ -35,10 +35,11 @@ function end(mode, type, selection) {
             qm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             qm.sendYesNo("Oh, you brought all #t4032100#s! Ahaha, I knew you'd be good at it. Tell you what, I now commend that you're now ready to become an official knight. Do you want to become one right now?");
         } else if (status == 1) {
@@ -47,14 +48,15 @@ function end(mode, type, selection) {
                 qm.dispose();
             } else {
                 if (qm.getPlayer().getJob().getId() != 1510) {
-					if (!qm.canHold(1142067)) {
-						qm.sendNext("If you wish to receive the medal befitting the title, you may want to make some room in your equipment inventory.");
-						qm.dispose();
-						return;
-					}
+                    if (!qm.canHold(1142067)) {
+                        qm.sendNext("If you wish to receive the medal befitting the title, you may want to make some room in your equipment inventory.");
+                        qm.dispose();
+                        return;
+                    }
                     qm.gainItem(4032100, -30);
                     qm.gainItem(1142067, 1);
-                    qm.getPlayer().changeJob(Packages.client.MapleJob.THUNDERBREAKER2);
+                    const Job = Java.type('client.Job');
+                    qm.getPlayer().changeJob(Job.THUNDERBREAKER2);
                     qm.completeQuest();
                 }
                 qm.sendNext("You are now no longer a Knight-in-Training. You have now officially become a Cygnus Knight.");

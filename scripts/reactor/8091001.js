@@ -25,7 +25,7 @@
  * LMPQ Maze - Reactor - Spawn Monster
 */
 
-function act(){
+function act() {
     rm.spawnMonster(9400211, 2);
     rm.spawnMonster(9400212, 2);
     rm.mapMessage(5, "Some monsters are summoned.");

@@ -1,0 +1,13 @@
+# Project administration files
+.idea
+.git
+.github
+
+# Not used by the build.
+docs
+handbook
+sql
+tools
+
+# Created by the db when using docker-compose, large and causes rebuild issues if sent to the context.
+docker-db-data

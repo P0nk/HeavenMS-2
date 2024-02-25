@@ -18,33 +18,33 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function isPillUsed(ch) {
-        return ch.getBuffSource(MapleBuffStat.HPREC) == 2022198;
+    const BuffStat = Java.type('client.BuffStat');
+    return ch.getBuffSource(BuffStat.HPREC) == 2022198;
 }
 
 function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
-            if(isPillUsed(qm.getPlayer())) {
-                if(qm.canHoldAll([2050004, 2022224], [10, 20])) {
-                    qm.sendNext("You did took my experiments. Hmm, so THAT is the result of it, hehehehe... Ok, take that as compensation will you? And oh, you can #rspew that#k right away (#bright-click on the pill icon at the top-right corner of the screen#k), no worries.");
-                
+            if (isPillUsed(qm.getPlayer())) {
+                if (qm.canHoldAll([2050004, 2022224], [10, 20])) {
+                    qm.sendNext("You did take my experiments. Hmm, so THAT is the result of it, hehehehe... Ok, take that as compensation will you? And oh, you can #rspew that#k right away (#bright-click on the pill icon at the top-right corner of the screen#k), no worries.");
+
                     qm.gainExp(12500);
                     qm.gainItem(2050004, 10);
 

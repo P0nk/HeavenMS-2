@@ -1,7 +1,3 @@
-importPackage(Packages.client);
-importPackage(Packages.tools);
-importPackage(Packages.server.life);
-
 var Orbis_btf;
 var Boat_to_Orbis;
 var Orbis_Boat_Cabin;
@@ -21,10 +17,10 @@ var invasionDelay = 5 * 1000; //The time that spawn balrog
 function init() {
     closeTime = em.getTransportationTime(closeTime);
     beginTime = em.getTransportationTime(beginTime);
-     rideTime = em.getTransportationTime(rideTime);
+    rideTime = em.getTransportationTime(rideTime);
     invasionStartTime = em.getTransportationTime(invasionStartTime);
     invasionDelayTime = em.getTransportationTime(invasionDelayTime);
-    
+
     Orbis_btf = em.getChannelServer().getMapFactory().getMap(200000112);
     Ellinia_btf = em.getChannelServer().getMapFactory().getMap(101000301);
     Boat_to_Orbis = em.getChannelServer().getMapFactory().getMap(200090010);
@@ -34,16 +30,16 @@ function init() {
     Ellinia_docked = em.getChannelServer().getMapFactory().getMap(101000300);
     Orbis_Station = em.getChannelServer().getMapFactory().getMap(200000100);
     Orbis_docked = em.getChannelServer().getMapFactory().getMap(200000111);
-    
+
     Ellinia_docked.setDocked(true);
     Orbis_docked.setDocked(true);
-    
+
     scheduleNew();
 }
 
 function scheduleNew() {
     em.setProperty("docked", "true");
-    
+
     em.setProperty("entry", "true");
     em.setProperty("haveBalrog", "false");
     em.schedule("stopentry", closeTime);
@@ -51,7 +47,7 @@ function scheduleNew() {
 }
 
 function stopentry() {
-    em.setProperty("entry","false");
+    em.setProperty("entry", "false");
     Orbis_Boat_Cabin.clearMapObjects();   //boxes
     Ellinia_Boat_Cabin.clearMapObjects();
 }
@@ -61,10 +57,12 @@ function takeoff() {
     Ellinia_btf.warpEveryone(Boat_to_Orbis.getId());
     Ellinia_docked.broadcastShip(false);
     Orbis_docked.broadcastShip(false);
-    
-    em.setProperty("docked","false");
-    
-    if(Math.random() < 0.42) em.schedule("approach", (invasionStartTime + (Math.random() * invasionDelayTime)));
+
+    em.setProperty("docked", "false");
+
+    if (Math.random() < 0.42) {
+        em.schedule("approach", (invasionStartTime + Math.trunc((Math.random() * invasionDelayTime))));
+    }
     em.schedule("arrived", rideTime);
 }
 
@@ -85,26 +83,29 @@ function arrived() {
 
 function approach() {
     if (Math.floor(Math.random() * 10) < 10) {
-        em.setProperty("haveBalrog","true");
+        em.setProperty("haveBalrog", "true");
         Boat_to_Orbis.broadcastEnemyShip(true);
         Boat_to_Ellinia.broadcastEnemyShip(true);
-        Boat_to_Orbis.broadcastMessage(MaplePacketCreator.musicChange("Bgm04/ArabPirate"));
-        Boat_to_Ellinia.broadcastMessage(MaplePacketCreator.musicChange("Bgm04/ArabPirate"));
-        
+        const PacketCreator = Java.type('tools.PacketCreator');
+        Boat_to_Orbis.broadcastMessage(PacketCreator.musicChange("Bgm04/ArabPirate"));
+        Boat_to_Ellinia.broadcastMessage(PacketCreator.musicChange("Bgm04/ArabPirate"));
+
         em.schedule("invasion", invasionDelay);
     }
 }
 
 function invasion() {
+    const LifeFactory = Java.type('server.life.LifeFactory');
+
     var map1 = Boat_to_Ellinia;
     var pos1 = new java.awt.Point(-538, 143);
-    map1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos1);
-    map1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos1);
+    map1.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos1);
+    map1.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos1);
 
     var map2 = Boat_to_Orbis;
     var pos2 = new java.awt.Point(339, 148);
-    map2.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos2);
-    map2.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos2);
+    map2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos2);
+    map2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos2);
 }
 
 function cancelSchedule() {}

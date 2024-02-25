@@ -19,10 +19,11 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* @Author Lerk
  * 2212000.js: Plateon Field reactors - Parts 2, Meso, White Pots
 */
 
-function act(){
-	rm.dropItems(true, 2, 80, 100);
+function act() {
+    rm.dropItems(true, 2, 80, 100);
 }

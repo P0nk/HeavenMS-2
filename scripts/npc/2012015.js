@@ -20,21 +20,21 @@
 */
 
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	El Nath Magic Spot - Orbis Tower <20th Floor>(200080200)
--- By ---------------------------------------------------------------------------------------------
-	Unknown
--- Version Info -----------------------------------------------------------------------------------
-    1.2 - Now official version (action(1,0,0) is stupid) by Moogra
-	1.1 - Official Text and Method [Information]
-	1.0 - First Version by Unknown
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ El Nath Magic Spot - Orbis Tower <20th Floor>(200080200)
+ -- By ---------------------------------------------------------------------------------------------
+ Unknown
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.2 - Now official version (action(1,0,0) is stupid) by Moogra
+ 1.1 - Official Text and Method [Information]
+ 1.0 - First Version by Unknown
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 function start() {
-    if (cm.haveItem(4001019))
+    if (cm.haveItem(4001019)) {
         cm.sendYesNo("You can use #b#t4001019##k to activate #b#p2012014##k. Will you teleport to where #b#p2012015##k is?");
-    else {
+    } else {
         cm.sendOk("There's a #b#p2012015##k that'll enable you to teleport to where #b#p2012014##k is, but you can't activate it without the scroll.");
         cm.dispose();
     }

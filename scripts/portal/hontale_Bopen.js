@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* The five caves
  * @author Jvlaple
  */
@@ -28,7 +29,7 @@ function enter(pi) {
     var target;
     var targetPortal;
     var avail;
-    
+
     if (pi.getPlayer().getMapId() == 240050101) {
         nextMap = 240050102;
         eim = pi.getPlayer().getEventInstance();
@@ -45,8 +46,7 @@ function enter(pi) {
             pi.getPlayer().changeMap(target, targetPortal);
             return true;
         }
-    }
-    else if (pi.getPlayer().getMapId() == 240050102) {
+    } else if (pi.getPlayer().getMapId() == 240050102) {
         nextMap = 240050103;
         eim = pi.getPlayer().getEventInstance();
         target = eim.getMapInstance(nextMap);
@@ -62,8 +62,7 @@ function enter(pi) {
             pi.getPlayer().changeMap(target, targetPortal);
             return true;
         }
-    }
-    else if (pi.getPlayer().getMapId() == 240050103) {
+    } else if (pi.getPlayer().getMapId() == 240050103) {
         nextMap = 240050104;
         eim = pi.getPlayer().getEventInstance();
         target = eim.getMapInstance(nextMap);
@@ -79,8 +78,7 @@ function enter(pi) {
             pi.getPlayer().changeMap(target, targetPortal);
             return true;
         }
-    }
-    else if (pi.getPlayer().getMapId() == 240050104) {
+    } else if (pi.getPlayer().getMapId() == 240050104) {
         nextMap = 240050105;
         eim = pi.getPlayer().getEventInstance();
         target = eim.getMapInstance(nextMap);
@@ -96,13 +94,12 @@ function enter(pi) {
             pi.getPlayer().changeMap(target, targetPortal);
             return true;
         }
-    }
-    else if (pi.getPlayer().getMapId() == 240050105) {
+    } else if (pi.getPlayer().getMapId() == 240050105) {
         nextMap = 240050100;
         eim = pi.getPlayer().getEventInstance();
         target = eim.getMapInstance(nextMap);
         targetPortal = target.getPortal("st00");
-        
+
         avail = eim.getProperty("5stageclear");
         if (avail == null) {
             if (pi.haveItem(4001092) && pi.isEventLeader()) {

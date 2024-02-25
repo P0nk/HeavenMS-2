@@ -26,14 +26,13 @@
  * 
 */
 
-importPackage(Packages.server.life);
+function act() {
+    var startId = 9400523;
+    var mobObj, mapObj = rm.getMap();
 
-function act(){
-	var startId = 9400523;
-        var mobObj, mapObj = rm.getMap();
-        
-        for(var i = 0; i < 7; i++) {
-                mobObj = MapleLifeFactory.getMonster(startId + Math.floor(Math.random() * 3));
-                mapObj.spawnMonsterOnGroundBelow(mobObj, rm.getReactor().getPosition());
-        }
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    for (var i = 0; i < 7; i++) {
+        mobObj = LifeFactory.getMonster(startId + Math.floor(Math.random() * 3));
+        mapObj.spawnMonsterOnGroundBelow(mobObj, rm.getReactor().getPosition());
+    }
 }

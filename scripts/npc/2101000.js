@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function start() {
-    cm.sendOk ("Just dancing well is not enough for me. I want to do a marvelous brilliant dance!");
+    cm.sendOk("Just dancing well is not enough for me. I want to do a marvelous brilliant dance!");
     cm.dispose();
 }

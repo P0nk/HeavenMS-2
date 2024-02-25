@@ -37,9 +37,9 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode < 1)
+    if (mode < 1) {
         cm.dispose();
-    else {
+    } else {
         status++;
         if (status == 1) {
             if (selection == 0) {

@@ -42,6 +42,7 @@ function pushIfItemExists(array, itemid) {
         array.push(itemid);
     }
 }
+
 function start() {
     status = -1;
     action(1, 0, 0);
@@ -51,11 +52,12 @@ function action(mode, type, selection) {
     if (mode < 1) {  // disposing issue with stylishs found thanks to Vcoc
         cm.dispose();
     } else {
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             cm.sendSimple("Hi, I'm #p1012117#, the most charming and stylish stylist around. If you're looking for the best looking hairdos around, look no further!\r\n\#L0##i5150040##t5150040##l\r\n\#L1##i5150044##t5150044##l");
         } else if (status == 1) {
@@ -64,32 +66,30 @@ function action(mode, type, selection) {
                 cm.sendYesNo("If you use this REGULAR coupon, your hair may transform into a random new look...do you still want to do it using #b#t5150040##k, I will do it anyways for you. But don't forget, it will be random!");
             } else {
                 beauty = 2;
-                
+
                 hairnew = Array();
                 if (cm.getPlayer().getGender() == 0) {
-                    for(var i = 0; i < mhair_v.length; i++) {
+                    for (var i = 0; i < mhair_v.length; i++) {
                         pushIfItemExists(hairnew, mhair_v[i] + parseInt(cm.getPlayer().getHair() % 10));
                     }
-                }
-                else {
-                    for(var i = 0; i < fhair_v.length; i++) {
+                } else {
+                    for (var i = 0; i < fhair_v.length; i++) {
                         pushIfItemExists(hairnew, fhair_v[i] + parseInt(cm.getPlayer().getHair() % 10));
                     }
                 }
-                
+
                 cm.sendStyle("Using the SPECIAL coupon you can choose the style your hair will become. Pick the style that best provides you delight...", hairnew);
             }
         } else if (status == 2) {
             if (beauty == 1) {
-                if (cm.haveItem(5150040) == true){
+                if (cm.haveItem(5150040) == true) {
                     hairnew = Array();
                     if (cm.getPlayer().getGender() == 0) {
-                        for(var i = 0; i < mhair_r.length; i++) {
+                        for (var i = 0; i < mhair_r.length; i++) {
                             pushIfItemExists(hairnew, mhair_r[i] + parseInt(cm.getPlayer().getHair() % 10));
                         }
-                    }
-                    else {
-                        for(var i = 0; i < fhair_r.length; i++) {
+                    } else {
+                        for (var i = 0; i < fhair_r.length; i++) {
                             pushIfItemExists(hairnew, fhair_r[i] + parseInt(cm.getPlayer().getHair() % 10));
                         }
                     }
@@ -101,7 +101,7 @@ function action(mode, type, selection) {
                     cm.sendOk("Hmmm...it looks like you don't have our designated coupon...I'm afraid I can't give you a haircut without it. I'm sorry...");
                 }
             } else if (beauty == 2) {
-                if (cm.haveItem(5150044) == true){
+                if (cm.haveItem(5150044) == true) {
                     cm.gainItem(5150044, -1);
                     cm.setHair(hairnew[selection]);
                     cm.sendOk("Enjoy your new and improved hairstyle!");
@@ -109,7 +109,7 @@ function action(mode, type, selection) {
                     cm.sendOk("Hmmm...it looks like you don't have our designated coupon...I'm afraid I can't give you a haircut without it. I'm sorry...");
                 }
             }
-            
+
             cm.dispose();
         }
     }

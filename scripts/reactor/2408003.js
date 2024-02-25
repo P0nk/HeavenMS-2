@@ -28,21 +28,21 @@
 //240060100 for 8810001
 
 function touch() {
-	if (rm.getPlayer().getEventInstance() != null) {
-		rm.getPlayer().getEventInstance().setProperty("summoned", "true");
-		rm.getPlayer().getEventInstance().setProperty("canEnter", "false");
-	}
+    if (rm.getPlayer().getEventInstance() != null) {
+        rm.getPlayer().getEventInstance().setProperty("summoned", "true");
+        rm.getPlayer().getEventInstance().setProperty("canEnter", "false");
+    }
     rm.spawnFakeMonster(8800000);
-    rm.mapMessage(6, "A gigantic creature is approaching from the deep cave.");	
+    rm.mapMessage(6, "A gigantic creature is approaching from the deep cave.");
     //rm.createMapMonitor(rm.getPlayer().getMap().getId(),"ps00");
-	switch (rm.getPlayer().getMap().getId()) {
-		case 240060000: 
-			rm.spawnMonster(8810000, 960, 0); 
-		break;
-		case 240060100:
-			rm.spawnMonster(8810001, 0, 0); //needs correct positions
-		break;
-	}
+    switch (rm.getPlayer().getMap().getId()) {
+        case 240060000:
+            rm.spawnMonster(8810000, 960, 0);
+            break;
+        case 240060100:
+            rm.spawnMonster(8810001, 0, 0); //needs correct positions
+            break;
+    }
 }
 	
 	

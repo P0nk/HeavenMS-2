@@ -25,6 +25,6 @@
  * 2112000.js: Zakum Party Quest Chest - drops an item (elixir)
 */
 
-function act(){
-	rm.dropItems();
+function act() {
+    rm.dropItems();
 }

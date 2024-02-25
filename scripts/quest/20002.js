@@ -33,17 +33,18 @@ function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if (mode > 0)
+        if (mode > 0) {
             status++;
-        else
+        } else {
             status--;
-        if (status == 0)
+        }
+        if (status == 0) {
             qm.sendNext("What? Neinheart sent you here? Ahh, you must be a rookie. Welcome, welcome. My name is Kiku, and my job is to train and mold kids like you into bonafide knights. Hmmm.. Why are you looking at me like that... Ahh, you must have never seen Piyos before.");
-        else if (status == 1)
+        } else if (status == 1) {
             qm.sendNext("We belong to a race called Piyos. You've talked to Shinsoo before, right? The one that stands next to the Empress. Yeah, Shinsoo is a Piyo, too. He may be of a different class, but... oh well. Piyos are only found in Ereve, so you may find us a bit odd at first, but you'll get used to us.");
-        else if (status == 2)
+        } else if (status == 2) {
             qm.sendAcceptDecline("Ah, I don't know if you are aware of this, but you won't find any monsters here in Ereve. Any form of evil will not be able to set foot on this island. Don't worry, you'll still have your opportunity to train here. Shinsoo created a fantasy creature called Mimi, which will be used as your training partners. Shall we begin?");
-        else if (status == 3) {
+        } else if (status == 3) {
             qm.forceStartQuest();
             qm.forceCompleteQuest();
 

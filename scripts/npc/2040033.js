@@ -20,15 +20,15 @@
 */
 
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-        Neru - Ludibrium : Ludibrium Pet Walkway (220000006)
--- By ---------------------------------------------------------------------------------------------
-        Xterminator
--- Version Info -----------------------------------------------------------------------------------
-        1.1 - Second Version by Moogra
-        1.0 - First Version by Xterminator
----------------------------------------------------------------------------------------------------
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Neru - Ludibrium : Ludibrium Pet Walkway (220000006)
+ -- By ---------------------------------------------------------------------------------------------
+ Xterminator
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.1 - Second Version by Moogra
+ 1.0 - First Version by Xterminator
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 function start() {
     if (cm.haveItem(4031128)) {
@@ -41,11 +41,11 @@ function start() {
 
 function action(mode, type, selection) {
     if (mode < 1) {
-    } else if (cm.getPlayer().getNoPets() == 0)
+    } else if (cm.getPlayer().getNoPets() == 0) {
         cm.sendNextPrev("Hmmm ... did you really get here with your pet? These obstacles are for pets. What are you here for without it?? Get outta here!");
-    else {
+    } else {
         cm.gainItem(4031128, -1);
-        cm.gainCloseness(4);
+        cm.gainTameness(4);
         cm.sendNextPrev("What do you think? Don't you think you have gotten much closer with your pet? If you have time, train your pet again on this obstacle course...of course, with my brother's permission.");
     }
     cm.dispose();

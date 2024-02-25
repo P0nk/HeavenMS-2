@@ -36,10 +36,11 @@ function start(mode, type, selection) {
             qm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             qm.sendNext("The jewel you brought back from the Master of Disguise is Shinsoo's Teardrop. It is the crystalization of Shinsoo's powers. If the Black Mage gets his hands on this, then this spells doom for all of us.");
         } else if (status == 1) {
@@ -54,7 +55,8 @@ function start(mode, type, selection) {
                 } else {
                     qm.completeQuest();
                     qm.gainItem(1142068, 1);
-                    qm.getPlayer().changeJob(Packages.client.MapleJob.BLAZEWIZARD3);
+                    const Job = Java.type('client.Job');
+                    qm.getPlayer().changeJob(Job.BLAZEWIZARD3);
                     qm.sendOk("#h #, as of this moment, you are an Advanced Knight. From this moment on, you will train yourself with fervor as you will lead your group of Knights for the safety of this world. That fervor will provide you with plenty of courage.");
                 }
             }

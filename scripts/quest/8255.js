@@ -19,7 +19,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*	
+
+/*
 	NPC Name: 		Adonis
 	Map(s): 		El Nath
 	Description: 		Quest - Lost Spirits
@@ -27,10 +28,10 @@
 */
 
 function start(mode, type, selection) {
-	qm.forceStartQuest();
-	qm.forceCompleteQuest();
+    qm.forceStartQuest();
+    qm.forceCompleteQuest();
 }
 
 function end(mode, type, selection) {
-	qm.forceCompleteQuest();
+    qm.forceCompleteQuest();
 }

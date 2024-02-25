@@ -20,9 +20,6 @@
 
 // @Author Ronan
 
-importPackage(Packages.constants.game);
-importPackage(Packages.server);
-
 function raiseOpen() {
     var chr = qm.getPlayer();
     var questStatus = chr.getQuestStatus(qm.getQuest());
@@ -34,15 +31,17 @@ function raiseOpen() {
         var diffExp = chr.getExp() - qm.getQuestProgressInt(20515, 1);
 
         var initLevel = qm.getQuestProgressInt(20515, 0);
+        const ExpTable = Java.type('constants.game.ExpTable');
         for (var i = initLevel; i < chr.getLevel(); i++) {
             diffExp += ExpTable.getExpNeededForLevel(i);
         }
-        
+
         if (diffExp > 0) {  // thanks IxianMace for noticing Mimiana egg not following progress by EXP
-            var consItem = MapleItemInformationProvider.getInstance().getQuestConsumablesInfo(4220137);
+            const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+            var consItem = ItemInformationProvider.getInstance().getQuestConsumablesInfo(4220137);
             var exp = consItem.exp;
             var grade = consItem.grade;
-            
+
             qm.setQuestProgress(20514, 0, Math.min(diffExp, exp * grade));
         }
     }

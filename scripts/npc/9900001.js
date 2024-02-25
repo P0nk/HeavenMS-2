@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
  * @Name         KIN
  * @Author:      Signalize
@@ -26,12 +27,16 @@
  * @Purpose:     Levels people up.
  */
 function start() {
-    if(cm.getPlayer().gmLevel() > 1) cm.sendYesNo("Do you want to level up?");
-    else cm.sendOk("Hey wassup?");
+    if (cm.getPlayer().gmLevel() > 1) {
+        cm.sendYesNo("Do you want to level up?");
+    } else {
+        cm.sendOk("Hey wassup?");
+    }
 }
 
 function action(i, am, pro) {
-    if (i > 0 && cm.getPlayer().gmLevel() > 1)
+    if (i > 0 && cm.getPlayer().gmLevel() > 1) {
         cm.getPlayer().levelUp(true);
+    }
     cm.dispose();
 }

@@ -19,13 +19,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
     Stage 1: Gatekeeper door - Guild Quest
     @Author Lerk
 */
 function enter(pi) {
     if (pi.getPlayer().getMap().getReactorByName("statuegate").getState() == 1) {
-        pi.playPortalSound(); pi.warp(990000301, 0);
+        pi.playPortalSound();
+        pi.warp(990000301, 0);
         return true;
     } else {
         pi.getPlayer().dropMessage(5, "The gate is closed.");

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="Cosmic" shutdownHook="disable">
+    <Properties>
+        <Property name="filename">cosmic-log</Property>
+        <Property name="standard-pattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{2} - %msg%n</Property>
+        <Property name="packet-pattern">%d{HH:mm:ss.SSS} %-15logger{1} - %msg%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                    <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="File"
+                     fileName="logs/${filename}.log"
+                     filePattern="logs/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/${filename}-%d{yyyy-MM-dd_HH-mm-ss}-%i.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy minSize="0"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <Console name="PacketConsole" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>${packet-pattern}</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <File name="MonitoredPacketFile" fileName="logs/monitored-packets.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+
+        <File name="TradeFile" fileName="logs/trades.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+
+        <File name="ExpeditionFile" fileName="logs/expeditions.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+
+        <File name="ChatFile" fileName="logs/chat.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+
+        <File name="GachaponFile" fileName="logs/gachapon.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+
+        <File name="MapleLeafFile" fileName="logs/mapleleaf.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="File" level="debug"/>
+            <AppenderRef ref="Console" level="trace"/>
+        </Root>
+
+        <Logger name="net.packet.logging" level="debug" additivity="false">
+            <AppenderRef ref="PacketConsole"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+        <Logger name="net.packet.logging.MonitoredChrLogger" level="info" additivity="false">
+            <AppenderRef ref="MonitoredPacketFile"/>
+        </Logger>
+
+        <Logger name="server.Trade" level="info" additivity="false">
+            <AppenderRef ref="TradeFile"/>
+        </Logger>
+        <Logger name="server.expeditions.Expedition" level="info" additivity="false">
+            <AppenderRef ref="ExpeditionFile"/>
+        </Logger>
+        <Logger name="server.ChatLogger" level="info" additivity="false">
+            <AppenderRef ref="ChatFile"/>
+        </Logger>
+        <Logger name="server.gachapon.Gachapon" level="info" additivity="false">
+            <AppenderRef ref="GachaponFile"/>
+        </Logger>
+        <Logger name="server.MapleLeafLogger" level="info" additivity="false">
+            <AppenderRef ref="MapleLeafFile"/>
+        </Logger>
+
+        <Logger name="com.zaxxer.hikari" level="info"/>
+        <Logger name="io.netty" level="info"/>
+    </Loggers>
+</Configuration>

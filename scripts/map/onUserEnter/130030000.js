@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-function start(ms) {   	       
-	ms.setQuestProgress(20010, 20022, 1);
+function start(ms) {
+    ms.setQuestProgress(20010, 20022, 1);
 }

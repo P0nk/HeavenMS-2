@@ -34,15 +34,16 @@ function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        if (status == 0)
+        }
+        if (status == 0) {
             qm.sendNext("I put this small, precious life in your hands...Guard it with your life...");
-        else if (status == 1)
+        } else if (status == 1) {
             qm.sendYesNo("Looking after another life...That is the inevitable mission given to you...Follow the force that leads you to me.");
-        else if (status == 2) {
+        } else if (status == 2) {
             qm.sendOk("Put your hand in your pocket. I think your friend has already found you.\r\nThe purple bellflower that soaks in the sun in between the skyscraping trees...Follow the path to the unknown that leads you to the bellflower. I will wait for you here.");
             qm.forceStartQuest();
             qm.gainItem(4032086, 1); // Mysterious Egg * 1
@@ -60,15 +61,16 @@ function end(mode, type, selection) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
-        if (status == 0)
+        }
+
+        if (status == 0) {
             qm.sendSimple("Hello, traveler... You have finally come to see me. Have you fulfilled your duties? \r\n #b#L0#What duties? Who are you?#l#k");
-        else if (selection == 0 && status == 1) {
+        } else if (selection == 0 && status == 1) {
             qm.sendNext("Have you found a small egg in your pocket? That egg is your duty, your responsibility. Life is hard when you're all by yourself. In times like this, there's nothing quite like having a friend that will be there for you at all times. Have you heard of a #bpet#k?\r\nPeople raise pets to ease the burden, sorrow, and loneliness, because knowing that you have someone, or something in this matter, on your side will really bring a peace of mind. But everything has consequences, and with it comes responsibility...");
         } else if (status == 2) {
             qm.sendNextPrev("Raising a pet requires a huge amount of responsibility. Remember a pet is a form of life, as well, so you'll need to feed it, name it, share your thoughts with it, and ultimately form a bond. That's how the owners get attached to these pets.");
@@ -84,7 +86,7 @@ function end(mode, type, selection) {
                 qm.sendNext("Please free a slot in your CASH inventory before you try to receive the pet...");
                 return;
             }
-            
+
             qm.sendNext("This snail will only be alive for #b5 hours#k. Shower it with love. Your love will be reciprocated in the end.");
         } else if (status == 7) {
             if (canComplete) {
@@ -92,7 +94,7 @@ function end(mode, type, selection) {
                 qm.forceCompleteQuest();
                 qm.gainItem(5000054, 1, false, true, 5 * 60 * 60 * 1000);  // rune snail (5hrs), missing expiration time detected thanks to cljnilsson
             }
-            
+
             qm.dispose();
         }
     }

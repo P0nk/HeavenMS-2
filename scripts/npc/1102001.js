@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* NPC Base
 	Map Name (Map ID)
 	Extra NPC info.
@@ -30,20 +31,21 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode < 0)
+    if (mode < 0) {
         cm.dispose();
-    else {
-        if (mode == 1)
+    } else {
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0 && mode == 1) {
-			cm.sendYesNo("Would you like to exit the drill hall?");
-		} else if(status == 1) {
-			cm.warp(130020000, 0);
-			cm.dispose();
-		} else {
-			cm.dispose();
-		}
+            cm.sendYesNo("Would you like to exit the drill hall?");
+        } else if (status == 1) {
+            cm.warp(130020000, 0);
+            cm.dispose();
+        } else {
+            cm.dispose();
+        }
     }
 }

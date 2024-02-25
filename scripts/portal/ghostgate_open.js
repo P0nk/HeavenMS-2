@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 Sharen III's Grave Exit - Guild Quest
 
@@ -27,10 +28,10 @@ Sharen III's Grave Exit - Guild Quest
 
 function enter(pi) {
     if (pi.getPlayer().getMap().getReactorByName("ghostgate").getState() == 1) {
-        pi.playPortalSound(); pi.warp(990000800, 0);
+        pi.playPortalSound();
+        pi.warp(990000800, 0);
         return true;
-    }
-    else {
+    } else {
         pi.playerMessage(5, "This way forward is not open yet.");
         return false;
     }

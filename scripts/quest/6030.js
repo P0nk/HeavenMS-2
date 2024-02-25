@@ -27,16 +27,17 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("I am to teach you about the fundamentals of Alchemy.");
         } else if (status == 1) {
@@ -49,7 +50,7 @@ function end(mode, type, selection) {
             qm.sendNextPrev("And remember this: the maxima of #bExchange#k, the area of the fundamentals of Alchemy where the total amount of the material does not change, is that no item can be created from nothing. Understood?");
         } else if (status == 5) {
             qm.gainMeso(-10000);
-            
+
             qm.forceCompleteQuest();
             qm.dispose();
         }

@@ -30,28 +30,30 @@ var cost;
 var stimID;
 
 var cd_item = 4001078;
-var cd_mats = new Array(4011001,4011002,4001079);
-var cd_matQty = new Array(1,1,1);
+var cd_mats = [4011001, 4011002, 4001079];
+var cd_matQty = [1, 1, 1];
 var cd_cost = 25000;
 
 function start() {
     cm.getPlayer().setCS(true);
     var selStr = "A dragon's power is not to be underestimated. If you like, I can add its power to one of your weapons. However, the weapon must be powerful enough to hold its potential...#b"
-    var options = new Array("What's a stimulator?","Create a Warrior weapon","Create a Bowman weapon","Create a Magician weapon","Create a Thief weapon","Create a Pirate Weapon",
-        "Create a Warrior weapon with a Stimulator","Create a Bowman weapon with a Stimulator","Create a Magician weapon with a Stimulator","Create a Thief weapon with a Stimulator","Create a Pirate Weapon with a Stimulator");
-        
-    if(cm.isQuestStarted(7301) || cm.isQuestStarted(7303)) options.push("Make #t4001078#");
-    
-    for (var i = 0; i < options.length; i++){
+    var options = ["What's a stimulator?", "Create a Warrior weapon", "Create a Bowman weapon", "Create a Magician weapon", "Create a Thief weapon", "Create a Pirate Weapon",
+        "Create a Warrior weapon with a Stimulator", "Create a Bowman weapon with a Stimulator", "Create a Magician weapon with a Stimulator", "Create a Thief weapon with a Stimulator", "Create a Pirate Weapon with a Stimulator"];
+
+    if (cm.isQuestStarted(7301) || cm.isQuestStarted(7303)) {
+        options.push("Make #t4001078#");
+    }
+
+    for (var i = 0; i < options.length; i++) {
         selStr += "\r\n#L" + i + "# " + options[i] + "#l";
     }
     cm.sendSimple(selStr);
 }
 
 function action(mode, type, selection) {
-    if (mode > 0)
+    if (mode > 0) {
         status++;
-    else {
+    } else {
         cm.dispose();
         return;
     }
@@ -60,159 +62,161 @@ function action(mode, type, selection) {
         if (selectedType > 5 && selectedType < 11) {
             stimulator = true;
             selectedType -= 5;
-        }
-        else
+        } else {
             stimulator = false;
+        }
         if (selectedType == 0) { //What's a stim?
             cm.sendNext("A stimulator is a special potion that I can add into the process of creating certain items. It gives it stats as though it had dropped from a monster. However, it is possible to have no change, and it is also possible for the item to be below average. There's also a 10% chance of not getting any item when using a stimulator, so please choose wisely.")
             cm.dispose();
-        } else if (selectedType == 1){ //warrior weapon
+        } else if (selectedType == 1) { //warrior weapon
             var selStr = "Very well, then which Warrior weapon shall receive a dragon's power?#b";
-            var weapon = new Array ("Dragon Carbella#k - Lv. 110 One-Handed Sword#b","Dragon Axe#k - Lv. 110 One-Handed Axe#b","Dragon Mace#k - Lv. 110 One-Handed BW#b","Dragon Claymore#k - Lv. 110 Two-Handed Sword#b","Dragon Battle Axe#k - Lv. 110 Two-Handed Axe#b","Dragon Flame#k - Lv. 110 Two-Handed BW#b",
-                "Dragon Faltizan#k - Lv. 110 Spear#b","Dragon Chelbird#k - Lv. 110 Polearm#b");
-            for (var i = 0; i < weapon.length; i++){
+            var weapon = ["Dragon Carbella#k - Lv. 110 One-Handed Sword#b", "Dragon Axe#k - Lv. 110 One-Handed Axe#b", "Dragon Mace#k - Lv. 110 One-Handed BW#b", "Dragon Claymore#k - Lv. 110 Two-Handed Sword#b", "Dragon Battle Axe#k - Lv. 110 Two-Handed Axe#b", "Dragon Flame#k - Lv. 110 Two-Handed BW#b",
+                "Dragon Faltizan#k - Lv. 110 Spear#b", "Dragon Chelbird#k - Lv. 110 Polearm#b"];
+            for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
-        } else if (selectedType == 2){ //bowman weapon
+        } else if (selectedType == 2) { //bowman weapon
             var selStr = "Very well, then which Bowman weapon shall receive a dragon's power?#b";
-            var weapon = new Array ("Dragon Shiner Bow#k - Lv. 110 Bow#b","Dragon Shiner Cross#k - Lv. 110 Crossbow#b");
-            for (var i = 0; i < weapon.length; i++){
+            var weapon = ["Dragon Shiner Bow#k - Lv. 110 Bow#b", "Dragon Shiner Cross#k - Lv. 110 Crossbow#b"];
+            for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
-        } else if (selectedType == 3){ //magician weapon
+        } else if (selectedType == 3) { //magician weapon
             var selStr = "Very well, then which Magician weapon shall receive a dragon's power?#b";
-            var weapon = new Array ("Dragon Wand#k - Lv. 108 Wand#b","Dragon Staff#k - Lv. 110 Staff#b");
-            for (var i = 0; i < weapon.length; i++){
+            var weapon = ["Dragon Wand#k - Lv. 108 Wand#b", "Dragon Staff#k - Lv. 110 Staff#b"];
+            for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
-        } else if (selectedType == 4){ //thief weapon
+        } else if (selectedType == 4) { //thief weapon
             var selStr = "Very well, then which Thief weapon shall receive a dragon's power?#b";
-            var weapon = new Array ("Dragon Kanzir#k - Lv. 110 STR Dagger#b","Dragon Kreda#k - Lv. 110 LUK Dagger#b","Dragon Green Sleve#k - Lv. 110 Claw#b");
-            for (var i = 0; i < weapon.length; i++){
+            var weapon = ["Dragon Kanzir#k - Lv. 110 STR Dagger#b", "Dragon Kreda#k - Lv. 110 LUK Dagger#b", "Dragon Green Sleve#k - Lv. 110 Claw#b"];
+            for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
-        } else if (selectedType == 5){ //pirate weapon
+        } else if (selectedType == 5) { //pirate weapon
             var selStr = "Very well, then which Pirate weapon shall receive a dragon's power?#b";
-            var weapon = new Array ("Dragon Slash Claw#k - Lv. 110 Knuckle#b","Dragonfire Revolver#k - Lv. 110 Gun#b");
-            for (var i = 0; i < weapon.length; i++){
-                    selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
+            var weapon = ["Dragon Slash Claw#k - Lv. 110 Knuckle#b", "Dragonfire Revolver#k - Lv. 110 Gun#b"];
+            for (var i = 0; i < weapon.length; i++) {
+                selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
-	}
-        else if (selectedType == 11){ //cornian's dagger
+        } else if (selectedType == 11) { //cornian's dagger
             var selStr = "Oh, are you trying to sneak into these lizards to save Moira? I will support your cause wherever I can. Bring me a couple of resources and I will make you an almost identical piece of #t4001078#.";
             cm.sendNext(selStr);
-	}
+        }
     } else if (status == 2) {
         selectedItem = selection;
-        
-        if (selectedType == 1){ //warrior weapon
-            var itemSet = new Array(1302059,1312031,1322052,1402036,1412026,1422028,1432038,1442045);
-            var matSet = new Array(new Array(1302056,4000244,4000245,4005000),new Array(1312030,4000244,4000245,4005000),new Array(1322045,4000244,4000245,4005000),new Array(1402035,4000244,4000245,4005000),
-                new Array(1412021,4000244,4000245,4005000),new Array(1422027,4000244,4000245,4005000),new Array(1432030,4000244,4000245,4005000),new Array(1442044,4000244,4000245,4005000));
-            var matQtySet = new Array(new Array(1,20,25,8),new Array(1,20,25,8),new Array(1,20,25,8),new Array(1,20,25,8),new Array(1,20,25,8),new Array(1,20,25,8),new Array(1,20,25,8),new Array(1,20,25,8));
-            var costSet = new Array(120000,120000,120000,120000,120000,120000,120000,120000);
+
+        if (selectedType == 1) { //warrior weapon
+            var itemSet = [1302059, 1312031, 1322052, 1402036, 1412026, 1422028, 1432038, 1442045];
+            var matSet = [[1302056, 4000244, 4000245, 4005000], [1312030, 4000244, 4000245, 4005000], [1322045, 4000244, 4000245, 4005000], [1402035, 4000244, 4000245, 4005000],
+                [1412021, 4000244, 4000245, 4005000], [1422027, 4000244, 4000245, 4005000], [1432030, 4000244, 4000245, 4005000], [1442044, 4000244, 4000245, 4005000]];
+            var matQtySet = [[1, 20, 25, 8], [1, 20, 25, 8], [1, 20, 25, 8], [1, 20, 25, 8], [1, 20, 25, 8], [1, 20, 25, 8], [1, 20, 25, 8], [1, 20, 25, 8]];
+            var costSet = [120000, 120000, 120000, 120000, 120000, 120000, 120000, 120000];
             item = itemSet[selectedItem];
             mats = matSet[selectedItem];
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
-        } else if (selectedType == 2){ //bowman weapon
-            var itemSet = new Array(1452044,1462039);
-            var matSet = new Array(new Array(1452019,4000244,4000245,4005000,4005002),new Array(1462015,4000244,4000245,4005000,4005002));
-            var matQtySet = new Array(new Array(1,20,25,3,5),new Array(1,20,25,5,3));
-            var costSet = new Array(120000,120000);
+        } else if (selectedType == 2) { //bowman weapon
+            var itemSet = [1452044, 1462039];
+            var matSet = [[1452019, 4000244, 4000245, 4005000, 4005002], [1462015, 4000244, 4000245, 4005000, 4005002]];
+            var matQtySet = [[1, 20, 25, 3, 5], [1, 20, 25, 5, 3]];
+            var costSet = [120000, 120000];
             item = itemSet[selectedItem];
             mats = matSet[selectedItem];
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
-        } else if (selectedType == 3){ //magician weapon
-            var itemSet = new Array(1372032,1382036);
-            var matSet = new Array(new Array(1372010,4000244,4000245,4005001,4005003),new Array(1382035,4000244,4000245,4005001,4005003));
-            var matQtySet = new Array(new Array(1,20,25,6,2),new Array(1,20,25,6,2));
-            var costSet = new Array(120000,120000);
+        } else if (selectedType == 3) { //magician weapon
+            var itemSet = [1372032, 1382036];
+            var matSet = [[1372010, 4000244, 4000245, 4005001, 4005003], [1382035, 4000244, 4000245, 4005001, 4005003]];
+            var matQtySet = [[1, 20, 25, 6, 2], [1, 20, 25, 6, 2]];
+            var costSet = [120000, 120000];
             item = itemSet[selectedItem];
             mats = matSet[selectedItem];
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
-        } else if (selectedType == 4){ //thief weapon
-            var itemSet = new Array(1332049,1332050,1472051);
-            var matSet = new Array(new Array(1332051,4000244,4000245,4005000,4005002),new Array(1332052,4000244,4000245,4005002,4005003),new Array(1472053,4000244,4000245,4005002,4005003));
-            var matQtySet = new Array(new Array(1,20,25,5,3),new Array(1,20,25,3,5),new Array(1,20,25,2,6));
-            var costSet = new Array(120000,120000,120000);
+        } else if (selectedType == 4) { //thief weapon
+            var itemSet = [1332049, 1332050, 1472051];
+            var matSet = [[1332051, 4000244, 4000245, 4005000, 4005002], [1332052, 4000244, 4000245, 4005002, 4005003], [1472053, 4000244, 4000245, 4005002, 4005003]];
+            var matQtySet = [[1, 20, 25, 5, 3], [1, 20, 25, 3, 5], [1, 20, 25, 2, 6]];
+            var costSet = [120000, 120000, 120000];
             item = itemSet[selectedItem];
             mats = matSet[selectedItem];
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
-        } else if (selectedType == 5){ //pirate weapon
-            var itemSet = new Array(1482013,1492013);
-            var matSet = new Array(new Array(1482012,4000244,4000245,4005000,4005002),new Array(1492012,4000244,4000245,4005000,4005002));
-            var matQtySet = new Array(new Array(1,20,25,5,3),new Array(1,20,25,3,5));
-            var costSet = new Array(120000,120000);
+        } else if (selectedType == 5) { //pirate weapon
+            var itemSet = [1482013, 1492013];
+            var matSet = [[1482012, 4000244, 4000245, 4005000, 4005002], [1492012, 4000244, 4000245, 4005000, 4005002]];
+            var matQtySet = [[1, 20, 25, 5, 3], [1, 20, 25, 3, 5]];
+            var costSet = [120000, 120000];
             item = itemSet[selectedItem];
             mats = matSet[selectedItem];
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
-        } else if (selectedType == 11){ //cornian's dagger
+        } else if (selectedType == 11) { //cornian's dagger
             item = cd_item;
             mats = cd_mats;
             matQty = cd_matQty;
             cost = cd_cost;
         }
-        
+
         var prompt = "You want me to make a #t" + item + "#? In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
-        if(stimulator){
+        if (stimulator) {
             stimID = getStimID(item);
-            prompt += "\r\n#i"+stimID+"# 1 #t" + stimID + "#";
+            prompt += "\r\n#i" + stimID + "# 1 #t" + stimID + "#";
         }
-        if (mats instanceof Array){
-            for(var i = 0; i < mats.length; i++){
-                prompt += "\r\n#i"+mats[i]+"# " + matQty[i] + " #t" + mats[i] + "#";
+        if (mats instanceof Array) {
+            for (var i = 0; i < mats.length; i++) {
+                prompt += "\r\n#i" + mats[i] + "# " + matQty[i] + " #t" + mats[i] + "#";
             }
         } else {
-            prompt += "\r\n#i"+mats+"# " + matQty + " #t" + mats + "#";
+            prompt += "\r\n#i" + mats + "# " + matQty + " #t" + mats + "#";
         }
-        if (cost > 0)
+        if (cost > 0) {
             prompt += "\r\n#i4031138# " + cost + " meso";
+        }
         cm.sendYesNo(prompt);
     } else if (status == 3) {
         var complete = true;
-        
-        if(!cm.canHold(item, 1)) {
+
+        if (!cm.canHold(item, 1)) {
             cm.sendOk("Check your inventory for a free slot first.");
             cm.dispose();
             return;
-        }
-        else if (cm.getMeso() < cost) {
+        } else if (cm.getMeso() < cost) {
             cm.sendOk("My fee is for the good of all of Leafre. If you cannot pay it, then begone.");
             cm.dispose();
             return;
         } else {
             if (mats instanceof Array) {
-                for(var i = 0; complete && i < mats.length; i++)
-                    if (!cm.haveItem(mats[i], matQty[i]))
+                for (var i = 0; complete && i < mats.length; i++) {
+                    if (!cm.haveItem(mats[i], matQty[i])) {
                         complete = false;
-            }
-            else if (!cm.haveItem(mats, matQty))
+                    }
+                }
+            } else if (!cm.haveItem(mats, matQty)) {
                 complete = false;
+            }
         }
-        if (stimulator){ //check for stimulator
+        if (stimulator) { //check for stimulator
             if (!cm.haveItem(stimID)) {
                 complete = false;
             }
         }
-        if (!complete)
+        if (!complete) {
             cm.sendOk("I'm afraid that without the correct items, the dragon's essence would... not make for a very reliable weapon. Please bring the correct items next time.");
-        else {
+        } else {
             if (mats instanceof Array) {
-                for (var i = 0; i < mats.length; i++){
+                for (var i = 0; i < mats.length; i++) {
                     cm.gainItem(mats[i], -matQty[i]);
                 }
-            } else
+            } else {
                 cm.gainItem(mats, -matQty);
+            }
             cm.gainMeso(-cost);
             if (stimulator) { //check for stimulator
                 cm.gainItem(stimID, -1);
@@ -223,8 +227,7 @@ function action(mode, type, selection) {
                 } else {
                     cm.sendOk("Unfortunately, the dragon's essence has... conflicted with your weapon. My apologies for your loss.");
                 }
-            }
-            else {//just give basic item
+            } else {//just give basic item
                 cm.gainItem(item, 1);
                 cm.sendOk("The process is complete. Treat your weapon well, lest you bring the wrath of the dragons upon you.");
             }
@@ -233,9 +236,9 @@ function action(mode, type, selection) {
     }
 }
 
-function getStimID(equipID){
+function getStimID(equipID) {
     var cat = Math.floor(equipID / 10000);
-    switch (cat){
+    switch (cat) {
         case 130: //1h sword
             return 4130002;
         case 131: //1h axe

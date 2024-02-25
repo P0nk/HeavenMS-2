@@ -19,7 +19,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/* 
+
+/*
  * @Author TheRamon
  * @Author Ronan
  * 
@@ -36,6 +37,7 @@ function clearStage(stage, eim) {
 }
 
 var status = 0;
+
 function start() {
     status = -1;
     action(1, 0, 0);
@@ -45,19 +47,20 @@ function action(mode, type, selection) {
     if (mode == -1) {
         cm.dispose();
     } else {
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             cm.dispose();
-        
+        }
+
         var eim = cm.getPlayer().getEventInstance();
-        
-        if (eim.getProperty("stage4clear") != null && eim.getProperty("stage4clear").equals("true")) {
+
+        if (eim.getProperty("stage4clear") != null && eim.getProperty("stage4clear") === "true") {
             cm.sendOk("After what I thought would be an immortal sleep, I have finally found someone that will save Sharenian. I can truly rest in peace now.");
             cm.dispose();
             return;
         }
-        
+
         if (status == 0) {
             if (cm.isEventLeader()) {
                 cm.sendNext("After what I thought would be an immortal sleep, I have finally found someone that will save Sharenian. This old man will now pave the way for you to finish the quest.");
@@ -65,11 +68,9 @@ function action(mode, type, selection) {
                 clearStage(4, eim);
                 cm.getGuild().gainGP(30);
                 cm.getPlayer().getMap().getReactorByName("ghostgate").forceHitReactor(1);
-    
+
                 cm.dispose();
-            }
-            else
-            {
+            } else {
                 cm.sendOk("I need the leader of your party to speak with me, nobody else.");
                 cm.dispose();
             }

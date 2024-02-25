@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 LudiPQ - 1 - 2 Portal
 @author Jvlaple
@@ -33,8 +34,7 @@ function enter(pi) {
     if (avail == null) {
         pi.getPlayer().dropMessage(5, "Some seal is blocking this door.");
         return false;
-    }
-    else {
+    } else {
         pi.playPortalSound();
         pi.getPlayer().changeMap(target, targetPortal);
         return true;

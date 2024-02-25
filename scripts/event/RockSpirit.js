@@ -19,8 +19,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-importPackage(Packages.tools);
-
 var entryMap;
 var exitMap;
 var otherMap;
@@ -42,9 +40,9 @@ function setup(level, lobbyid) {
     var eim = em.newInstance("RockSpirit_" + lobbyid);
     eim.setProperty("level", level);
     eim.setProperty("boss", "0");
-    
+
     respawn(eim);
-    eim.startEventTimer(timer);    
+    eim.startEventTimer(timer);
     return eim;
 }
 
@@ -78,9 +76,9 @@ function playerDisconnected(eim, player) {
     if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
         eim.unregisterPlayer(player);
         end(eim);
-    }
-    else
+    } else {
         eim.unregisterPlayer(player);
+    }
 }
 
 function changedMap(eim, player, mapid) {
@@ -88,13 +86,13 @@ function changedMap(eim, player, mapid) {
         if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
             eim.unregisterPlayer(player);
             end(eim);
-        }
-        else
+        } else {
             eim.unregisterPlayer(player);
+        }
     }
 }
 
-function monsterValue(eim,mobId) { 
+function monsterValue(eim, mobId) {
     return -1;
 }
 

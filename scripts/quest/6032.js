@@ -27,16 +27,17 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("So you've come to attend my class, huh? Right, I'll make it fast.");
         } else if (status == 1) {
@@ -47,7 +48,7 @@ function end(mode, type, selection) {
             qm.sendNextPrev("Ok, now you need to hand me a fee, 10,000 mesos that is, for that information. The collected fee shall be used for acquiring the needed materials for your learning of the fine art of the #bMaker#k.");
         } else if (status == 4) {
             qm.gainMeso(-10000);
-            
+
             qm.forceCompleteQuest();
             qm.dispose();
         }

@@ -14,7 +14,7 @@ function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             if (status != 3) {
                 qm.sendOk("Really? It's an urgent matter, so if you have some time, please see me.");
                 qm.dispose();
@@ -26,13 +26,14 @@ function start(mode, type, selection) {
                     qm.dispose();
                 }
             }
-            
+
             status++;
         } else {
-            if (mode == 1)
+            if (mode == 1) {
                 status++;
-            else
+            } else {
                 status--;
+            }
 
             if (status == 0) {
                 qm.sendAcceptDecline("Now that you have made the job advancement, you look like you're ready for this. I have something I'd like to ask you for help. Are you willing to listen?");
@@ -47,23 +48,23 @@ function start(mode, type, selection) {
                     if (!qm.haveItem(4032375, 1)) {
                         qm.gainItem(4032375, 1);
                     }
-                    
+
                     qm.warp(106020000, 0);
                     qm.forceStartQuest();
                 } else {
                     qm.sendOk("Please have a slot available in your Etc inventory.");
                 }
-                
+
                 qm.dispose();
-                return;
+
             } else if (status == 5) {
                 if (!qm.haveItem(4032375, 1)) {
                     qm.gainItem(4032375, 1);
                 }
-                
+
                 qm.forceStartQuest();
                 qm.dispose();
-                return;
+
             }
         }
     }
@@ -73,23 +74,24 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             if (!qm.haveItem(4032375, 1)) {
                 qm.sendNext("What do you want, hmmm?");
                 qm.dispose();
                 return;
             }
-            
+
             qm.sendNext("Hmmm? Is that a #brecommendation letter from the job instructor#k??! What is this, are you the one that came to save us, the Kingdom of Mushroom?");
         } else if (status == 1) {
             qm.sendNextPrev("Hmmm... okay. Since the letter is from the job instructor, I suppose you are really the one. I apologize for not introducing myself to you earlier. I'm the #bHead Security Officer#k in charge of protecting King Mush. As you can see, this temporary hideout is protected by the team of security and soldiers. Our situation may be dire, but nevertheless, welcome to Kingdom of Mushroom.");

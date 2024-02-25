@@ -21,17 +21,13 @@
  Marriage NPC
  */
 
-importPackage(Packages.config);
-importPackage(Packages.net.server.channel.handlers);
-importPackage(Packages.tools);
-importPackage(Packages.tools.packets);
-
 var status;
 var state;
 var eim;
 var weddingEventName = "WeddingCathedral";
 var cathedralWedding = true;
 var weddingIndoors;
+const YamlConfig = Java.type('config.YamlConfig');
 var weddingBlessingExp = YamlConfig.config.server.WEDDING_BLESS_EXP;
 
 function isWeddingIndoors(mapid) {
@@ -41,7 +37,7 @@ function isWeddingIndoors(mapid) {
 function getMarriageInstance(player) {
     var em = cm.getEventManager(weddingEventName);
 
-    for (var iterator = em.getInstances().iterator(); iterator.hasNext(); ) {
+    for (var iterator = em.getInstances().iterator(); iterator.hasNext();) {
         var eim = iterator.next();
         if (eim.isEventLeader(player)) {
             return eim;
@@ -86,15 +82,19 @@ function isSuitedForWedding(player, equipped) {
 }
 
 function getWeddingPreparationStatus(player, partner) {
-    if (!player.haveItem(4000313))
+    if (!player.haveItem(4000313)) {
         return -3;
-    if (!partner.haveItem(4000313))
+    }
+    if (!partner.haveItem(4000313)) {
         return 3;
+    }
 
-    if (!isSuitedForWedding(player, true))
+    if (!isSuitedForWedding(player, true)) {
         return -4;
-    if (!isSuitedForWedding(partner, true))
+    }
+    if (!isSuitedForWedding(partner, true)) {
         return 4;
+    }
 
     var hasEngagement = false;
     for (var x = 4031357; x <= 4031364; x++) {
@@ -103,8 +103,9 @@ function getWeddingPreparationStatus(player, partner) {
             break;
         }
     }
-    if (!hasEngagement)
+    if (!hasEngagement) {
         return -1;
+    }
 
     hasEngagement = false;
     for (var x = 4031357; x <= 4031364; x++) {
@@ -113,13 +114,16 @@ function getWeddingPreparationStatus(player, partner) {
             break;
         }
     }
-    if (!hasEngagement)
+    if (!hasEngagement) {
         return -2;
+    }
 
-    if (!player.canHold(1112803))
+    if (!player.canHold(1112803)) {
         return 1;
-    if (!partner.canHold(1112803))
+    }
+    if (!partner.canHold(1112803)) {
         return 2;
+    }
 
     return 0;
 }
@@ -133,8 +137,9 @@ function giveCoupleBlessings(eim, player, partner) {
 
 function start() {
     weddingIndoors = isWeddingIndoors(cm.getMapId());
-    if (weddingIndoors)
+    if (weddingIndoors) {
         eim = cm.getEventInstance();
+    }
 
     status = -1;
     action(1, 0, 0);
@@ -148,10 +153,11 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
         if (!weddingIndoors) {
             if (status == 0) {
@@ -304,18 +310,19 @@ function action(mode, type, selection) {
                 if (state == 0) {    // give player blessings
                     eim.gridInsert(cm.getPlayer(), 1);
 
+                    const PacketCreator = Java.type('tools.PacketCreator');
                     if (YamlConfig.config.server.WEDDING_BLESSER_SHOWFX) {
                         var target = cm.getPlayer();
-                        target.announce(MaplePacketCreator.showSpecialEffect(9));
-                        target.getMap().broadcastMessage(target, MaplePacketCreator.showForeignEffect(target.getId(), 9), false);
+                        target.sendPacket(PacketCreator.showSpecialEffect(9));
+                        target.getMap().broadcastMessage(target, PacketCreator.showForeignEffect(target.getId(), 9), false);
                     } else {
                         var target = eim.getPlayerById(eim.getIntProperty("groomId"));
-                        target.announce(MaplePacketCreator.showSpecialEffect(9));
-                        target.getMap().broadcastMessage(target, MaplePacketCreator.showForeignEffect(target.getId(), 9), false);
+                        target.sendPacket(PacketCreator.showSpecialEffect(9));
+                        target.getMap().broadcastMessage(target, PacketCreator.showForeignEffect(target.getId(), 9), false);
 
                         target = eim.getPlayerById(eim.getIntProperty("brideId"));
-                        target.announce(MaplePacketCreator.showSpecialEffect(9));
-                        target.getMap().broadcastMessage(target, MaplePacketCreator.showForeignEffect(target.getId(), 9), false);
+                        target.sendPacket(PacketCreator.showSpecialEffect(9));
+                        target.getMap().broadcastMessage(target, PacketCreator.showForeignEffect(target.getId(), 9), false);
                     }
 
                     cm.sendOk("Your blessings have been added to their love. What a noble act for a lovely couple!");
@@ -354,13 +361,14 @@ function action(mode, type, selection) {
                                             cm.gainItem(playerItemId, -1);
                                             cmPartner.gainItem(partnerItemId, -1);
 
+                                            const RingActionHandler = Java.type('net.server.channel.handlers.RingActionHandler');
                                             RingActionHandler.giveMarriageRings(player, partner, marriageRingId);
                                             player.setMarriageItemId(marriageRingId);
                                             partner.setMarriageItemId(marriageRingId);
 
                                             //var marriageId = eim.getIntProperty("weddingId");
-                                            //player.announce(Wedding.OnMarriageResult(marriageId, player, true));
-                                            //partner.announce(Wedding.OnMarriageResult(marriageId, player, true));
+                                            //player.sendPacket(Wedding.OnMarriageResult(marriageId, player, true));
+                                            //partner.sendPacket(Wedding.OnMarriageResult(marriageId, player, true));
 
                                             giveCoupleBlessings(eim, player, partner);
 

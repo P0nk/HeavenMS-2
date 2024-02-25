@@ -1,10 +1,10 @@
 /**
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Drago (MapleStorySA)
-        2.0 - Second Version by Ronan (HeavenMS)
-        3.0 - Third Version by Jayd - translated CPQ contents to English and added Pirate items
----------------------------------------------------------------------------------------------------
-**/
+ -- Version Info -----------------------------------------------------------------------------------
+ 1.0 - First Version by Drago (MapleStorySA)
+ 2.0 - Second Version by Ronan (HeavenMS)
+ 3.0 - Third Version by Jayd - translated CPQ contents to English and added Pirate items
+ ---------------------------------------------------------------------------------------------------
+ **/
 
 var status = 0;
 var rnk = -1;
@@ -28,19 +28,20 @@ var feeMultiplier = 7.0;
 
 function start() {
     status = -1;
-    
-    if (!Packages.config.YamlConfig.config.server.USE_CPQ) {
-        if (Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+
+    const YamlConfig = Java.type('config.YamlConfig');
+    if (!YamlConfig.config.server.USE_CPQ) {
+        if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
             status = 0;
             action(1, 0, 4);
         } else {
             cm.sendOk("The Monster Carnival is currently unavailable.");
             cm.dispose();
         }
-        
+
         return;
     }
-    
+
     action(1, 0, 0);
 }
 
@@ -52,11 +53,13 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
+        const YamlConfig = Java.type('config.YamlConfig');
         if (cm.getPlayer().getMapId() == 980000010) {
             if (status == 0) {
                 cm.sendNext("I hope you had fun at the Monster Carnival!");
@@ -220,9 +223,9 @@ function action(mode, type, selection) {
                     }
                 } else {
                     var party = cm.getParty().getMembers();
-                    if ((selection >= 0 && selection <= 3) && party.size() < (Packages.config.YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 2)) {
+                    if ((selection >= 0 && selection <= 3) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 2)) {
                         cm.sendOk("You need at least 2 players to participate in the battle!");
-                    } else if ((selection >= 4 && selection <= 5) && party.size() < (Packages.config.YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 3)) {
+                    } else if ((selection >= 4 && selection <= 5) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 3)) {
                         cm.sendOk("You need at least 3 players to participate in the battle!");
                     } else {
                         cm.cpqLobby(selection);
@@ -235,7 +238,7 @@ function action(mode, type, selection) {
         } else {
             if (status == 0) {
                 var talk = "What would you like to do? If you have never participate in the Monster Carnival, you will need to know a few things before participating! \r\n#b#L0# Go to the Monster Carnival 1.#l \r\n#L3# Go to the Monster Carnival 2.#l \r\n#L1# Learn about the Monster Carnival.#l\r\n#L2# Trade #t4001129#.#l";
-                if (Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+                if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
                     talk += "\r\n#L4# ... Can I just refine my ores?#l";
                 }
                 cm.sendSimple(talk);
@@ -245,15 +248,15 @@ function action(mode, type, selection) {
                         cm.getChar().saveLocation("MONSTER_CARNIVAL");
                         cm.warp(980000000, 0);
                         cm.dispose();
-                        return;
+
                     } else if (cm.getLevel() < 30) {
                         cm.sendOk("You must be at least level 30 to participate in the Monster Carnival. Talk to me when you're strong enough.");
                         cm.dispose();
-                        return;
+
                     } else {
                         cm.sendOk("I'm sorry, but only players of level 30 ~ 50 can participate in the Monster Carnival.");
                         cm.dispose();
-                        return;
+
                     }
                 } else if (selection == 1) {
                     status = 60;
@@ -264,24 +267,24 @@ function action(mode, type, selection) {
                     cm.getChar().saveLocation("MONSTER_CARNIVAL");
                     cm.warp(980030000, 0);
                     cm.dispose();
-                    return;
+
                 } else if (selection == 4) {
                     var selStr = "Very well, instead I offer a steadfast #bore refining#k service for you, taxing #r" + ((feeMultiplier * 100) | 0) + "%#k over the usual fee to synthetize them. What will you do?#b";
 
-                    var options = new Array("Refine mineral ores","Refine jewel ores");
-                    if(refineCrystals) {
+                    var options = ["Refine mineral ores", "Refine jewel ores"];
+                    if (refineCrystals) {
                         options.push("Refine crystal ores");
                     }
-                    if(refineRocks) {
+                    if (refineRocks) {
                         options.push("Refine plates/jewels");
                     }
 
-                    for (var i = 0; i < options.length; i++){
+                    for (var i = 0; i < options.length; i++) {
                         selStr += "\r\n#L" + i + "# " + options[i] + "#l";
                     }
 
                     cm.sendSimple(selStr);
-                    
+
                     status = 76;
                 }
             } else if (status == 2) {
@@ -324,8 +327,8 @@ function action(mode, type, selection) {
                 if (selection == 12) {
                     cm.sendSimple("Select the weapon you would like to trade. The weapons I have here are extremely useful. Take a look! \r\n#b#L0# #z1322015# (" + n3 + " coins)#l\r\n#L1# #z1422008# (" + n3 + " coins)#l\r\n#L2# #z1322016# (" + n4 + " coins)#l\r\n#L3# #z1422007# (" + n4 + " coins)#l\r\n#L4# #z1322017# (" + n5 + " coins)#l\r\n#L5# #z1422005# (" + n5 + " coins)#l\r\n#L6# #z1432003# (" + n3 + " coins)#l\r\n#L7# #z1442003# (" + n3 + " coins)#l\r\n#L8# #z1432005# (" + n4 + " coins)#l\r\n#L9# #z1442009# (" + n4 + " coins)#l\r\n#L10# #z1442005# (" + n5 + " coins)#l\r\n#L11# #z1432004# (" + n5 + " coins)#l\r\n#L12# Back to the first page (2/2)#l");
                 } else {
-                    var item = new Array(1302004, 1402006, 1302009, 1402007, 1302010, 1402003, 1312006, 1412004, 1312007, 1412005, 1312008, 1412003);
-                    var cost = new Array(n3, n3, n4, n4, n5, n5, n3, n3, n4, n4, n5);
+                    var item = [1302004, 1402006, 1302009, 1402007, 1302010, 1402003, 1312006, 1412004, 1312007, 1412005, 1312008, 1412003];
+                    var cost = [n3, n3, n4, n4, n5, n5, n3, n3, n4, n4, n5];
                     if (cm.haveItem(4001129, cost[selection]) && cm.canHold(item[selection])) {
                         cm.gainItem(item[selection], 1);
                         cm.gainItem(4001129, -cost[selection]);
@@ -340,8 +343,8 @@ function action(mode, type, selection) {
                     status = 10;
                     cm.sendSimple("Please make sure you have #b#t4001129##k for the weapon you want. Select the weapon you would like to trade #t4001129#. The choices I have are really good, and I'm not the one who speaks to the people who say it! \r\n#b#L0# #z1302004# (" + n3 + " coins)#l\r\n#L1# #z1402006# (" + n3 + " coins)#l\r\n#L2# #z1302009# (" + n4 + " coins)#l\r\n#L3# #z1402007# (" + n4 + " coins)#l\r\n#L4# #z1302010# (" + n5 + " coins)#l\r\n#L5# #z1402003# (" + n5 + " coins)#l\r\n#L6# #z1312006# (" + n3 + " coins)#l\r\n#L7# #z1412004# (" + n3 + " coins)#l\r\n#L8# #z1312007# (" + n4 + " coins)#l\r\n#L9# #z1412005# (" + n4 + " coins)#l\r\n#L10# #z1312008# (" + n5 + " coins)#l\r\n#L11# #z1412003# (" + n5 + " coins)#l\r\n#L12# Continue to the next page(1/2)#l");
                 } else {
-                    var item = new Array(1322015, 1422008, 1322016, 1422007, 1322017, 1422005, 1432003, 1442003, 1432005, 1442009, 1442005, 1432004);
-                    var cost = new Array(n3, n3, n4, n4, n5, n5, n3, n3, n4, n4, n5, n5);
+                    var item = [1322015, 1422008, 1322016, 1422007, 1322017, 1422005, 1432003, 1442003, 1432005, 1442009, 1442005, 1432004];
+                    var cost = [n3, n3, n4, n4, n5, n5, n3, n3, n4, n4, n5, n5];
                     if (cm.haveItem(4001129, cost[selection]) && cm.canHold(item[selection])) {
                         cm.gainItem(item[selection], 1);
                         cm.gainItem(4001129, -cost[selection]);
@@ -352,8 +355,8 @@ function action(mode, type, selection) {
                     }
                 }
             } else if (status == 21) {
-                var item = new Array(1372001, 1382018, 1372012, 1382019, 1382001, 1372007);
-                var cost = new Array(n3, n3, n4, n4, n5, n5);
+                var item = [1372001, 1382018, 1372012, 1382019, 1382001, 1372007];
+                var cost = [n3, n3, n4, n4, n5, n5];
                 if (cm.haveItem(4001129, cost[selection]) && cm.canHold(item[selection])) {
                     cm.gainItem(item[selection], 1);
                     cm.gainItem(4001129, -cost[selection]);
@@ -363,8 +366,8 @@ function action(mode, type, selection) {
                     cm.dispose();
                 }
             } else if (status == 31) {
-                var item = new Array(1452006, 1452007, 1452008, 1462005, 1462006, 1462007);
-                var cost = new Array(n3, n4, n5, n3, n4, n5);
+                var item = [1452006, 1452007, 1452008, 1462005, 1462006, 1462007];
+                var cost = [n3, n4, n5, n3, n4, n5];
                 if (cm.haveItem(4001129, cost[selection]) && cm.canHold(item[selection])) {
                     cm.gainItem(item[selection], 1);
                     cm.gainItem(4001129, -cost[selection]);
@@ -374,8 +377,8 @@ function action(mode, type, selection) {
                     cm.dispose();
                 }
             } else if (status == 41) {
-                var item = new Array(1472013, 1472017, 1472021, 1332014, 1332031, 1332011, 1332016, 1332003);
-                var cost = new Array(n3, n4, n5, n3, n4, n4, n5, n5);
+                var item = [1472013, 1472017, 1472021, 1332014, 1332031, 1332011, 1332016, 1332003];
+                var cost = [n3, n4, n5, n3, n4, n4, n5, n5];
                 if (cm.haveItem(4001129, cost[selection]) && cm.canHold(item[selection])) {
                     cm.gainItem(item[selection], 1);
                     cm.gainItem(4001129, -cost[selection]);
@@ -385,8 +388,8 @@ function action(mode, type, selection) {
                     cm.dispose();
                 }
             } else if (status == 51) {
-                var item = new Array(1482005, 1482006, 1482007, 1492005, 1492006, 1492007);
-                var cost = new Array(n3, n4, n5, n3, n4, n5);
+                var item = [1482005, 1482006, 1482007, 1492005, 1492006, 1492007];
+                var cost = [n3, n4, n5, n3, n4, n5];
                 if (cm.haveItem(4001129, cost[selection]) && cm.canHold(item[selection])) {
                     cm.gainItem(item[selection], 1);
                     cm.gainItem(4001129, -cost[selection]);
@@ -454,7 +457,7 @@ function action(mode, type, selection) {
                     allDone = refineRockItems(); // moon/star rock
                 }
 
-                if(allDone) {
+                if (allDone) {
                     cm.sendOk("Done. Thanks for showing up~.");
                 } else {
                     cm.sendOk("Done. Be aware some of the items #rcould not be synthetized#k because either you have a lack of space on your ETC inventory or there's not enough mesos to cover the fee.");
@@ -470,67 +473,70 @@ function getRefineFee(fee) {
 }
 
 function isRefineTarget(refineType, refineItemid) {
-    if(refineType == 0) { //mineral refine
+    if (refineType == 0) { //mineral refine
         return refineItemid >= 4010000 && refineItemid <= 4010007 && !(refineItemid == 4010007 && !refineSpecials);
-    } else if(refineType == 1) { //jewel refine
+    } else if (refineType == 1) { //jewel refine
         return refineItemid >= 4020000 && refineItemid <= 4020008 && !(refineItemid == 4020008 && !refineSpecials);
-    } else if(refineType == 2) { //crystal refine
+    } else if (refineType == 2) { //crystal refine
         return refineItemid >= 4004000 && refineItemid <= 4004004 && !(refineItemid == 4004004 && !refineSpecials);
     }
-    
+
     return false;
 }
 
 function getRockRefineTarget(refineItemid) {
-    if(refineItemid >= 4011000 && refineItemid <= 4011006) {
+    if (refineItemid >= 4011000 && refineItemid <= 4011006) {
         return 0;
-    } else if(refineItemid >= 4021000 && refineItemid <= 4021008) {
+    } else if (refineItemid >= 4021000 && refineItemid <= 4021008) {
         return 1;
     }
-    
+
     return -1;
 }
 
 function refineItems(refineType) {
     var allDone = true;
-    
-    var refineFees = [[300,300,300,500,500,500,800,270],[500,500,500,500,500,500,500,1000,3000],[5000,5000,5000,5000,1000000]];
+
+    var refineFees = [[300, 300, 300, 500, 500, 500, 800, 270], [500, 500, 500, 500, 500, 500, 500, 1000, 3000], [5000, 5000, 5000, 5000, 1000000]];
     var itemCount = {};
-    
-    var iter = cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).iterator();
+
+    const InventoryType = Java.type('client.inventory.InventoryType');
+    var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();
 
-        if(isRefineTarget(refineType, itemid)) {
+        if (isRefineTarget(refineType, itemid)) {
             var ic = itemCount[itemid];
-            
-            if(ic != undefined) {
+
+            if (ic != undefined) {
                 itemCount[itemid] += it.getQuantity();
             } else {
                 itemCount[itemid] = it.getQuantity();
             }
         }
     }
-    
-    for(var key in itemCount) {
+
+    for (var key in itemCount) {
         var itemqty = itemCount[key];
         var itemid = parseInt(key);
-        
+
         var refineQty = ((itemqty / 10) | 0);
-        if(refineQty <= 0) continue;
-        
-        while(true) {
+        if (refineQty <= 0) {
+            continue;
+        }
+
+        while (true) {
             itemqty = refineQty * 10;
-        
+
             var fee = getRefineFee(refineFees[refineType][(itemid % 100) | 0] * refineQty);
-            if(cm.canHold(itemid + 1000, refineQty, itemid, itemqty) && cm.getMeso() >= fee) {
+            if (cm.canHold(itemid + 1000, refineQty, itemid, itemqty) && cm.getMeso() >= fee) {
                 cm.gainMeso(-fee);
                 cm.gainItem(itemid, -itemqty);
                 cm.gainItem(itemid + (itemid != 4010007 ? 1000 : 1001), refineQty);
-                
+
                 break;
-            } else if(refineQty <= 1) {
+            } else if (refineQty <= 1) {
                 allDone = false;
                 break;
             } else {
@@ -538,7 +544,7 @@ function refineItems(refineType) {
             }
         }
     }
-    
+
     return allDone;
 }
 
@@ -546,52 +552,55 @@ function refineRockItems() {
     var allDone = true;
     var minItems = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
     var minRocks = [2147483647, 2147483647];
-    
+
     var rockItems = [4011007, 4021009];
     var rockFees = [10000, 15000];
 
-    var iter = cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).iterator();
+    const InventoryType = Java.type('client.inventory.InventoryType');
+    var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();
         var rockRefine = getRockRefineTarget(itemid);
-        if(rockRefine >= 0) {
+        if (rockRefine >= 0) {
             var rockItem = ((itemid % 100) | 0);
             var itemqty = it.getQuantity();
-            
+
             minItems[rockRefine][rockItem] += itemqty;
         }
     }
-    
-    for(var i = 0; i < minRocks.length; i++) {
-        for(var j = 0; j < minItems[i].length; j++) {
-            if(minRocks[i] > minItems[i][j]) {
+
+    for (var i = 0; i < minRocks.length; i++) {
+        for (var j = 0; j < minItems[i].length; j++) {
+            if (minRocks[i] > minItems[i][j]) {
                 minRocks[i] = minItems[i][j];
             }
         }
-        if(minRocks[i] <= 0 || minRocks[i] == 2147483647) continue;
-        
+        if (minRocks[i] <= 0 || minRocks[i] == 2147483647) {
+            continue;
+        }
+
         var refineQty = minRocks[i];
-        while(true) {
+        while (true) {
             var fee = getRefineFee(rockFees[i] * refineQty);
-            if(cm.canHold(rockItems[i], refineQty) && cm.getMeso() >= fee) {
+            if (cm.canHold(rockItems[i], refineQty) && cm.getMeso() >= fee) {
                 cm.gainMeso(-fee);
 
                 var j;
-                if(i == 0) {
-                    for(j = 4011000; j < 4011007; j++) {
+                if (i == 0) {
+                    for (j = 4011000; j < 4011007; j++) {
                         cm.gainItem(j, -refineQty);
                     }
                     cm.gainItem(j, refineQty);
                 } else {
-                    for(j = 4021000; j < 4021009; j++) {
+                    for (j = 4021000; j < 4021009; j++) {
                         cm.gainItem(j, -refineQty);
                     }
                     cm.gainItem(j, refineQty);
                 }
-                
+
                 break;
-            } else if(refineQty <= 1) {
+            } else if (refineQty <= 1) {
                 allDone = false;
                 break;
             } else {
@@ -599,6 +608,6 @@ function refineRockItems() {
             }
         }
     }
-    
+
     return allDone;
 }

@@ -1,3 +1,3 @@
-function start(ms) { 
-	ms.setStandAloneMode(true);
+function start(ms) {
+    ms.setStandAloneMode(true);
 }

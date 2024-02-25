@@ -9,17 +9,18 @@ function start(mode, type, selection) {
         qm.sendOk("Talk to me after you have decided what you really want to do. Whatever you choose, you will not miss out or lose privileges, so don't take this too seriously...");
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0 || selection == 1) {
+        if (mode == 0 && type > 0 || selection == 1) {
             qm.sendOk("Talk to me after you have decided what you really want to do. Whatever you choose, you will not miss out or lose privileges, so don't take this too seriously...");
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("I can tell you've worked really hard by seeing that you're already at Level 10. I think it's time now for you to break out as a Nobless and officially become the Knight-in-Training. Before doing that, however, I want to ask you one thing. Have you decided which Knight you'd want to beome?");
         } else if (status == 1) {

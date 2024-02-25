@@ -264,7 +264,7 @@
 5160006 - Sparkling Eyes - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character display sparkling eyes.
 5160007 - Flaming - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character display the look of rage.
 5160008 - Ray - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character display beaming eyes.
-5160009 - Goo Goo - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character display the look of “awesome!!!”
+5160009 - Goo Goo - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character display the look of ï¿½awesome!!!ï¿½
 5160010 - Whoa Whoa - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character display the look of being flustered.
 5160011 - Constant Sigh - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character display the thinking look.
 5160012 - Drool - On the KeyConfig, configure this expression on a button of your choice. Press the button and watch your character act like falling asleep.
@@ -479,9 +479,9 @@
 5610001 - Vega's Spell(60%) - This winning spell from Vega enables a 90% success rate on a 60% scroll. Please check the scroll description to confirm that Vega's Spell is available for the scroll you choose.
 5590000 - High-Five Stamp - Can equip items that are 5 levels above your current level.
 5021026 - Gift Box Throwing Stars - A gift box that can be freely thrown around. Using the #cThrowing Star# will create an orbital effect.\n\nThis item cannot be deleted.
-5010073 - Miss Popular - Well, lookie here. Someone’s certainly become popular with the guys. Turn this effect on and off by assigning it to a shortcut key from the keyboard settings menu.
+5010073 - Miss Popular - Well, lookie here. Someoneï¿½s certainly become popular with the guys. Turn this effect on and off by assigning it to a shortcut key from the keyboard settings menu.
 
-5010074 - Mr. Popular - Well, lookie here. Someone’s certainly become popular with the girls. Turn this effect on and off by assigning it to a shortcut key from the keyboard settings menu.
+5010074 - Mr. Popular - Well, lookie here. Someoneï¿½s certainly become popular with the girls. Turn this effect on and off by assigning it to a shortcut key from the keyboard settings menu.
 
 5240027 - Golden Drumstick - A drumstick that can be consumed only by #cBaby Tiger#. It recovers hunger and #cincreases Closeness by 100.#
 5390005 - Cute Tiger Messenger - Shout to everyone in the world your character is on with this megaphone. Now available with your avatar on the top of everyone's screen! Comes with a tiger background for your avatar.

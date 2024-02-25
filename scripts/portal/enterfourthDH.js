@@ -3,15 +3,15 @@ function enter(pi) {
         pi.playerMessage(5, "You already have the proof of ability.");
         return false;
     }
-    
+
     if (pi.isQuestStarted(20611) || pi.isQuestStarted(20612) || pi.isQuestStarted(20613) || pi.isQuestStarted(20614) || pi.isQuestStarted(20615)) {
         if (pi.getPlayerCount(913020300) == 0) {
             var map = pi.getMap(913020300);
             map.killAllMonsters();
-            
+
             pi.playPortalSound();
             pi.warp(913020300, 0);
-            pi.spawnMonster(9300294, 87,88);
+            pi.spawnMonster(9300294, 87, 88);
             return true;
         } else {
             pi.playerMessage(5, "Someone is already attempting to defeat the boss. Better come back later.");

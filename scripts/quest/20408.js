@@ -24,16 +24,17 @@ function start(mode, type, selection) { // missing script for questid found than
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
             qm.sendNext("#h0#... First of all, thank you for your great work. If it weren't you, I... I wouldn't be safe from the curse of Black Witch. Thank you so much.");
         } else if (status == 1) {
@@ -46,15 +47,15 @@ function start(mode, type, selection) { // missing script for questid found than
                 qm.dispose();
                 return;
             }
-            
+
             qm.gainItem(1142069, 1);
             if (qm.getJobId() % 10 == 1) {
                 qm.changeJobById(qm.getJobId() + 1);
             }
-            
+
             qm.forceStartQuest();
             qm.forceCompleteQuest();
-            
+
             qm.sendOk("#h0#. For courageously battling the Black Mage, I will appoint you as the new Chief Knight of Cygnus Knights from this moment onwards. Please use your power and authority wisely to help protect the citizens of Maple World.");
         } else if (status == 4) {
             qm.dispose();

@@ -27,6 +27,6 @@
  * Guild Quest - part of stage 4
  */
 
-function act(){
+function act() {
     rm.spawnMonster(9300033, 8, -100, 50);
 }

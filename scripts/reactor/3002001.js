@@ -1,4 +1,4 @@
 function act() {
-        rm.getEventInstance().showClearEffect(rm.getMap().getId());
-	rm.dropItems();
+    rm.getEventInstance().showClearEffect(rm.getMap().getId());
+    rm.dropItems();
 }

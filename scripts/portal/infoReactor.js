@@ -19,15 +19,17 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 @author kevintjuh93
 */
-function enter(pi) { 
-	if (pi.isQuestCompleted(1008))
-		pi.showInfo("UI/tutorial.img/22");
-	else if (pi.isQuestCompleted(1020))
-		pi.showInfo("UI/tutorial.img/27");  
- 
+function enter(pi) {
+    if (pi.isQuestCompleted(1008)) {
+        pi.showInfo("UI/tutorial.img/22");
+    } else if (pi.isQuestCompleted(1020)) {
+        pi.showInfo("UI/tutorial.img/27");
+    }
+
     pi.blockPortal();
     return true;
 }  

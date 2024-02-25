@@ -26,8 +26,6 @@
 * @Map(s): Dojo Hall
 */
 
-importPackage(Packages.constants.game);
-
 var disabled = false;
 var belts = Array(1132000, 1132001, 1132002, 1132003, 1132004);
 var belt_level = Array(25, 35, 45, 60, 75);
@@ -39,14 +37,16 @@ var status = -1;
 var selectedMenu = -1;
 
 function start() {
-	if(disabled) {
-		cm.sendOk("My master has requested that the dojo be #rclosed#k at this time so I can't let you in.");
-		cm.dispose();
-		return;
-	}
-	
+    if (disabled) {
+        cm.sendOk("My master has requested that the dojo be #rclosed#k at this time so I can't let you in.");
+        cm.dispose();
+        return;
+    }
+
     if (isRestingSpot(cm.getPlayer().getMap().getId())) {
         var text = "I'm surprised you made it this far! But it won't be easy from here on out. You still want the challenge?\r\n\r\n#b#L0#I want to continue#l\r\n#L1#I want to leave#l\r\n";
+
+        const GameConstants = Java.type('constants.game.GameConstants');
         if (!GameConstants.isDojoPartyArea(cm.getPlayer().getMapId())) {
             text += "#L2#I want to record my score up to this point#l";
         }
@@ -68,8 +68,9 @@ function action(mode, type, selection) {
         cm.dispose();
     } else if (cm.getPlayer().getMap().getId() == 925020001) {
         if (mode >= 0) {
-            if (status == -1)
+            if (status == -1) {
                 selectedMenu = selection;
+            }
             status++; //there is no prev.
             if (selectedMenu == 0) { //I want to challenge him alone.
                 if (!cm.getPlayer().hasEntered("dojang_Msg") && !cm.getPlayer().getFinishedDojoTutorial()) { //kind of hackish...
@@ -79,7 +80,7 @@ function action(mode, type, selection) {
                         if (mode == 0) {
                             cm.sendNext("Haha! Who are you trying to impress with a heart like that?\r\nGo back home where you belong!");
                         } else {
-                           if(cm.getClient().getChannelServer().getMapFactory().getMap(925020010).getCharacters().size() > 0) {
+                            if (cm.getClient().getChannelServer().getMapFactory().getMap(925020010).getCharacters().size() > 0) {
                                 cm.sendOk("Someone is already in Dojo.");
                                 cm.dispose();
                                 return;
@@ -97,13 +98,13 @@ function action(mode, type, selection) {
                         cm.dispose();
                     }
                 } else {
-					for (var i = 1 ; i < 39; i++) { //only 32 stages, but 38 maps
-						if(cm.getClient().getChannelServer().getMapFactory().getMap(925020000 + 100 * i).getCharacters().size() > 0) {
-							cm.sendOk("Someone is already in the Dojo." + i);
-							cm.dispose();
-							return;
-						}
-					}
+                    for (var i = 1; i < 39; i++) { //only 32 stages, but 38 maps
+                        if (cm.getClient().getChannelServer().getMapFactory().getMap(925020000 + 100 * i).getCharacters().size() > 0) {
+                            cm.sendOk("Someone is already in the Dojo." + i);
+                            cm.dispose();
+                            return;
+                        }
+                    }
                     cm.getClient().getChannelServer().getMapFactory().getMap(925020100).resetReactors();
                     cm.getClient().getChannelServer().getMapFactory().getMap(925020100).killAllMonsters();
                     cm.warp(925020100, 0);
@@ -120,10 +121,11 @@ function action(mode, type, selection) {
                 var highest = lowest;
                 for (var x = 0; x < party.getMembers().size(); x++) {
                     var lvl = party.getMembers().get(x).getLevel();
-                    if (lvl > highest)
+                    if (lvl > highest) {
                         highest = lvl;
-                    else if (lvl < lowest)
+                    } else if (lvl < lowest) {
                         lowest = lvl;
+                    }
                 }
                 var isBetween30 = highest - lowest < 30;
                 if (party.getLeader().getId() != cm.getPlayer().getId()) {
@@ -134,12 +136,12 @@ function action(mode, type, selection) {
                 } else if (!isBetween30) {
                     cm.sendNext("Your partys level ranges are too broad to enter. Please make sure all of your party members are within #r30 levels#k of each other.");
                 } else {
-                    for (var i = 1 ; i < 39; i++) { //only 32 stages, but 38 maps
-                            if(cm.getClient().getChannelServer().getMapFactory().getMap(925020000 + 100 * i).getCharacters().size() > 0) {
-                                    cm.sendOk("Someone is already in the Dojo.");
-                                    cm.dispose();
-                                    return;
-                            }
+                    for (var i = 1; i < 39; i++) { //only 32 stages, but 38 maps
+                        if (cm.getClient().getChannelServer().getMapFactory().getMap(925020000 + 100 * i).getCharacters().size() > 0) {
+                            cm.sendOk("Someone is already in the Dojo.");
+                            cm.dispose();
+                            return;
+                        }
                     }
                     cm.getClient().getChannelServer().getMapFactory().getMap(925020100).resetReactors();
                     cm.getClient().getChannelServer().getMapFactory().getMap(925020100).killAllMonsters();
@@ -157,8 +159,9 @@ function action(mode, type, selection) {
                     for (var i = 0; i < belts.length; i++) {
                         if (cm.haveItemWithId(belts[i], true)) {
                             selStr += "\r\n     #i" + belts[i] + "# #t" + belts[i] + "#(Obtain)";
-                        } else
+                        } else {
                             selStr += "\r\n#L" + i + "##i" + belts[i] + "# #t" + belts[i] + "#l";
+                        }
                     }
                     cm.sendSimple(selStr);
                 } else if (status == 1) {
@@ -166,12 +169,14 @@ function action(mode, type, selection) {
                     var level = belt_level[selection];
                     var points = belt_points[selection];
                     if (cm.getPlayer().getDojoPoints() > points) {
-                        if (cm.getPlayer().getLevel() > level)
+                        if (cm.getPlayer().getLevel() > level) {
                             cm.gainItem(belt, 1);
-                        else
+                        } else {
                             cm.sendNext("In order to receive #i" + belt + "# #b#t" + belt + "##k, you have to be at least over level #b" + level + "#k and you need to have earned at least #b" + points + " training points#k.\r\n\r\nIf you want to obtain this belt, you need #r" + (points - cm.getPlayer().getDojoPoints()) + "#k more training points.");
-                    } else
+                        }
+                    } else {
                         cm.sendNext("In order to receive #i" + belt + "# #b#t" + belt + "##k, you have to be at least over level #b" + level + "#k and you need to have earned at least #b" + points + " training points#k.\r\n\r\nIf you want to obtain this belt, you need #r" + (points - cm.getPlayer().getDojoPoints()) + "#k more training points.");
+                    }
                     cm.dispose();
                 }
             } else if (selectedMenu == 3) { //I want to reset my training points.
@@ -196,9 +201,9 @@ function action(mode, type, selection) {
                     } else {
                         if (cm.getPlayer().getDojoStage() > 37) {
                             cm.sendNext("You have complete all medals challenges.");
-                        } else if (cm.getPlayer().getVanquisherKills() < 100 && cm.getPlayer().getVanquisherStage() > 0)
+                        } else if (cm.getPlayer().getVanquisherKills() < 100 && cm.getPlayer().getVanquisherStage() > 0) {
                             cm.sendNext("You still need #b" + (100 - cm.getPlayer().getVanquisherKills()) + "#k in order to obtain the #b#t" + (1142032 + cm.getPlayer().getVanquisherStage()) + "##k. Please try a little harder. As a reminder, only the mosnters that have been summoned by our Master in Mu Lung Dojo are considered. Oh, and make sure you're not hunting the monsters and exiting!#r If you don't go to the next level after defeating the monster, it doesn't count as a win#k.");
-                        else if (cm.getPlayer().getVanquisherStage() <= 0) {
+                        } else if (cm.getPlayer().getVanquisherStage() <= 0) {
                             cm.getPlayer().setVanquisherStage(1);
                         } else {
                             cm.sendNext("You have obtained #b#t" + (1142032 + cm.getPlayer().getVanquisherStage()) + "##k.");
@@ -213,11 +218,13 @@ function action(mode, type, selection) {
                 cm.sendNext("Our master is the strongest person in Mu Lung. The place he built is called the Mu Lung Dojo, a building that is 38 stories tall! You can train yourself as you go up each level. Of course, it'll be hard for someone at your level to reach the top.");
                 cm.dispose();
             }
-        } else
+        } else {
             cm.dispose();
+        }
     } else if (isRestingSpot(cm.getPlayer().getMap().getId())) {
-        if (selectedMenu == -1)
+        if (selectedMenu == -1) {
             selectedMenu = selection;
+        }
         status++;
         if (selectedMenu == 0) {
             cm.warp(cm.getPlayer().getMap().getId() + 100, 0);

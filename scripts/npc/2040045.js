@@ -39,23 +39,23 @@ function start() {
 }
 
 function action(mode, type, selection) {
-        if (mode == -1) {
-                cm.dispose();//ExitChat
-        }else if (mode == 0){
-                cm.sendOk("Wise choice. Who wouldn't want free mesos from the #bBonus Stage#k?");
-                cm.dispose();//No
+    if (mode == -1) {
+        cm.dispose();//ExitChat
+    } else if (mode == 0) {
+        cm.sendOk("Wise choice. Who wouldn't want free mesos from the #bBonus Stage#k?");
+        cm.dispose();//No
+    } else {
+        if (mode == 1) {
+            status++;
         } else {
-                if (mode == 1)
-                        status++;
-                else
-                        status--;
-
-                if(status == 0) {
-                        cm.sendYesNo("Would you like to leave the bonus stage?");
-                }
-                else {
-                        cm.warp(922011100, "st00");
-                        cm.dispose();
-                }
+            status--;
         }
+
+        if (status == 0) {
+            cm.sendYesNo("Would you like to leave the bonus stage?");
+        } else {
+            cm.warp(922011100, "st00");
+            cm.dispose();
+        }
+    }
 }

@@ -27,7 +27,7 @@
  * Guild Quest - end of stage 4
  */
 
-function act(){
+function act() {
     rm.mapMessage(5, "A bright flash of light, then someone familiar appears in front of the blocked gate.");
     rm.spawnNpc(9040003);
 }

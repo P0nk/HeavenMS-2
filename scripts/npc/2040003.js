@@ -1,50 +1,48 @@
 var status = 0;
-var entry;
-function start() {
-	if(cm.getPlayer().getMapId() == 922000000) {
-		entry = 0;
-		cm.sendYesNo("Do you wish to quit this stage?");
-		status++;
-	}
+var em;
+var eim;
 
-	else if(cm.isQuestStarted(3239)) {
-		entry = 1;
-		cm.sendYesNo("Do you want to enter #bToy Factory<Sector 4>#k?");
-		status++;
-	}
-	else {
-		cm.sendOk("Access to #bToy Factory<Sector 4>#k is restricted to the public.");
-	}
+function sendBaseText() {
+    cm.sendOk("Access is restricted to the public.");
+    cm.dispose();
+}
+
+function start() {
+    em = cm.getEventManager("q3239");
+    if (em != null)
+        eim = cm.getEventInstance();
+
+    if (em == null) { // No event handler
+        sendBaseText();
+        return;
+    }
+    else if (eim == null && !cm.isQuestStarted(3239)) { // Not in instance, quest is not in progress
+        sendBaseText();
+        return;
+    }
+
+    if (eim == null) { // Not in instance
+        cm.sendYesNo("Are you ready to enter #b#m922000000##k?");
+    }
+    else { // Inside the instance
+        cm.sendYesNo("Are you ready to leave this place?");
+    }
 }
 
 function action(mode, type, selection) {
-	if(status == 1) {
-		if(entry == 0) {
-			if(mode <= 0) {
-				cm.sendOk("Ok. Call me if you urge to exit, then.");
-				cm.dispose();
-				return;
-			}
-			
-			cm.warp(922000009, 0);
-			if(!(cm.isQuestStarted(3239) && cm.haveItem(4031092, 10))) cm.removeAll(4031092);
-			cm.dispose();
-		}
+    if (mode < 1) {
+        cm.dispose();
+        return;
+    }
 
-		else {
-			if(mode <= 0) {
-				cm.dispose();
-				return;
-			}
-                        
-                        if(cm.getWarpMap(922000000).countPlayers() == 0) {
-                                cm.warp(922000000, 0);
-                                if(!(cm.isQuestStarted(3239) && cm.haveItem(4031092, 10))) cm.removeAll(4031092);
-                        } else {
-                                cm.sendOk("Someone else is already attempting the parts. Wait for them to finish before you enter.");
-                        }
-	
-			cm.dispose();		
-		}
-	}
+    if (eim == null) { // Not in instance, ready to enter
+        cm.removeAll(4031092); // This handling is done in the portal script and in the event end, just for legacy purposes here
+        if (!em.startInstance(cm.getPlayer())) {
+            cm.sendOk("Someone else is already gathering some parts for me. Please wait until the area is cleared.");
+        }
+    }
+    else { // Inside the instance, ready to exit
+        eim.removePlayer(cm.getPlayer()); // This will end the event and warp the player out
+    }
+    cm.dispose();
 }

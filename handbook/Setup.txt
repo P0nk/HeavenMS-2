@@ -192,7 +192,7 @@
 3010058 - WorldEnd - You will recover 50 HP every 10 seconds. Perhaps, as you recline, you will find the answer to many of life's questions.
 3010057 - BloodyRose - You will recover 50 HP every 10 seconds. You will experience the might of a conqueror after recovery.
 3010060 - Noblesse Chair - A chair makes you feel like you're sitting in the lap of luxury. Also recovers 50 HP every 10 seconds.
-3010061 - Underneath the Maple Tree… - A white chair created to celebrate Maple Story's 6th Anniversary. Sit on it to restore 35 HP and 10 MP every 10 seconds.
+3010061 - Underneath the Maple Treeï¿½ - A white chair created to celebrate Maple Story's 6th Anniversary. Sit on it to restore 35 HP and 10 MP every 10 seconds.
 3010062 - Bamboo Chair  - A chair that restores HP every 10 seconds when used. It's very strong since it was made from bamboo grown on Rien.
 3010063 - Moon and Star Cushion - A pretty cushion shaped like a moon. Recovers 60 HP every 10 seconds.
 3010064 - Male Desert Rabbit Cushion   - 60 HP is restored every 10 seconds if you lean back on this cute Male Desert Rabbit Cushion.

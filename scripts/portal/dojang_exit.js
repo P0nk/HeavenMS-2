@@ -19,7 +19,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*	
+
+/*
  * @author:  kevintjuh93, moogra
  * @portal:  dojang_exit
  * @purpose: warps user out
@@ -27,8 +28,11 @@
 
 function enter(pi) {
     var map = pi.getPlayer().getSavedLocation("MIRROR");
-    if(map == -1) map = 100000000;
-    
-    pi.playPortalSound(); pi.warp(map);
+    if (map == -1) {
+        map = 100000000;
+    }
+
+    pi.playPortalSound();
+    pi.warp(map);
     return true;
 }

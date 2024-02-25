@@ -33,20 +33,22 @@ function end(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
     } else {
-        if(mode == 0 && type > 0) {
+        if (mode == 0 && type > 0) {
             qm.dispose();
             return;
         }
-        
-        if (mode == 1)
+
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
-        
+        }
+
         if (status == 0) {
-            if(qm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).getNumFreeSlot() < 1) {
+            const InventoryType = Java.type('client.inventory.InventoryType');
+            if (qm.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1) {
                 qm.sendOk("Make room on your ETC inventory first.");
-                qm.dispose();		
+                qm.dispose();
                 return;
             }
 
@@ -56,10 +58,9 @@ function end(mode, type, selection) {
             qm.gainItem(4000118, -30);
 
             rnd = Math.random();
-            if(rnd < 1.0) {
+            if (rnd < 1.0) {
                 qm.gainItem(4031928, 1);
-            }
-            else {
+            } else {
                 qm.gainItem(4031927, 1);
             }
 

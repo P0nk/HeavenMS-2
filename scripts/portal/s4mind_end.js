@@ -25,7 +25,7 @@ function enter(pi) {
         if (pi.isQuestStarted(6410)) {
             pi.setQuestProgress(6410, 6411, "p2");
         }
-        
+
         pi.playPortalSound();
         pi.warp(925010400);
         return true;

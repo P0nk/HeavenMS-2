@@ -46,16 +46,7 @@ public class PortalScriptManager extends AbstractScriptManager {
     public boolean isScriptAvailable(String scriptPath) {
         ScriptEngine engine = getInvocableScriptEngine(scriptPath);
 
-        if (engine == null) {
-            return false;
-        }
-
-        boolean isInvocable = (engine instanceof Invocable iv);
-        if (!isInvocable) {
-            return false;
-        }
-
-        return true;
+        return engine instanceof Invocable;
     }
 
     private PortalScript getPortalScript(String scriptName) throws ScriptException {

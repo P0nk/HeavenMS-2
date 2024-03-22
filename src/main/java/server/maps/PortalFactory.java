@@ -63,7 +63,7 @@ public class PortalFactory {
         // If no script node is set, try to find the fallback script and set it
         // otherwise, don't set the script name. Portals break if the script is not found
         // and a portal name is set.
-        if (script != null && (!script.isBlank() && !script.isEmpty())) {
+        if (script != null && !script.isBlank()) {
             myPortal.setScriptName(script);
             return;
         }

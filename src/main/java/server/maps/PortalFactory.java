@@ -69,7 +69,7 @@ public class PortalFactory {
         }
 
         // Check for and set fallback portal script name if available
-        String fallbackScriptPath = String.format("%s.%s", mapId, portal.getName());
+        String fallbackScriptPath = String.format("%s_%s", mapId, portal.getName());
         boolean isScriptAvailable = PortalScriptManager.getInstance().isScriptAvailable("portal/" + fallbackScriptPath + ".js");
 
         if (!isScriptAvailable) {

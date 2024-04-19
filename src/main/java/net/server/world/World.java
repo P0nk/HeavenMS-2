@@ -56,6 +56,7 @@ import server.maps.*;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
+import tools.Randomizer;
 import tools.packets.Fishing;
 
 import java.sql.*;
@@ -101,6 +102,7 @@ public class World {
     private final ServicesManager services = new ServicesManager(WorldServices.SAVE_CHARACTER);
     private final MatchCheckerCoordinator matchChecker = new MatchCheckerCoordinator();
     private final PartySearchCoordinator partySearch = new PartySearchCoordinator();
+    private final int fishSeed = Randomizer.rand(144, 365);
 
     private final Lock chnRLock;
     private final Lock chnWLock;
@@ -2064,7 +2066,7 @@ public class World {
     }
 
     public void runCheckFishingSchedule() {
-        double[] fishingLikelihoods = Fishing.fetchFishingLikelihood();
+        double[] fishingLikelihoods = Fishing.fetchFishingLikelihood(fishSeed);
         double yearLikelihood = fishingLikelihoods[0], timeLikelihood = fishingLikelihoods[1];
 
         if (!fishingAttempters.isEmpty()) {

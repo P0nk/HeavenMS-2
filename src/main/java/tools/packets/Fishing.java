@@ -42,7 +42,7 @@ public class Fishing {
         return 50.0 + 7.0 * (7.0 * Math.sin(x)) * (Math.cos(Math.pow(x, 0.777)));
     }
 
-    public static double[] fetchFishingLikelihood() {
+    public static double[] fetchFishingLikelihood(int seed) {
         Calendar calendar = Calendar.getInstance();
         int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
 
@@ -50,8 +50,8 @@ public class Fishing {
         int minutes = calendar.get(Calendar.MINUTE);
         int seconds = calendar.get(Calendar.SECOND);
 
-        double yearLikelihood = getFishingLikelihood(dayOfYear);
-        double timeLikelihood = getFishingLikelihood(hours + minutes + seconds);
+        double yearLikelihood = getFishingLikelihood(dayOfYear + seed);
+        double timeLikelihood = getFishingLikelihood(hours + minutes + seconds + seed);
 
         return new double[]{yearLikelihood, timeLikelihood};
     }

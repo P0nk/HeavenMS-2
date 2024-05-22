@@ -26,7 +26,12 @@ import net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.maps.AnimatedMapObject;
-import server.movement.*;
+import server.movement.AbsoluteLifeMovement;
+import server.movement.ChangeEquip;
+import server.movement.JumpDownMovement;
+import server.movement.LifeMovementFragment;
+import server.movement.RelativeLifeMovement;
+import server.movement.TeleportMovement;
 import tools.exceptions.EmptyMovementException;
 
 import java.awt.*;

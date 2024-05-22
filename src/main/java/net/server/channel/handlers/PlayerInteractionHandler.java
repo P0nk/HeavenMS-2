@@ -39,8 +39,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.Trade;
-import server.maps.*;
+import server.maps.FieldLimit;
+import server.maps.HiredMerchant;
+import server.maps.MapObject;
+import server.maps.MapObjectType;
+import server.maps.MiniGame;
 import server.maps.MiniGame.MiniGameType;
+import server.maps.PlayerShop;
+import server.maps.PlayerShopItem;
+import server.maps.Portal;
 import tools.PacketCreator;
 
 import java.awt.*;

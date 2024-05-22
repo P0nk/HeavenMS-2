@@ -24,8 +24,17 @@ package client;
 
 import client.autoban.AutobanManager;
 import client.creator.CharacterFactoryRecipe;
-import client.inventory.*;
+import client.inventory.Equip;
 import client.inventory.Equip.StatUpgrade;
+import client.inventory.Inventory;
+import client.inventory.InventoryProof;
+import client.inventory.InventoryType;
+import client.inventory.Item;
+import client.inventory.ItemFactory;
+import client.inventory.ModifyInventory;
+import client.inventory.Pet;
+import client.inventory.PetDataFactory;
+import client.inventory.WeaponType;
 import client.inventory.manipulator.CashIdGenerator;
 import client.inventory.manipulator.InventoryManipulator;
 import client.keybind.KeyBinding;
@@ -40,7 +49,35 @@ import constants.id.ItemId;
 import constants.id.MapId;
 import constants.id.MobId;
 import constants.inventory.ItemConstants;
-import constants.skills.*;
+import constants.skills.Aran;
+import constants.skills.Beginner;
+import constants.skills.Bishop;
+import constants.skills.BlazeWizard;
+import constants.skills.Bowmaster;
+import constants.skills.Brawler;
+import constants.skills.Buccaneer;
+import constants.skills.Corsair;
+import constants.skills.Crusader;
+import constants.skills.DarkKnight;
+import constants.skills.DawnWarrior;
+import constants.skills.Evan;
+import constants.skills.FPArchMage;
+import constants.skills.Hermit;
+import constants.skills.Hero;
+import constants.skills.ILArchMage;
+import constants.skills.Legend;
+import constants.skills.Magician;
+import constants.skills.Marauder;
+import constants.skills.Marksman;
+import constants.skills.NightLord;
+import constants.skills.Noblesse;
+import constants.skills.Paladin;
+import constants.skills.Priest;
+import constants.skills.Ranger;
+import constants.skills.Shadower;
+import constants.skills.Sniper;
+import constants.skills.ThunderBreaker;
+import constants.skills.Warrior;
 import net.packet.Packet;
 import net.server.PlayerBuffValueHolder;
 import net.server.PlayerCoolDownValueHolder;
@@ -52,39 +89,98 @@ import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
 import net.server.services.task.world.CharacterSaveService;
 import net.server.services.type.WorldServices;
-import net.server.world.*;
+import net.server.world.Messenger;
+import net.server.world.MessengerCharacter;
+import net.server.world.Party;
+import net.server.world.PartyCharacter;
+import net.server.world.PartyOperation;
+import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.item.ItemScriptManager;
-import server.*;
+import server.CashShop;
+import server.ExpLogger;
 import server.ExpLogger.ExpLogRecord;
+import server.ItemInformationProvider;
 import server.ItemInformationProvider.ScriptedItem;
+import server.Marriage;
+import server.Shop;
+import server.StatEffect;
+import server.Storage;
+import server.ThreadManager;
+import server.TimerManager;
+import server.Trade;
 import server.events.Events;
 import server.events.RescueGaga;
 import server.events.gm.Fitness;
 import server.events.gm.Ola;
-import server.life.*;
-import server.maps.*;
+import server.life.MobSkill;
+import server.life.MobSkillFactory;
+import server.life.MobSkillId;
+import server.life.MobSkillType;
+import server.life.Monster;
+import server.life.PlayerNPC;
+import server.maps.AbstractAnimatedMapObject;
+import server.maps.Door;
+import server.maps.DoorObject;
+import server.maps.Dragon;
+import server.maps.FieldLimit;
+import server.maps.HiredMerchant;
+import server.maps.MapEffect;
+import server.maps.MapItem;
+import server.maps.MapManager;
+import server.maps.MapObject;
+import server.maps.MapObjectType;
+import server.maps.MapleMap;
+import server.maps.MiniGame;
 import server.maps.MiniGame.MiniGameResult;
+import server.maps.PlayerShop;
+import server.maps.PlayerShopItem;
+import server.maps.Portal;
+import server.maps.SavedLocation;
+import server.maps.SavedLocationType;
+import server.maps.Summon;
 import server.minigame.RockPaperScissor;
 import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
 import server.partyquest.MonsterCarnivalParty;
 import server.partyquest.PartyQuest;
 import server.quest.Quest;
-import tools.*;
+import tools.DatabaseConnection;
+import tools.LongTool;
+import tools.PacketCreator;
+import tools.Pair;
+import tools.Randomizer;
 import tools.exceptions.NotEnabledException;
 import tools.packets.WeddingPackets;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -94,7 +190,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.util.concurrent.TimeUnit.*;
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
@@ -128,7 +226,7 @@ public class Character extends AbstractCharacterObject {
     private int expRate = 1, mesoRate = 1, dropRate = 1, expCoupon = 1, mesoCoupon = 1, dropCoupon = 1;
     private int omokwins, omokties, omoklosses, matchcardwins, matchcardties, matchcardlosses;
     private int owlSearch;
-    private long lastfametime, lastUsedCashItem, lastExpression = 0, lastHealed, lastBuyback = 0, lastDeathtime, jailExpiration = -1;
+    private long lastfametime, lastUsedCashItem, lastExpression = 0, lastHealed, lastDeathtime, jailExpiration = -1;
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
     private int localchairrate;
@@ -6054,98 +6152,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private boolean canBuyback(int fee, boolean usingMesos) {
-        return (usingMesos ? this.getMeso() : cashshop.getCash(1)) >= fee;
-    }
-
-    private void applyBuybackFee(int fee, boolean usingMesos) {
-        if (usingMesos) {
-            this.gainMeso(-fee);
-        } else {
-            cashshop.gainCash(1, -fee);
-        }
-    }
-
-    private long getNextBuybackTime() {
-        return lastBuyback + MINUTES.toMillis(YamlConfig.config.server.BUYBACK_COOLDOWN_MINUTES);
-    }
-
-    private boolean isBuybackInvincible() {
-        return Server.getInstance().getCurrentTime() - lastBuyback < 4200;
-    }
-
-    private int getBuybackFee() {
-        float fee = YamlConfig.config.server.BUYBACK_FEE;
-        int grade = Math.min(Math.max(level, 30), 120) - 30;
-
-        fee += (grade * YamlConfig.config.server.BUYBACK_LEVEL_STACK_FEE);
-        if (YamlConfig.config.server.USE_BUYBACK_WITH_MESOS) {
-            fee *= YamlConfig.config.server.BUYBACK_MESO_MULTIPLIER;
-        }
-
-        return (int) Math.floor(fee);
-    }
-
-    public void showBuybackInfo() {
-        String s = "#eBUYBACK STATUS#n\r\n\r\nCurrent buyback fee: #b" + getBuybackFee() + " " + (YamlConfig.config.server.USE_BUYBACK_WITH_MESOS ? "mesos" : "NX") + "#k\r\n\r\n";
-
-        long timeNow = Server.getInstance().getCurrentTime();
-        boolean avail = true;
-        if (!isAlive()) {
-            long timeLapsed = timeNow - lastDeathtime;
-            long timeRemaining = MINUTES.toMillis(YamlConfig.config.server.BUYBACK_RETURN_MINUTES) - (timeLapsed + Math.max(0, getNextBuybackTime() - timeNow));
-            if (timeRemaining < 1) {
-                s += "Buyback #e#rUNAVAILABLE#k#n";
-                avail = false;
-            } else {
-                s += "Buyback countdown: #e#b" + getTimeRemaining(MINUTES.toMillis(YamlConfig.config.server.BUYBACK_RETURN_MINUTES) - timeLapsed) + "#k#n";
-            }
-            s += "\r\n";
-        }
-
-        if (timeNow < getNextBuybackTime() && avail) {
-            s += "Buyback available in #r" + getTimeRemaining(getNextBuybackTime() - timeNow) + "#k";
-            s += "\r\n";
-        } else {
-            s += "Buyback #bavailable#k";
-        }
-
-        this.showHint(s);
-    }
-
     private static String getTimeRemaining(long timeLeft) {
         int seconds = (int) Math.floor(timeLeft / SECONDS.toMillis(1)) % 60;
         int minutes = (int) Math.floor(timeLeft / MINUTES.toMillis(1)) % 60;
 
         return (minutes > 0 ? (String.format("%02d", minutes) + " minutes, ") : "") + String.format("%02d", seconds) + " seconds";
-    }
-
-    public boolean couldBuyback() {  // Ronan's buyback system
-        long timeNow = Server.getInstance().getCurrentTime();
-
-        if (timeNow - lastDeathtime > MINUTES.toMillis(YamlConfig.config.server.BUYBACK_RETURN_MINUTES)) {
-            this.dropMessage(5, "The period of time to decide has expired, therefore you are unable to buyback.");
-            return false;
-        }
-
-        long nextBuybacktime = getNextBuybackTime();
-        if (timeNow < nextBuybacktime) {
-            long timeLeft = nextBuybacktime - timeNow;
-            this.dropMessage(5, "Next buyback available in " + getTimeRemaining(timeLeft) + ".");
-            return false;
-        }
-
-        boolean usingMesos = YamlConfig.config.server.USE_BUYBACK_WITH_MESOS;
-        int fee = getBuybackFee();
-
-        if (!canBuyback(fee, usingMesos)) {
-            this.dropMessage(5, "You don't have " + fee + " " + (usingMesos ? "mesos" : "NX") + " to buyback.");
-            return false;
-        }
-
-        lastBuyback = timeNow;
-        applyBuybackFee(fee, usingMesos);
-        return true;
     }
 
     public boolean isBuffFrom(BuffStat stat, Skill skill) {
@@ -8911,11 +8922,7 @@ public class Character extends AbstractCharacterObject {
         boolean playerDied = false;
         if (hp <= 0) {
             if (oldHp > hp) {
-                if (!isBuybackInvincible()) {
-                    playerDied = true;
-                } else {
-                    hp = 1;
-                }
+                playerDied = true;
             }
         }
 

@@ -21,12 +21,11 @@ services:
       DB_HOST: "db" ## Remember if this is present it will OVERRIDE the host in the config.yaml, if you put here anything other than db, you'll need to change the config.yaml jdbc string to port 3307, and not port 3306
     
   db:
-    image: mysql:8.0.23
+    image: mysql:8.4.0
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: "true"
       MYSQL_DATABASE: "cosmic"
-      MYSQL_USER: "cosmic_server"
-      MYSQL_PASSWORD: "snailshell"
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
     ports:
       - "3307:3306"
     volumes:

@@ -21,8 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
+import client.BuffStat;
 import client.Character;
-import client.*;
+import client.Client;
+import client.Skill;
+import client.SkillFactory;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -32,7 +35,13 @@ import config.YamlConfig;
 import constants.id.ItemId;
 import constants.id.MapId;
 import constants.inventory.ItemConstants;
-import constants.skills.*;
+import constants.skills.Aran;
+import constants.skills.Buccaneer;
+import constants.skills.NightLord;
+import constants.skills.NightWalker;
+import constants.skills.Shadower;
+import constants.skills.ThunderBreaker;
+import constants.skills.WindArcher;
 import net.packet.InPacket;
 import net.packet.Packet;
 import org.slf4j.Logger;

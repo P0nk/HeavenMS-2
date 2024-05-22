@@ -24,13 +24,22 @@
 package client.processor.stat;
 
 import client.Character;
-import client.*;
+import client.Client;
+import client.Job;
+import client.Skill;
+import client.SkillFactory;
+import client.Stat;
 import client.autoban.AutobanFactory;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import config.YamlConfig;
-import constants.skills.*;
+import constants.skills.BlazeWizard;
+import constants.skills.Brawler;
+import constants.skills.DawnWarrior;
+import constants.skills.Magician;
+import constants.skills.ThunderBreaker;
+import constants.skills.Warrior;
 import net.packet.InPacket;
 import tools.PacketCreator;
 import tools.Randomizer;

@@ -1,5 +1,6 @@
 /logs/**
-.idea/
+.idea/*
+!.idea/codeStyles/
 *.iml
 /target
 
@@ -16,3 +17,7 @@
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Database
+database/docker-db-data
+database/docker-pg-db-data

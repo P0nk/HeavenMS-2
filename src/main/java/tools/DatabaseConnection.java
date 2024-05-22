@@ -81,8 +81,9 @@ public class DatabaseConnection {
             return true;
         }
 
-        log.info("Initializing connection pool...");
         final HikariConfig config = getConfig();
+        log.info("Initializing database connection pool. Connecting to:'{}' with user:'{}'", config.getJdbcUrl(),
+                config.getUsername());
         Instant initStart = Instant.now();
         try {
             dataSource = new HikariDataSource(config);

@@ -21,8 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
+import client.BuffStat;
 import client.Character;
-import client.*;
+import client.Client;
+import client.Skill;
+import client.SkillFactory;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -39,7 +42,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.StatEffect;
 import server.life.LifeFactory.loseItem;
-import server.life.*;
+import server.life.MobAttackInfo;
+import server.life.MobAttackInfoFactory;
+import server.life.MobSkill;
+import server.life.MobSkillFactory;
+import server.life.MobSkillType;
+import server.life.Monster;
 import server.maps.MapObject;
 import server.maps.MapleMap;
 import tools.PacketCreator;

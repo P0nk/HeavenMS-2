@@ -161,8 +161,8 @@ server:
     #Database Configuration
     DB_URL_FORMAT: "jdbc:mysql://%s:3306/cosmic" # If the docker ENV for DB_HOST is anything but "db", this string format should be changed from 3306 to 3307 (or whichever port it was changed to in docker) 
     DB_HOST: "localhost" 
-    DB_USER: "cosmic_server"
-    DB_PASS: "snailshell"
+    DB_USER: "root"
+    DB_PASS: ""
     INIT_CONNECTION_POOL_TIMEOUT: 90    # Seconds
 
     #Login Configuration
@@ -220,7 +220,6 @@ server:
     USE_MTS: false
     USE_CPQ: true                       #Renders the CPQ available or not.
     USE_AUTOHIDE_GM: true              #When enabled, GMs are automatically hidden when joining. Thanks to Steven Deblois (steven1152).
-    USE_BUYBACK_SYSTEM: false            #Enables the HeavenMS-builtin buyback system, to be used by dead players when clicking the MTS button.
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
     USE_FAMILY_SYSTEM: true
     USE_DUEY: true
@@ -446,14 +445,6 @@ server:
     WEDDING_BLESS_EXP: 30000            #Exp gained per bless count.
     WEDDING_GIFT_LIMIT: 1               #Max number of gifts per person to same wishlist on marriage instances.
     WEDDING_BLESSER_SHOWFX: true    #Pops bubble sprite effect on players blessing the couple. Setting this false shows the blessing effect on the couple instead.
-
-    #Buyback Configuration
-    USE_BUYBACK_WITH_MESOS: true    #Enables usage of either mesos or NX for the buyback fee.
-    BUYBACK_FEE: 77.70               #Sets the base amount needed to buyback (level 30 or under will use the base value).
-    BUYBACK_LEVEL_STACK_FEE: 85.47   #Sets the level-stacking portion of the amount needed to buyback (fee will sum up linearly until level 120, when it reaches the peak).
-    BUYBACK_MESO_MULTIPLIER: 1000       #Sets a multiplier for the fee when using meso as the charge unit.
-    BUYBACK_RETURN_MINUTES: 1           #Sets the maximum amount of time the player can wait before decide to buyback.
-    BUYBACK_COOLDOWN_MINUTES: 7         #Sets the time the player must wait before using buyback again.
 
     # Login timeout by shavit
     TIMEOUT_DURATION: 3600000               # Kicks clients who don't send any packet to the game server in due time (in millisseconds).

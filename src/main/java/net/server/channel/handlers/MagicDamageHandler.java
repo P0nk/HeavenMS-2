@@ -21,8 +21,11 @@
  */
 package net.server.channel.handlers;
 
+import client.BuffStat;
 import client.Character;
-import client.*;
+import client.Client;
+import client.Skill;
+import client.SkillFactory;
 import config.YamlConfig;
 import constants.id.MapId;
 import constants.skills.Bishop;

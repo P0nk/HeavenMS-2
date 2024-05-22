@@ -68,7 +68,6 @@ public class ServerConfig {
     public boolean USE_MTS;
     public boolean USE_CPQ;
     public boolean USE_AUTOHIDE_GM;
-    public boolean USE_BUYBACK_SYSTEM;
     public boolean USE_FIXED_RATIO_HPMP_UPDATE;
     public boolean USE_FAMILY_SYSTEM;
     public boolean USE_DUEY;
@@ -294,14 +293,6 @@ public class ServerConfig {
     public int WEDDING_BLESS_EXP;
     public int WEDDING_GIFT_LIMIT;
     public boolean WEDDING_BLESSER_SHOWFX;
-
-    //Buyback Configuration
-    public boolean USE_BUYBACK_WITH_MESOS;
-    public float BUYBACK_FEE;
-    public float BUYBACK_LEVEL_STACK_FEE;
-    public int BUYBACK_MESO_MULTIPLIER;
-    public int BUYBACK_RETURN_MINUTES;
-    public int BUYBACK_COOLDOWN_MINUTES;
 
     // Login timeout by shavit
     public long TIMEOUT_DURATION;

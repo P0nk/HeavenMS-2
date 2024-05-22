@@ -21,12 +21,22 @@
 */
 package net.server.channel.handlers;
 
+import client.BuffStat;
 import client.Character;
-import client.*;
+import client.Client;
+import client.Job;
+import client.Skill;
+import client.SkillFactory;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.MapId;
-import constants.skills.*;
+import constants.skills.Crusader;
+import constants.skills.DawnWarrior;
+import constants.skills.DragonKnight;
+import constants.skills.Hero;
+import constants.skills.NightWalker;
+import constants.skills.Rogue;
+import constants.skills.WindArcher;
 import net.packet.InPacket;
 import server.StatEffect;
 import tools.PacketCreator;

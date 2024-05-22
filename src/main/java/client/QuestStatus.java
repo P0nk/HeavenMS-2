@@ -24,7 +24,11 @@ package client;
 import server.quest.Quest;
 import tools.StringUtil;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Matze

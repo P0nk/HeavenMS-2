@@ -44,9 +44,8 @@ public class RemoteStoreHandler extends AbstractPacketHandler {
                 boolean playerIsOnShopMap  = chr.getMapId() == hm.getMapId();
                 if(!playerIsOnShopMap) {
                     var remoteControl = chr.getInventory(InventoryType.CASH).findById(ItemId.REMOTE_CONTROLLER);
-                    if(remoteControl == null) {
+                    if(remoteControl == null)
                         return;
-                    }
                 }
                 hm.visitShop(chr);
             } else {

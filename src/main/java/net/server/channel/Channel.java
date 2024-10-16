@@ -365,10 +365,14 @@ public final class Channel {
         }
     }
 
-    public void addHiredMerchant(int chrid, HiredMerchant hm) {
+    public boolean addHiredMerchant(int chrid, HiredMerchant hm) {
         merchWlock.lock();
         try {
+            if(hiredMerchants.containsKey(chrid))
+                return false;
+
             hiredMerchants.put(chrid, hm);
+            return true;
         } finally {
             merchWlock.unlock();
         }

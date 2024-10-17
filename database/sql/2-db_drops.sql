@@ -1,5 +1,4 @@
-#THIS SQL MUST BE USED AFTER 'db_database.sql'
-#NEXT SQL 'db_shopupdate.sql' IS OPTIONAL
+SET SQL_SAFE_UPDATES = 0;
 
 USE `cosmic`;
 

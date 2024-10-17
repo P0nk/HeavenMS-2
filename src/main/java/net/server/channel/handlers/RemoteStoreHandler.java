@@ -41,10 +41,10 @@ public class RemoteStoreHandler extends AbstractPacketHandler {
         HiredMerchant hm = getMerchant(c);
         if (hm != null && hm.isOwner(chr)) {
             if (hm.getChannel() == chr.getClient().getChannel()) {
-                boolean playerIsOnShopMap  = chr.getMapId() == hm.getMapId();
-                if(!playerIsOnShopMap) {
+                boolean isPlayerOnMerchantMap = chr.getMapId() == hm.getMapId();
+                if (!isPlayerOnMerchantMap) {
                     var remoteControl = chr.getInventory(InventoryType.CASH).findById(ItemId.REMOTE_CONTROLLER);
-                    if(remoteControl == null)
+                    if (remoteControl == null)
                         return;
                 }
                 hm.visitShop(chr);

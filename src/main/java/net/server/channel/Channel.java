@@ -369,8 +369,9 @@ public final class Channel {
     public boolean addHiredMerchant(int chrid, HiredMerchant hm) {
         merchWlock.lock();
         try {
-            if (hiredMerchants.containsKey(chrid))
+            if (hiredMerchants.containsKey(chrid)) {
                 return false;
+            }
 
             hiredMerchants.put(chrid, hm);
             return true;

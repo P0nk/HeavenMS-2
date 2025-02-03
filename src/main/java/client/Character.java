@@ -267,7 +267,7 @@ public class Character extends AbstractCharacterObject {
     private final Pet[] pets = new Pet[3];
     private PlayerShop playerShop = null;
     private Shop shop = null;
-    private SkinColor skinColor = SkinColor.NORMAL;
+    private SkinColor skinColor = SkinColor.LIGHT;
     private Storage storage = null;
     private Trade trade = null;
     private MonsterBook monsterbook;
